@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApexStore Admin Dashboard | Store Management</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .admin-layout {
+      max-width: 1320px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-value {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+    .stat-sub {
+      font-size: 0.75rem;
+      color: var(--success);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+    .admin-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .orders-table-wrap {
+      overflow-x: auto;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .orders-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .orders-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+    }
+    .status-badge {
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+    .status-confirmed { background: var(--bg-accent-soft); color: var(--primary); }
+    .status-shipped { background: var(--warning-light); color: #92400e; }
+    .status-delivered { background: var(--success-light); color: #065f46; }
+    .status-select {
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-secondary);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    @media (max-width: 1024px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .admin-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        </div>
+        <span class="brand-name">ApexStore Admin</span>
+      </a>
+
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <a href="/docs" target="_blank" class="btn btn-secondary btn-sm" title="Interactive Swagger API Documentation">
+          📄 API Docs (Swagger)
+        </a>
+        <a href="/" class="btn btn-primary btn-sm">
+          🛍️ View Live Store
+        </a>
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-layout">
+    
+    <!-- Header Title -->
+    <div class="admin-header">
+      <div>
+        <h1 style="font-size:1.85rem;font-weight:800;letter-spacing:-0.5px;">Store Control & Analytics Dashboard</h1>
+        <p style="color:var(--text-secondary);font-size:0.9rem;">Real-time SQLite database synchronization with live order management.</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="loadAdminData()">
+        🔄 Refresh Data
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-value" id="stat-revenue">₹0</div>
+        <div class="stat-sub">↑ 18.4% from last week</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Orders Placed</div>
+        <div class="stat-value" id="stat-orders">0</div>
+        <div class="stat-sub">↑ Real-time updates</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Active Products</div>
+        <div class="stat-value" id="stat-products">0</div>
+        <div class="stat-sub" style="color:var(--info);">Across 6 categories</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">VIP Subscribers</div>
+        <div class="stat-value" id="stat-subscribers">0</div>
+        <div class="stat-sub">Newsletter members</div>
+      </div>
+    </div>
+
+    <!-- Main Grid: Orders & Add Product -->
+    <div class="admin-grid">
+
+      <!-- Orders Management -->
+      <div class="admin-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">📦 Customer Orders Stream</h3>
+          <span style="font-size:0.8rem;color:var(--text-muted);">Synced with SQLite DB</span>
+        </div>
+
+        <div class="orders-table-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items & Total</th>
+                <th>Payment</th>
+                <th>Status / Action</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <tr><td colspan="5" style="text-align:center;padding:2rem;">Loading orders...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add New Product Form -->
+      <div class="admin-panel">
+        <div class="panel-header">
+          <h3 class="panel-title">➕ Add New Product</h3>
+        </div>
+
+        <form id="add-product-form" onsubmit="submitNewProduct(event)" style="display:flex;flex-direction:column;gap:0.9rem;">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input type="text" id="np-name" class="form-input" placeholder="e.g. Sony Wireless Mic" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="np-category" class="form-input" required>
+                <option value="electronics">Electronics</option>
+                <option value="fashion">Fashion</option>
+                <option value="footwear">Footwear</option>
+                <option value="accessories">Accessories</option>
+                <option value="home">Home & Living</option>
+                <option value="beauty">Beauty & Wellness</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category Name</label>
+              <input type="text" id="np-category-name" class="form-input" placeholder="Electronics" value="Electronics" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Selling Price (₹) *</label>
+              <input type="number" id="np-price" class="form-input" placeholder="4999" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Original Price (₹) *</label>
+              <input type="number" id="np-orig-price" class="form-input" placeholder="7999" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Image URL *</label>
+            <input type="url" id="np-image" class="form-input" placeholder="https://images.unsplash.com/photo-..." value="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description *</label>
+            <textarea id="np-desc" class="form-input" rows="2" placeholder="High-definition studio wireless microphone with zero latency..." required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Stock Units</label>
+              <input type="number" id="np-stock" class="form-input" value="25" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Badge Tag</label>
+              <input type="text" id="np-badge" class="form-input" placeholder="NEW / HOT" value="NEW" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top:0.5rem;">
+            💾 Add to Live Store
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/config.js"></script>
+  <script>
+    async function loadAdminData() {
+      try {
+        const res = await fetch(getApiUrl('/api/admin/stats'));
+        const data = await res.json();
+
+        // Update stats
+        document.getElementById('stat-revenue').textContent = `₹${data.total_revenue.toLocaleString('en-IN')}`;
+        document.getElementById('stat-orders').textContent = data.total_orders;
+        document.getElementById('stat-products').textContent = data.total_products;
+        document.getElementById('stat-subscribers').textContent = data.total_subscribers;
+
+        // Render orders table
+        const tbody = document.getElementById('orders-table-body');
+        if (data.recent_orders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;">No orders placed yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = data.recent_orders.map(o => `
+          <tr>
+            <td>
+              <strong style="color:var(--primary);">${o.order_id}</strong>
+              <div style="font-size:0.75rem;color:var(--text-muted);">${o.created_at || ''}</div>
+            </td>
+            <td>
+              <div style="font-weight:700;">${o.customer_name}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">${o.customer_city} (${o.customer_phone})</div>
+            </td>
+            <td>
+              <div style="font-weight:700;">₹${Math.round(o.total).toLocaleString('en-IN')}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">${o.items.length} item(s)</div>
+            </td>
+            <td>
+              <span style="font-size:0.8rem;font-weight:600;">${o.payment_method}</span>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateOrderStatus('${o.order_id}', this.value)">
+                <option value="Confirmed" ${o.status==='Confirmed'?'selected':''}>Confirmed</option>
+                <option value="Shipped" ${o.status==='Shipped'?'selected':''}>Shipped</option>
+                <option value="Delivered" ${o.status==='Delivered'?'selected':''}>Delivered</option>
+                <option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>Cancelled</option>
+              </select>
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        console.error('Error fetching admin data:', err);
+      }
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(getApiUrl(`/api/orders/${orderId}/status`), {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (res.ok) {
+          showAdminToast(`Order ${orderId} updated to ${newStatus}`);
+          loadAdminData();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function submitNewProduct(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('np-name').value,
+        category: document.getElementById('np-category').value,
+        category_name: document.getElementById('np-category-name').value,
+        price: Number(document.getElementById('np-price').value),
+        original_price: Number(document.getElementById('np-orig-price').value),
+        image: document.getElementById('np-image').value,
+        description: document.getElementById('np-desc').value,
+        stock: Number(document.getElementById('np-stock').value),
+        badge: document.getElementById('np-badge').value,
+        is_flash_deal: false
+      };
+
+      try {
+        const res = await fetch(getApiUrl('/api/products'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showAdminToast('Product added successfully!');
+          document.getElementById('add-product-form').reset();
+          loadAdminData();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function showAdminToast(msg) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast success';
+      t.innerHTML = `<div class="toast-message">✓ ${msg}</div>`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function toggleTheme() {
+      const curr = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = curr === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminData();
+      setInterval(loadAdminData, 10000); // Poll every 10s
+    });
+  </script>
+</body>
+</html>
