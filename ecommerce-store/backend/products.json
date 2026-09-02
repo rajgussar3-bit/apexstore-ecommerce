@@ -1,21 +1,15 @@
-// ApexStore - Mega Product Catalog Data (30+ High-Demand Products across 6 Categories)
-// Every product features 4-7 HD multi-angle photos, Flipkart-style technical specifications & key highlights
-
-const PRODUCTS_DATA = [
-  // =========================================================================
-  // 1. ELECTRONICS & GADGETS
-  // =========================================================================
+[
   {
-    id: 1,
-    name: "Sony WH-1000XM5 Wireless Noise-Cancelling Headphones",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 26999,
-    originalPrice: 34990,
-    rating: 4.8,
-    reviewCount: 342,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 1,
+    "name": "Sony WH-1000XM5 Wireless Noise-Cancelling Headphones",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 26999,
+    "originalPrice": 34990,
+    "rating": 4.8,
+    "reviewCount": 342,
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=900&auto=format&fit=crop&q=80",
@@ -23,18 +17,18 @@ const PRODUCTS_DATA = [
       "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: true,
-    stock: 14,
-    description: "Industry-leading noise cancellation optimized automatically based on your wearing conditions and environment. Engineered for perfection with the new Integrated Processor V1.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": true,
+    "stock": 14,
+    "description": "Industry-leading noise cancellation optimized automatically based on your wearing conditions and environment. Engineered for perfection with the new Integrated Processor V1.",
+    "highlights": [
       "Industry Leading Active Noise Cancellation (ANC) with 2 processors & 8 mics",
       "Up to 30 Hours Battery Life with 3-minute Quick Charge (3 hrs playback)",
       "Ultra-comfortable lightweight design with soft fit synthetic leather",
       "Crystal clear hands-free calling with 4 beamforming microphones",
       "Multipoint connection allows switching between two devices seamlessly"
     ],
-    specs: {
+    "specs": {
       "Brand": "Sony",
       "Model Name": "WH-1000XM5 / Black",
       "Headphone Type": "Over-Ear Wireless",
@@ -45,20 +39,26 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Manufacturer Warranty",
       "In The Box": "Headphones, Premium Carry Case, USB-C Cable, 3.5mm Audio Cable, Manual"
     },
-    colors: ["#1e293b", "#f1f5f9", "#78716c"],
-    sizes: ["Standard"]
+    "colors": [
+      "#1e293b",
+      "#f1f5f9",
+      "#78716c"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
   {
-    id: 2,
-    name: "Apple iPhone 15 Pro Max (256 GB, Natural Titanium)",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 134900,
-    originalPrice: 149900,
-    rating: 4.9,
-    reviewCount: 890,
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 2,
+    "name": "Apple iPhone 15 Pro Max (256 GB, Natural Titanium)",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 134900,
+    "originalPrice": 149900,
+    "rating": 4.9,
+    "reviewCount": 890,
+    "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1511707171634-5f897ff02560?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=900&auto=format&fit=crop&q=80",
@@ -66,18 +66,18 @@ const PRODUCTS_DATA = [
       "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: false,
-    stock: 8,
-    description: "Forged in aerospace-grade titanium, featuring the revolutionary A17 Pro chip, customizable Action button, and 5x Telephoto optical zoom.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": false,
+    "stock": 8,
+    "description": "Forged in aerospace-grade titanium, featuring the revolutionary A17 Pro chip, customizable Action button, and 5x Telephoto optical zoom.",
+    "highlights": [
       "6.7-inch Super Retina XDR display with ProMotion 120Hz & Always-On",
       "A17 Pro chip with 6-core GPU for console-level mobile gaming",
       "48MP Main Camera with 5x Optical Zoom Telephoto lens",
       "Strong & lightweight titanium frame with Ceramic Shield front",
       "USB-C connector with USB 3 support (up to 10Gb/s transfer speed)"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apple",
       "Model Name": "iPhone 15 Pro Max",
       "Display": "6.7\" Super Retina XDR OLED (2796 x 1290)",
@@ -89,38 +89,48 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Apple India Warranty",
       "In The Box": "iPhone 15 Pro Max, USB-C Charge Cable, Documentation"
     },
-    colors: ["#334155", "#e2e8f0", "#1e293b", "#d97706"],
-    sizes: ["128GB", "256GB", "512GB", "1TB"]
+    "colors": [
+      "#334155",
+      "#e2e8f0",
+      "#1e293b",
+      "#d97706"
+    ],
+    "sizes": [
+      "128GB",
+      "256GB",
+      "512GB",
+      "1TB"
+    ]
   },
   {
-    id: 3,
-    name: "Apple MacBook Air 15\" M3 (16GB RAM, 512GB SSD)",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 124900,
-    originalPrice: 134900,
-    rating: 4.9,
-    reviewCount: 420,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 3,
+    "name": "Apple MacBook Air 15\" M3 (16GB RAM, 512GB SSD)",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 124900,
+    "originalPrice": 134900,
+    "rating": 4.9,
+    "reviewCount": 420,
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "NEW",
-    isFlashDeal: false,
-    stock: 12,
-    description: "Strikingly thin and fast with the M3 chip. Built for Apple Intelligence and delivers up to 18 hours of continuous battery life.",
-    highlights: [
+    "badge": "NEW",
+    "isFlashDeal": false,
+    "stock": 12,
+    "description": "Strikingly thin and fast with the M3 chip. Built for Apple Intelligence and delivers up to 18 hours of continuous battery life.",
+    "highlights": [
       "Apple M3 Chip with 8-core CPU and 10-core GPU",
       "15.3-inch Liquid Retina Display with 500 nits brightness & True Tone",
       "Up to 18 hours of wireless web battery life",
       "1080p FaceTime HD camera with 3-mic array and 6-speaker spatial audio",
       "MagSafe 3 charging port and two Thunderbolt / USB 4 ports"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apple",
       "Model": "MacBook Air 15.3 (M3, 2024)",
       "Processor": "Apple M3 (8-Core CPU / 10-Core GPU)",
@@ -131,38 +141,47 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Apple Limited Warranty",
       "In The Box": "MacBook Air 15\", 35W Dual USB-C Adapter, MagSafe 3 Cable"
     },
-    colors: ["#0f172a", "#cbd5e1", "#f8fafc", "#fde68a"],
-    sizes: ["256GB SSD", "512GB SSD", "1TB SSD"]
+    "colors": [
+      "#0f172a",
+      "#cbd5e1",
+      "#f8fafc",
+      "#fde68a"
+    ],
+    "sizes": [
+      "256GB SSD",
+      "512GB SSD",
+      "1TB SSD"
+    ]
   },
   {
-    id: 4,
-    name: "Apple Watch Ultra 2 GPS + Cellular (49mm Titanium)",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 79900,
-    originalPrice: 89900,
-    rating: 4.7,
-    reviewCount: 215,
-    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 4,
+    "name": "Apple Watch Ultra 2 GPS + Cellular (49mm Titanium)",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 79900,
+    "originalPrice": 89900,
+    "rating": 4.7,
+    "reviewCount": 215,
+    "image": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1510017803434-a899398421b3?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 9,
-    description: "The most rugged and capable Apple Watch. Powered by the S9 SiP, featuring a 3000-nit display and specialized metrics for endurance athletes.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 9,
+    "description": "The most rugged and capable Apple Watch. Powered by the S9 SiP, featuring a 3000-nit display and specialized metrics for endurance athletes.",
+    "highlights": [
       "49mm corrosion-resistant aerospace-grade titanium case",
       "Brightest Always-On Retina display at 3000 nits peak brightness",
       "Precision dual-frequency GPS for incredible accuracy in dense environments",
       "100m water resistance, EN13319 certified dive computer up to 40m",
       "Up to 36 hours of normal battery life / 72 hours in Low Power Mode"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apple",
       "Model": "Apple Watch Ultra 2",
       "Case Size": "49mm Titanium",
@@ -173,38 +192,44 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Manufacturer Warranty",
       "In The Box": "Titanium Case, Loop Band, Magnetic Fast Charger USB-C Cable"
     },
-    colors: ["#e2e8f0", "#ea580c", "#0284c7"],
-    sizes: ["49mm"]
+    "colors": [
+      "#e2e8f0",
+      "#ea580c",
+      "#0284c7"
+    ],
+    "sizes": [
+      "49mm"
+    ]
   },
   {
-    id: 5,
-    name: "Sony PlayStation 5 (PS5) Slim Console Disc Edition",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 54990,
-    originalPrice: 59990,
-    rating: 4.9,
-    reviewCount: 680,
-    image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 5,
+    "name": "Sony PlayStation 5 (PS5) Slim Console Disc Edition",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 54990,
+    "originalPrice": 59990,
+    "rating": 4.9,
+    "reviewCount": 680,
+    "image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1612287233207-6f81c9e42289?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: true,
-    stock: 10,
-    description: "Experience lightning-fast loading with an ultra-high-speed SSD, deeper immersion with haptic feedback, adaptive triggers, and 3D Audio.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": true,
+    "stock": 10,
+    "description": "Experience lightning-fast loading with an ultra-high-speed SSD, deeper immersion with haptic feedback, adaptive triggers, and 3D Audio.",
+    "highlights": [
       "Slimmer design with 1TB Ultra-High Speed Custom NVMe SSD",
       "Ray Tracing technology for true-to-life reflections & lighting",
       "4K 120Hz High Frame Rate Gaming with HDR support",
       "DualSense Wireless Controller with Haptic Feedback & Adaptive Triggers",
       "Tempest 3D AudioTech sound engine"
     ],
-    specs: {
+    "specs": {
       "Brand": "Sony",
       "Model": "PlayStation 5 Slim (CFI-2000)",
       "Storage": "1TB Custom High-Speed SSD",
@@ -213,38 +238,43 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Official Sony India Warranty",
       "In The Box": "PS5 Slim Console, DualSense Controller, HDMI 2.1 Cable, AC Power Cord"
     },
-    colors: ["#ffffff", "#0f172a"],
-    sizes: ["1TB Disc Edition"]
+    "colors": [
+      "#ffffff",
+      "#0f172a"
+    ],
+    "sizes": [
+      "1TB Disc Edition"
+    ]
   },
   {
-    id: 6,
-    name: "Samsung Galaxy S24 Ultra (512GB, Titanium Gray)",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 139999,
-    originalPrice: 149999,
-    rating: 4.8,
-    reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 6,
+    "name": "Samsung Galaxy S24 Ultra (512GB, Titanium Gray)",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 139999,
+    "originalPrice": 149999,
+    "rating": 4.8,
+    "reviewCount": 310,
+    "image": "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1511707171634-5f897ff02560?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "NEW",
-    isFlashDeal: false,
-    stock: 7,
-    description: "Galaxy AI is here. Epic 200MP camera with 100x Space Zoom, built-in S-Pen, and Snapdragon 8 Gen 3 for Galaxy with titanium frame.",
-    highlights: [
+    "badge": "NEW",
+    "isFlashDeal": false,
+    "stock": 7,
+    "description": "Galaxy AI is here. Epic 200MP camera with 100x Space Zoom, built-in S-Pen, and Snapdragon 8 Gen 3 for Galaxy with titanium frame.",
+    "highlights": [
       "Galaxy AI Features: Circle to Search, Live Translate & Photo Assist",
       "200MP Quad Telephoto Camera system with ProVisual AI engine",
       "6.8-inch QHD+ Dynamic AMOLED 2X 120Hz Anti-Reflective Display",
       "Integrated S-Pen stylus with ultra-low latency",
       "5000 mAh all-day intelligent battery with 45W Fast Charging"
     ],
-    specs: {
+    "specs": {
       "Brand": "Samsung",
       "Model": "Galaxy S24 Ultra",
       "Processor": "Snapdragon 8 Gen 3 (4nm)",
@@ -254,37 +284,46 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Samsung India Warranty",
       "In The Box": "Handset, S-Pen, USB-C to USB-C Cable, Ejection Pin"
     },
-    colors: ["#475569", "#1e293b", "#ca8a04", "#7c3aed"],
-    sizes: ["256GB", "512GB", "1TB"]
+    "colors": [
+      "#475569",
+      "#1e293b",
+      "#ca8a04",
+      "#7c3aed"
+    ],
+    "sizes": [
+      "256GB",
+      "512GB",
+      "1TB"
+    ]
   },
   {
-    id: 7,
-    name: "GoPro HERO12 Black 5.3K Action Camera",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 37990,
-    originalPrice: 44990,
-    rating: 4.7,
-    reviewCount: 195,
-    image: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 7,
+    "name": "GoPro HERO12 Black 5.3K Action Camera",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 37990,
+    "originalPrice": 44990,
+    "rating": 4.7,
+    "reviewCount": 195,
+    "image": "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 18,
-    description: "Incredible image quality with 5.3K video, Emmy Award-winning HyperSmooth 6.0 stabilization, and enhanced battery life for action creators.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 18,
+    "description": "Incredible image quality with 5.3K video, Emmy Award-winning HyperSmooth 6.0 stabilization, and enhanced battery life for action creators.",
+    "highlights": [
       "5.3K60 + 4K120 Ultra-High Definition Video Recording",
       "HyperSmooth 6.0 video stabilization with 360° Horizon Lock",
       "Rugged and Waterproof up to 10m (33ft) without housing",
       "Bluetooth audio support for AirPods & wireless microphones",
       "Enduro rechargeable battery included for extended cold-weather runtime"
     ],
-    specs: {
+    "specs": {
       "Brand": "GoPro",
       "Model": "HERO12 Black",
       "Video Resolution": "5.3K at 60fps, 4K at 120fps, 2.7K at 240fps (8x Slo-Mo)",
@@ -293,38 +332,42 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Official GoPro Warranty",
       "In The Box": "HERO12 Black, Enduro Battery, Curved Adhesive Mount, Mounting Buckle + Thumb Screw, USB-C Cable"
     },
-    colors: ["#0f172a"],
-    sizes: ["Standard"]
+    "colors": [
+      "#0f172a"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
   {
-    id: 8,
-    name: "JBL Flip 6 Portable Waterproof Bluetooth Speaker",
-    category: "electronics",
-    categoryName: "Electronics",
-    price: 9999,
-    originalPrice: 13999,
-    rating: 4.8,
-    reviewCount: 512,
-    image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 8,
+    "name": "JBL Flip 6 Portable Waterproof Bluetooth Speaker",
+    "category": "electronics",
+    "categoryName": "Electronics",
+    "price": 9999,
+    "originalPrice": 13999,
+    "rating": 4.8,
+    "reviewCount": 512,
+    "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1528148343865-51218c4a13e6?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: true,
-    stock: 19,
-    description: "Bold sound for every adventure. 2-way speaker system delivering loud, crystal-clear, powerful sound with IP67 waterproof and dustproof protection.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": true,
+    "stock": 19,
+    "description": "Bold sound for every adventure. 2-way speaker system delivering loud, crystal-clear, powerful sound with IP67 waterproof and dustproof protection.",
+    "highlights": [
       "2-Way Speaker System engineered for powerful, crystal-clear sound & deep bass",
       "IP67 Waterproof and Dustproof for pool parties, beach, and trails",
       "Up to 12 Hours of Continuous Playtime on a single charge",
       "PartyBoost allows pairing multiple compatible speakers for stereo sound",
       "USB-C Charging Protection with alert sound if connector detects water"
     ],
-    specs: {
+    "specs": {
       "Brand": "JBL",
       "Model": "Flip 6",
       "Output Power": "20W RMS Woofer + 10W RMS Tweeter",
@@ -335,24 +378,27 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Official Brand Warranty",
       "In The Box": "JBL Flip 6 Speaker, Type-C USB Cable, Quick Start Guide, Safety Sheet"
     },
-    colors: ["#0284c7", "#dc2626", "#1e293b", "#16a34a"],
-    sizes: ["Standard"]
+    "colors": [
+      "#0284c7",
+      "#dc2626",
+      "#1e293b",
+      "#16a34a"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
-
-  // =========================================================================
-  // 2. FASHION & STREETWEAR
-  // =========================================================================
   {
-    id: 9,
-    name: "Urban Explorer Weatherproof Insulated Bomber Jacket",
-    category: "fashion",
-    categoryName: "Fashion",
-    price: 3499,
-    originalPrice: 6999,
-    rating: 4.6,
-    reviewCount: 184,
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 9,
+    "name": "Urban Explorer Weatherproof Insulated Bomber Jacket",
+    "category": "fashion",
+    "categoryName": "Fashion",
+    "price": 3499,
+    "originalPrice": 6999,
+    "rating": 4.6,
+    "reviewCount": 184,
+    "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1544441893-675973e31985?w=900&auto=format&fit=crop&q=80",
@@ -360,18 +406,18 @@ const PRODUCTS_DATA = [
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "50% OFF",
-    isFlashDeal: true,
-    stock: 25,
-    description: "Premium insulated bomber jacket crafted from windproof, water-repellent matte nylon shell with ultra-warm quilted thermal fleece lining.",
-    highlights: [
+    "badge": "50% OFF",
+    "isFlashDeal": true,
+    "stock": 25,
+    "description": "Premium insulated bomber jacket crafted from windproof, water-repellent matte nylon shell with ultra-warm quilted thermal fleece lining.",
+    "highlights": [
       "100% Windproof and Water-Repellent Matte Shell",
       "Heavy-duty dual YKK metallic anti-snag zippers",
       "Ribbed collar, cuffs, and hem for tailored snug fit",
       "5 functional pockets including inner secure zippered passport slot",
       "Machine washable with color-lock fabric technology"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apex Apparel",
       "Material": "100% Water-Resistant Nylon Shell, Polyfill Thermal Lining",
       "Fit": "Regular Tailored Streetwear Fit",
@@ -380,37 +426,47 @@ const PRODUCTS_DATA = [
       "Origin": "Made in India",
       "Package Contains": "1 Insulated Bomber Jacket"
     },
-    colors: ["#1e293b", "#3f6212", "#78350f"],
-    sizes: ["S", "M", "L", "XL", "XXL"]
+    "colors": [
+      "#1e293b",
+      "#3f6212",
+      "#78350f"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ]
   },
   {
-    id: 10,
-    name: "Heavyweight 450 GSM French Terry Oversized Hoodie",
-    category: "fashion",
-    categoryName: "Fashion",
-    price: 2199,
-    originalPrice: 3999,
-    rating: 4.8,
-    reviewCount: 290,
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 10,
+    "name": "Heavyweight 450 GSM French Terry Oversized Hoodie",
+    "category": "fashion",
+    "categoryName": "Fashion",
+    "price": 2199,
+    "originalPrice": 3999,
+    "rating": 4.8,
+    "reviewCount": 290,
+    "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1544441893-675973e31985?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: false,
-    stock: 30,
-    description: "Constructed with 450 GSM 100% organic French Terry cotton for supreme structure, drape, and warmth. Features dropped shoulders and a double-layered hood.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": false,
+    "stock": 30,
+    "description": "Constructed with 450 GSM 100% organic French Terry cotton for supreme structure, drape, and warmth. Features dropped shoulders and a double-layered hood.",
+    "highlights": [
       "450 GSM Heavyweight 100% Organic Combed Cotton",
       "Pre-shrunk fabric to prevent post-wash shrinking",
       "Double-layered structured hood with seamless kangaroo pocket",
       "Drop-shoulder boxy streetwear silhouette",
       "Bio-washed for ultra-soft plush texture"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apex Studio",
       "Fabric": "100% French Terry Combed Cotton (450 GSM)",
       "Fit": "Oversized / Relaxed Streetwear Fit",
@@ -418,37 +474,48 @@ const PRODUCTS_DATA = [
       "Origin": "Made in India",
       "Package Contains": "1 Premium Heavyweight Hoodie"
     },
-    colors: ["#0f172a", "#f8fafc", "#78716c", "#1e3a8a"],
-    sizes: ["S", "M", "L", "XL", "XXL"]
+    "colors": [
+      "#0f172a",
+      "#f8fafc",
+      "#78716c",
+      "#1e3a8a"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ]
   },
   {
-    id: 11,
-    name: "Levi's 501 Original Fit Raw Indigo Denim Jeans",
-    category: "fashion",
-    categoryName: "Fashion",
-    price: 3799,
-    originalPrice: 4999,
-    rating: 4.7,
-    reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 11,
+    "name": "Levi's 501 Original Fit Raw Indigo Denim Jeans",
+    "category": "fashion",
+    "categoryName": "Fashion",
+    "price": 3799,
+    "originalPrice": 4999,
+    "rating": 4.7,
+    "reviewCount": 310,
+    "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1542272604-787c3835535d?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: false,
-    stock: 22,
-    description: "The original blue jean since 1873. Iconic straight leg fit, signature button fly, and 100% non-stretch authentic raw denim.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": false,
+    "stock": 22,
+    "description": "The original blue jean since 1873. Iconic straight leg fit, signature button fly, and 100% non-stretch authentic raw denim.",
+    "highlights": [
       "Authentic signature button fly closure",
       "Classic straight leg silhouette that sits comfortably at waist",
       "100% Heavyweight Non-Stretch Cotton Denim",
       "Signature red tab and Two-Horse pull leather patch",
       "Riveted reinforcement on stress points for 10+ year longevity"
     ],
-    specs: {
+    "specs": {
       "Brand": "Levi's",
       "Model": "501 Original Fit",
       "Material": "100% Cotton Raw Selvedge Denim",
@@ -457,37 +524,46 @@ const PRODUCTS_DATA = [
       "Warranty": "Brand Authenticity Guarantee",
       "Package Contains": "1 Pair of Genuine Levi's Denim Jeans"
     },
-    colors: ["#1e3a8a", "#0f172a", "#64748b"],
-    sizes: ["30W/32L", "32W/32L", "34W/32L", "36W/32L"]
+    "colors": [
+      "#1e3a8a",
+      "#0f172a",
+      "#64748b"
+    ],
+    "sizes": [
+      "30W/32L",
+      "32W/32L",
+      "34W/32L",
+      "36W/32L"
+    ]
   },
   {
-    id: 12,
-    name: "Italian Mulberry Silk Luxury Formal Shirt",
-    category: "fashion",
-    categoryName: "Fashion",
-    price: 4499,
-    originalPrice: 8999,
-    rating: 4.9,
-    reviewCount: 140,
-    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 12,
+    "name": "Italian Mulberry Silk Luxury Formal Shirt",
+    "category": "fashion",
+    "categoryName": "Fashion",
+    "price": 4499,
+    "originalPrice": 8999,
+    "rating": 4.9,
+    "reviewCount": 140,
+    "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1603252109303-2751441ec157?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 15,
-    description: "Woven from 100% pure Grade 6A Mulberry silk with subtle pearlescent sheen, mother-of-pearl buttons, and tailored Italian collar.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 15,
+    "description": "Woven from 100% pure Grade 6A Mulberry silk with subtle pearlescent sheen, mother-of-pearl buttons, and tailored Italian collar.",
+    "highlights": [
       "100% Pure Grade 6A Mulberry Silk Fabric",
       "Genuine Mother-of-Pearl laser engraved buttons",
       "Naturally hypoallergenic, temperature regulating & breathable",
       "Slim tailored silhouette with French cuffs",
       "Wrinkle-resistant luxury finish"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apex Sartorial",
       "Fabric": "100% Pure Mulberry Silk",
       "Collar": "Semi-Spread Italian Collar",
@@ -495,24 +571,30 @@ const PRODUCTS_DATA = [
       "Care": "Dry Clean Recommended or Hand Wash in Cold Water",
       "Package Contains": "1 Silk Shirt in Gift Box"
     },
-    colors: ["#ffffff", "#0f172a", "#1e3a8a", "#831843"],
-    sizes: ["38 (S)", "40 (M)", "42 (L)", "44 (XL)"]
+    "colors": [
+      "#ffffff",
+      "#0f172a",
+      "#1e3a8a",
+      "#831843"
+    ],
+    "sizes": [
+      "38 (S)",
+      "40 (M)",
+      "42 (L)",
+      "44 (XL)"
+    ]
   },
-
-  // =========================================================================
-  // 3. FOOTWEAR & SNEAKERS
-  // =========================================================================
   {
-    id: 13,
-    name: "Nike Air Max Pulse Lifestyle Athletic Sneakers",
-    category: "footwear",
-    categoryName: "Footwear",
-    price: 7999,
-    originalPrice: 12999,
-    rating: 4.8,
-    reviewCount: 450,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 13,
+    "name": "Nike Air Max Pulse Lifestyle Athletic Sneakers",
+    "category": "footwear",
+    "categoryName": "Footwear",
+    "price": 7999,
+    "originalPrice": 12999,
+    "rating": 4.8,
+    "reviewCount": 450,
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&auto=format&fit=crop&q=80",
@@ -520,18 +602,18 @@ const PRODUCTS_DATA = [
       "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: true,
-    stock: 15,
-    description: "Drawing inspiration from London music culture, the Air Max Pulse brings a tough, underground touch with point-loaded Air cushioning system for extreme bounce.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": true,
+    "stock": 15,
+    "description": "Drawing inspiration from London music culture, the Air Max Pulse brings a tough, underground touch with point-loaded Air cushioning system for extreme bounce.",
+    "highlights": [
       "Point-loaded Air cushioning with targeted plastic clip for responsive bounce",
       "Textile wrapped midsole and breathable mesh upper for durability",
       "Rubber waffle outsole delivers time-tested traction and grip",
       "Reflective design accents for nighttime visibility",
       "Foam midsole provides all-day walking comfort"
     ],
-    specs: {
+    "specs": {
       "Brand": "Nike",
       "Model": "Air Max Pulse",
       "Outer Material": "Breathable Mesh with Leather Overlays",
@@ -542,37 +624,47 @@ const PRODUCTS_DATA = [
       "Warranty": "3 Months Manufacturer Warranty",
       "In The Box": "1 Pair of Nike Sneakers in Original Box"
     },
-    colors: ["#dc2626", "#0f172a", "#f8fafc"],
-    sizes: ["UK 7", "UK 8", "UK 9", "UK 10", "UK 11"]
+    "colors": [
+      "#dc2626",
+      "#0f172a",
+      "#f8fafc"
+    ],
+    "sizes": [
+      "UK 7",
+      "UK 8",
+      "UK 9",
+      "UK 10",
+      "UK 11"
+    ]
   },
   {
-    id: 14,
-    name: "Adidas Originals Samba Classic Leather Sneakers",
-    category: "footwear",
-    categoryName: "Footwear",
-    price: 8999,
-    originalPrice: 10999,
-    rating: 4.9,
-    reviewCount: 520,
-    image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 14,
+    "name": "Adidas Originals Samba Classic Leather Sneakers",
+    "category": "footwear",
+    "categoryName": "Footwear",
+    "price": 8999,
+    "originalPrice": 10999,
+    "rating": 4.9,
+    "reviewCount": 520,
+    "image": "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: false,
-    stock: 18,
-    description: "Born on the pitch, the Samba is a timeless icon of street style. Features full-grain leather upper, suede T-toe overlay, and low-profile gum rubber outsole.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": false,
+    "stock": 18,
+    "description": "Born on the pitch, the Samba is a timeless icon of street style. Features full-grain leather upper, suede T-toe overlay, and low-profile gum rubber outsole.",
+    "highlights": [
       "Full-grain leather upper with contrasting suede T-toe overlay",
       "Classic gum rubber cupsole for authentic vintage look & grip",
       "Serrated 3-Stripes branding with gold foil Samba lettering",
       "Die-cut EVA insole for lightweight step-in cushioning",
       "Versatile retro silhouette loved by fashion tastemakers globally"
     ],
-    specs: {
+    "specs": {
       "Brand": "Adidas Originals",
       "Model": "Samba OG / Classic",
       "Upper Material": "Full-Grain Leather with Suede Overlays",
@@ -581,37 +673,47 @@ const PRODUCTS_DATA = [
       "Warranty": "100% Original Brand Guarantee",
       "In The Box": "1 Pair of Adidas Samba OG Shoes in Box"
     },
-    colors: ["#ffffff", "#0f172a", "#16a34a"],
-    sizes: ["UK 6", "UK 7", "UK 8", "UK 9", "UK 10"]
+    "colors": [
+      "#ffffff",
+      "#0f172a",
+      "#16a34a"
+    ],
+    "sizes": [
+      "UK 6",
+      "UK 7",
+      "UK 8",
+      "UK 9",
+      "UK 10"
+    ]
   },
   {
-    id: 15,
-    name: "Air Jordan 1 Retro High OG 'Chicago'",
-    category: "footwear",
-    categoryName: "Footwear",
-    price: 16999,
-    originalPrice: 19999,
-    rating: 4.9,
-    reviewCount: 780,
-    image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 15,
+    "name": "Air Jordan 1 Retro High OG 'Chicago'",
+    "category": "footwear",
+    "categoryName": "Footwear",
+    "price": 16999,
+    "originalPrice": 19999,
+    "rating": 4.9,
+    "reviewCount": 780,
+    "image": "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: true,
-    stock: 6,
-    description: "The sneaker that started it all. Premium tumbled leather with encapsulated Air-Sole unit and the iconic Wings logo stamped on the collar.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": true,
+    "stock": 6,
+    "description": "The sneaker that started it all. Premium tumbled leather with encapsulated Air-Sole unit and the iconic Wings logo stamped on the collar.",
+    "highlights": [
       "Encapsulated Nike Air-Sole unit provides lightweight cushioning",
       "Genuine premium tumbled leather upper for durability and luxury feel",
       "Solid rubber outsole with deep flex grooves for traction",
       "Iconic Chicago red, black, and white heritage color blocking",
       "Collector's limited edition release"
     ],
-    specs: {
+    "specs": {
       "Brand": "Jordan / Nike",
       "Model": "Air Jordan 1 Retro High OG",
       "Upper": "100% Genuine Tumbled Leather",
@@ -620,37 +722,47 @@ const PRODUCTS_DATA = [
       "Warranty": "Authenticity Verified Guarantee",
       "In The Box": "1 Pair of Air Jordan 1s, Extra White & Black Laces, Special Edition Box"
     },
-    colors: ["#dc2626", "#0f172a", "#ffffff"],
-    sizes: ["UK 7.5", "UK 8.5", "UK 9.5", "UK 10.5", "UK 11.5"]
+    "colors": [
+      "#dc2626",
+      "#0f172a",
+      "#ffffff"
+    ],
+    "sizes": [
+      "UK 7.5",
+      "UK 8.5",
+      "UK 9.5",
+      "UK 10.5",
+      "UK 11.5"
+    ]
   },
   {
-    id: 16,
-    name: "New Balance 9060 Chunky Lifestyle Sneakers",
-    category: "footwear",
-    categoryName: "Footwear",
-    price: 13999,
-    originalPrice: 15999,
-    rating: 4.8,
-    reviewCount: 210,
-    image: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 16,
+    "name": "New Balance 9060 Chunky Lifestyle Sneakers",
+    "category": "footwear",
+    "categoryName": "Footwear",
+    "price": 13999,
+    "originalPrice": 15999,
+    "rating": 4.8,
+    "reviewCount": 210,
+    "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1539185441755-769473a23570?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "NEW",
-    isFlashDeal: false,
-    stock: 11,
-    description: "The 9060 reinterprets familiar elements sourced from classic 99X models with a warped sensibility inspired by the futuristic Y2K aesthetic.",
-    highlights: [
+    "badge": "NEW",
+    "isFlashDeal": false,
+    "stock": 11,
+    "description": "The 9060 reinterprets familiar elements sourced from classic 99X models with a warped sensibility inspired by the futuristic Y2K aesthetic.",
+    "highlights": [
       "Dual-density ABZORB and SBS midsole cushioning",
       "Premium pigskin suede and open mesh upper construction",
       "Translucent CR device at heel for stability",
       "Diamond outsole pattern inspired by classic 860 design",
       "Supreme all-day cloud-like comfort"
     ],
-    specs: {
+    "specs": {
       "Brand": "New Balance",
       "Model": "9060 / Sea Salt",
       "Cushioning": "ABZORB & SBS Dual Density",
@@ -659,42 +771,47 @@ const PRODUCTS_DATA = [
       "Warranty": "3 Months Brand Warranty",
       "In The Box": "1 Pair of New Balance 9060 Shoes"
     },
-    colors: ["#e2e8f0", "#78716c", "#0f172a"],
-    sizes: ["UK 7", "UK 8", "UK 9", "UK 10"]
+    "colors": [
+      "#e2e8f0",
+      "#78716c",
+      "#0f172a"
+    ],
+    "sizes": [
+      "UK 7",
+      "UK 8",
+      "UK 9",
+      "UK 10"
+    ]
   },
-
-  // =========================================================================
-  // 4. WATCHES & LUXURY ACCESSORIES
-  // =========================================================================
   {
-    id: 17,
-    name: "Fossil Minimalist Chronograph Brown Leather Watch",
-    category: "accessories",
-    categoryName: "Accessories",
-    price: 8495,
-    originalPrice: 11995,
-    rating: 4.6,
-    reviewCount: 167,
-    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 17,
+    "name": "Fossil Minimalist Chronograph Brown Leather Watch",
+    "category": "accessories",
+    "categoryName": "Accessories",
+    "price": 8495,
+    "originalPrice": 11995,
+    "rating": 4.6,
+    "reviewCount": 167,
+    "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 20,
-    description: "44mm case size with Japanese quartz chronograph movement, satin dial finish, and genuine interchangeable brown calfskin leather strap.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 20,
+    "description": "44mm case size with Japanese quartz chronograph movement, satin dial finish, and genuine interchangeable brown calfskin leather strap.",
+    "highlights": [
       "44mm stainless steel case with scratch-resistant mineral crystal glass",
       "Japanese Quartz Chronograph movement with stopwatch and 24-hr sub-dials",
       "5 ATM Water Resistance (50 meters) suitable for swimming",
       "Interchangeable 22mm genuine supple calfskin leather strap",
       "Luminous hands for clear night reading"
     ],
-    specs: {
+    "specs": {
       "Brand": "Fossil",
       "Movement": "Quartz Chronograph",
       "Case Diameter": "44 mm",
@@ -704,37 +821,43 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years International Warranty",
       "In The Box": "Watch, Authentic Tin Gift Box, Warranty Booklet"
     },
-    colors: ["#92400e", "#0f172a", "#ca8a04"],
-    sizes: ["44mm"]
+    "colors": [
+      "#92400e",
+      "#0f172a",
+      "#ca8a04"
+    ],
+    "sizes": [
+      "44mm"
+    ]
   },
   {
-    id: 18,
-    name: "Seiko 5 Sports Automatic Diver Watch (Black Dial)",
-    category: "accessories",
-    categoryName: "Accessories",
-    price: 24500,
-    originalPrice: 28000,
-    rating: 4.9,
-    reviewCount: 380,
-    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 18,
+    "name": "Seiko 5 Sports Automatic Diver Watch (Black Dial)",
+    "category": "accessories",
+    "categoryName": "Accessories",
+    "price": 24500,
+    "originalPrice": 28000,
+    "rating": 4.9,
+    "reviewCount": 380,
+    "image": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: false,
-    stock: 14,
-    description: "Legendary Japanese automatic timepiece powered by Calibre 4R36 with 41-hour power reserve, LumiBrite hands, and unidirectional rotating bezel.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": false,
+    "stock": 14,
+    "description": "Legendary Japanese automatic timepiece powered by Calibre 4R36 with 41-hour power reserve, LumiBrite hands, and unidirectional rotating bezel.",
+    "highlights": [
       "Automatic Movement Calibre 4R36 with manual winding capability",
       "41 Hours Power Reserve with 24 Jewels",
       "100m (10 Bar) Water Resistance with see-through exhibition case back",
       "High-grade LumiBrite on hands and markers for intense glow",
       "Solid stainless steel bracelet with three-fold clasp & push button release"
     ],
-    specs: {
+    "specs": {
       "Brand": "Seiko",
       "Model": "Seiko 5 Sports SRPD55K1",
       "Movement": "Automatic Calibre 4R36 (24 Jewels)",
@@ -744,36 +867,42 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Official Seiko International Warranty",
       "In The Box": "Seiko Watch, Presentation Case, Warranty Card, User Manual"
     },
-    colors: ["#0f172a", "#1e3a8a", "#16a34a"],
-    sizes: ["42.5mm"]
+    "colors": [
+      "#0f172a",
+      "#1e3a8a",
+      "#16a34a"
+    ],
+    "sizes": [
+      "42.5mm"
+    ]
   },
   {
-    id: 19,
-    name: "Ray-Ban Aviator Classic Polarized Sunglasses (Gold/Green)",
-    category: "accessories",
-    categoryName: "Accessories",
-    price: 9890,
-    originalPrice: 12590,
-    rating: 4.8,
-    reviewCount: 420,
-    image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 19,
+    "name": "Ray-Ban Aviator Classic Polarized Sunglasses (Gold/Green)",
+    "category": "accessories",
+    "categoryName": "Accessories",
+    "price": 9890,
+    "originalPrice": 12590,
+    "rating": 4.8,
+    "reviewCount": 420,
+    "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: true,
-    stock: 25,
-    description: "Originally designed for U.S. Aviators in 1937. Legendary G-15 polarized crystal lenses encased in lightweight, durable gold metal frame.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": true,
+    "stock": 25,
+    "description": "Originally designed for U.S. Aviators in 1937. Legendary G-15 polarized crystal lenses encased in lightweight, durable gold metal frame.",
+    "highlights": [
       "Classic G-15 Polarized Crystal Mineral Glass lenses",
       "100% UV400 Protection against harmful UVA/UVB rays",
       "Sturdy corrosion-resistant gold-toned metal frame",
       "Adjustable silicone nose pads for personalized comfortable fit",
       "Eliminates 99% of reflected glare for ultimate visual clarity"
     ],
-    specs: {
+    "specs": {
       "Brand": "Ray-Ban",
       "Model": "RB3025 Aviator Classic",
       "Frame Material": "Polished Gold Metal",
@@ -784,36 +913,43 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Luxottica India Warranty",
       "In The Box": "Sunglasses, Leather Case, Microfiber Cleaning Cloth, Certificate"
     },
-    colors: ["#ca8a04", "#0f172a", "#94a3b8"],
-    sizes: ["58mm Standard", "62mm Large"]
+    "colors": [
+      "#ca8a04",
+      "#0f172a",
+      "#94a3b8"
+    ],
+    "sizes": [
+      "58mm Standard",
+      "62mm Large"
+    ]
   },
   {
-    id: 20,
-    name: "Bellroy Hide & Seek RFID Leather Wallet",
-    category: "accessories",
-    categoryName: "Accessories",
-    price: 4999,
-    originalPrice: 6499,
-    rating: 4.8,
-    reviewCount: 190,
-    image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 20,
+    "name": "Bellroy Hide & Seek RFID Leather Wallet",
+    "category": "accessories",
+    "categoryName": "Accessories",
+    "price": 4999,
+    "originalPrice": 6499,
+    "rating": 4.8,
+    "reviewCount": 190,
+    "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1627123424574-724758594e93?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: false,
-    stock: 28,
-    description: "Slim bifold wallet made from environmentally certified leather. Features hidden bill section and RFID protection for up to 12 cards.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": false,
+    "stock": 28,
+    "description": "Slim bifold wallet made from environmentally certified leather. Features hidden bill section and RFID protection for up to 12 cards.",
+    "highlights": [
       "Holds 5–12+ cards and flat unfolded currency notes",
       "Hidden coin pouch and secret flat-bill section",
       "RFID blocking lining protects against electronic skimmers",
       "Premium environmentally certified top-grain leather",
       "Ultra-slim profile prevents pocket bulge"
     ],
-    specs: {
+    "specs": {
       "Brand": "Bellroy",
       "Material": "Premium Eco-Tanned Top-Grain Leather",
       "Dimensions": "115 x 95 mm",
@@ -821,42 +957,44 @@ const PRODUCTS_DATA = [
       "Warranty": "3 Years Bellroy Warranty",
       "In The Box": "1 Leather Wallet in Embossed Gift Box"
     },
-    colors: ["#78350f", "#0f172a", "#1e3a8a"],
-    sizes: ["Standard"]
+    "colors": [
+      "#78350f",
+      "#0f172a",
+      "#1e3a8a"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
-
-  // =========================================================================
-  // 5. HOME & SMART LIVING
-  // =========================================================================
   {
-    id: 21,
-    name: "Smart LED Ergonomic Desk Lamp with 15W Fast Wireless Charger",
-    category: "home",
-    categoryName: "Home & Living",
-    price: 2999,
-    originalPrice: 4999,
-    rating: 4.7,
-    reviewCount: 230,
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 21,
+    "name": "Smart LED Ergonomic Desk Lamp with 15W Fast Wireless Charger",
+    "category": "home",
+    "categoryName": "Home & Living",
+    "price": 2999,
+    "originalPrice": 4999,
+    "rating": 4.7,
+    "reviewCount": 230,
+    "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 16,
-    description: "Multi-angle adjustable architectural lamp with 5 color temperatures, slide dimming, 15W Qi fast wireless charging base, and auto-off timer.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 16,
+    "description": "Multi-angle adjustable architectural lamp with 5 color temperatures, slide dimming, 15W Qi fast wireless charging base, and auto-off timer.",
+    "highlights": [
       "Integrated 15W Qi Fast Wireless Charging Base for smartphones & earbuds",
       "5 Color Modes (2700K - 6500K) and 10 Stepless Brightness levels",
       "Flicker-free eye protection technology reduces ocular fatigue",
       "Dual-axis foldable aluminum alloy body for multi-angle illumination",
       "45-minute smart auto-off sleep timer"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apex Home",
       "Power Output": "12W LED Lamp + 15W Qi Charger",
       "Color Temperature": "2700K - 6500K",
@@ -866,36 +1004,42 @@ const PRODUCTS_DATA = [
       "Warranty": "1 Year Replacement Warranty",
       "In The Box": "Desk Lamp, Fast Power Adapter, User Manual"
     },
-    colors: ["#18181b", "#ffffff", "#94a3b8"],
-    sizes: ["One Size"]
+    "colors": [
+      "#18181b",
+      "#ffffff",
+      "#94a3b8"
+    ],
+    "sizes": [
+      "One Size"
+    ]
   },
   {
-    id: 22,
-    name: "Dyson V12 Detect Slim Cordless Vacuum Cleaner",
-    category: "home",
-    categoryName: "Home & Living",
-    price: 49900,
-    originalPrice: 58900,
-    rating: 4.9,
-    reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 22,
+    "name": "Dyson V12 Detect Slim Cordless Vacuum Cleaner",
+    "category": "home",
+    "categoryName": "Home & Living",
+    "price": 49900,
+    "originalPrice": 58900,
+    "rating": 4.9,
+    "reviewCount": 310,
+    "image": "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: false,
-    stock: 9,
-    description: "Dyson's lightest intelligent cordless vacuum with laser illumination that reveals invisible microscopic dust on hard floors.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": false,
+    "stock": 9,
+    "description": "Dyson's lightest intelligent cordless vacuum with laser illumination that reveals invisible microscopic dust on hard floors.",
+    "highlights": [
       "Illumination Fluffy cleaner head reveals invisible dust particles",
       "Piezo sensor continuously sizes and counts dust particles on LCD screen",
       "Dyson Hyperdymium motor spins up to 125,000 RPM for 150 AW suction",
       "Up to 60 minutes of fade-free run time with click-in battery",
       "Hair screw tool de-tangles pet hair automatically"
     ],
-    specs: {
+    "specs": {
       "Brand": "Dyson",
       "Model": "V12 Detect Slim Total Clean",
       "Suction Power": "150 Air Watts (AW)",
@@ -905,36 +1049,41 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Dyson India On-Site Warranty",
       "In The Box": "Vacuum, Laser Fluffy Head, Motorbar, Hair Screw Tool, Combi Tool, Wall Dock, Charger"
     },
-    colors: ["#ea580c", "#7c3aed"],
-    sizes: ["Standard"]
+    "colors": [
+      "#ea580c",
+      "#7c3aed"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
   {
-    id: 23,
-    name: "Nespresso Vertuo Pop Automatic Coffee & Espresso Machine",
-    category: "home",
-    categoryName: "Home & Living",
-    price: 15990,
-    originalPrice: 19990,
-    rating: 4.8,
-    reviewCount: 260,
-    image: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 23,
+    "name": "Nespresso Vertuo Pop Automatic Coffee & Espresso Machine",
+    "category": "home",
+    "categoryName": "Home & Living",
+    "price": 15990,
+    "originalPrice": 19990,
+    "rating": 4.8,
+    "reviewCount": 260,
+    "image": "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1509785307050-d4066910ec1e?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 14,
-    description: "Centrifusion technology reads barcode on each capsule to brew 4 cup sizes: Espresso, Double Espresso, Gran Lungo, and Mug with silky crema.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 14,
+    "description": "Centrifusion technology reads barcode on each capsule to brew 4 cup sizes: Espresso, Double Espresso, Gran Lungo, and Mug with silky crema.",
+    "highlights": [
       "Centrifusion extraction spins up to 4,000 RPM for rich barista crema",
       "One-Touch Brewing with automatic capsule barcode recognition",
       "Brews 4 cup sizes: Espresso (40ml), Double (80ml), Gran Lungo (150ml), Mug (230ml)",
       "Compact pop styling fits seamlessly on any modern kitchen counter",
       "Fast 30-second heat up time and auto-off energy saving mode"
     ],
-    specs: {
+    "specs": {
       "Brand": "Nespresso",
       "Model": "Vertuo Pop",
       "Water Tank Capacity": "0.6 Liters",
@@ -943,78 +1092,87 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Official Warranty",
       "In The Box": "Coffee Machine, Welcome Capsule Kit (12 pods), User Manual"
     },
-    colors: ["#dc2626", "#0284c7", "#ca8a04", "#0f172a"],
-    sizes: ["Standard"]
+    "colors": [
+      "#dc2626",
+      "#0284c7",
+      "#ca8a04",
+      "#0f172a"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
   {
-    id: 24,
-    name: "Ceramic Pour-Over Artisan Dripper & Carafe Set",
-    category: "home",
-    categoryName: "Home & Living",
-    price: 1899,
-    originalPrice: 2999,
-    rating: 4.9,
-    reviewCount: 175,
-    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 24,
+    "name": "Ceramic Pour-Over Artisan Dripper & Carafe Set",
+    "category": "home",
+    "categoryName": "Home & Living",
+    "price": 1899,
+    "originalPrice": 2999,
+    "rating": 4.9,
+    "reviewCount": 175,
+    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1509785307050-d4066910ec1e?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: false,
-    stock: 35,
-    description: "Handcrafted matte ceramic V60 pour-over dripper paired with 600ml heat-resistant borosilicate glass server carafe with walnut wood collar.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": false,
+    "stock": 35,
+    "description": "Handcrafted matte ceramic V60 pour-over dripper paired with 600ml heat-resistant borosilicate glass server carafe with walnut wood collar.",
+    "highlights": [
       "Handcrafted high-fired ceramic dripper ensures optimal thermal stability",
       "Spiral interior ribs for smooth water flow and maximum flavor extraction",
       "600ml Borosilicate glass carafe with measuring graduation marks",
       "Natural real walnut wood insulating collar with leather tie",
       "Includes 40 premium unbleached Japanese cone paper filters"
     ],
-    specs: {
+    "specs": {
       "Brand": "Apex Artisan",
       "Material": "Matte Ceramic, Borosilicate Glass, Walnut Wood",
       "Carafe Capacity": "600 ml (2–4 Cups)",
       "Origin": "Handmade Craft",
       "Package Contains": "Ceramic Dripper, Glass Carafe, Walnut Collar, 40 Paper Filters"
     },
-    colors: ["#18181b", "#ffffff", "#78350f"],
-    sizes: ["600ml"]
+    "colors": [
+      "#18181b",
+      "#ffffff",
+      "#78350f"
+    ],
+    "sizes": [
+      "600ml"
+    ]
   },
-
-  // =========================================================================
-  // 6. BEAUTY, GROOMING & WELLNESS
-  // =========================================================================
   {
-    id: 25,
-    name: "Vitamin C & 2% Hyaluronic Glow Facial Serum (50ml)",
-    category: "beauty",
-    categoryName: "Beauty & Wellness",
-    price: 999,
-    originalPrice: 1799,
-    rating: 4.9,
-    reviewCount: 680,
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 25,
+    "name": "Vitamin C & 2% Hyaluronic Glow Facial Serum (50ml)",
+    "category": "beauty",
+    "categoryName": "Beauty & Wellness",
+    "price": 999,
+    "originalPrice": 1799,
+    "rating": 4.9,
+    "reviewCount": 680,
+    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1608248597359-00f7cfcb7e25?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: true,
-    stock: 50,
-    description: "Advanced anti-aging glowing formula with 20% Pure Ethyl Ascorbic Acid, 2% Multi-Molecular Hyaluronic Acid, and Ferulic Acid.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": true,
+    "stock": 50,
+    "description": "Advanced anti-aging glowing formula with 20% Pure Ethyl Ascorbic Acid, 2% Multi-Molecular Hyaluronic Acid, and Ferulic Acid.",
+    "highlights": [
       "20% Active Vitamin C brightens dark spots and evens skin tone",
       "2% Multi-molecular Hyaluronic Acid delivers 24hr deep skin hydration",
       "Cruelty-free, Vegan, Paraben-free, and Sulphate-free certified",
       "Dermatologically tested on Indian skin types with zero fragrance irritation",
       "Noticeable radiance and dark spot reduction in 14 days"
     ],
-    specs: {
+    "specs": {
       "Brand": "DermaGlow",
       "Quantity": "50 ml / 1.7 fl.oz",
       "Skin Type": "All Skin Types (Oily, Dry, Sensitive)",
@@ -1023,36 +1181,41 @@ const PRODUCTS_DATA = [
       "Key Ingredients": "20% Ethyl Ascorbic Acid, Hyaluronic Acid, Vitamin E, Ferulic Acid",
       "In The Box": "1 Glass Dropper Bottle (50ml)"
     },
-    colors: ["#fbbf24"],
-    sizes: ["30ml", "50ml"]
+    "colors": [
+      "#fbbf24"
+    ],
+    "sizes": [
+      "30ml",
+      "50ml"
+    ]
   },
   {
-    id: 26,
-    name: "Dyson Supersonic Ionic Hair Dryer (Iron / Fuchsia)",
-    category: "beauty",
-    categoryName: "Beauty & Wellness",
-    price: 34900,
-    originalPrice: 39900,
-    rating: 4.9,
-    reviewCount: 410,
-    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 26,
+    "name": "Dyson Supersonic Ionic Hair Dryer (Iron / Fuchsia)",
+    "category": "beauty",
+    "categoryName": "Beauty & Wellness",
+    "price": 34900,
+    "originalPrice": 39900,
+    "rating": 4.9,
+    "reviewCount": 410,
+    "image": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "HOT",
-    isFlashDeal: false,
-    stock: 12,
-    description: "Engineered for different hair types. Fast drying with no extreme heat damage. Intelligent heat control protects natural shine.",
-    highlights: [
+    "badge": "HOT",
+    "isFlashDeal": false,
+    "stock": 12,
+    "description": "Engineered for different hair types. Fast drying with no extreme heat damage. Intelligent heat control protects natural shine.",
+    "highlights": [
       "Intelligent Heat Control measures temperature 40 times per second",
       "Dyson digital motor V9 spins up to 110,000 RPM with Air Multiplier technology",
       "Includes 5 magnetic styling attachments (Flyaway, Diffuser, Styling Concentrator)",
       "Negative ions help reduce static electricity in hair",
       "Acoustically tuned for ultra-quiet operation"
     ],
-    specs: {
+    "specs": {
       "Brand": "Dyson",
       "Model": "Supersonic HD08",
       "Power": "1600 Watts",
@@ -1061,36 +1224,42 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Dyson India Warranty",
       "In The Box": "Dyson Supersonic, 5 Magnetic Attachments, Non-Slip Heat Mat"
     },
-    colors: ["#db2777", "#ca8a04", "#0284c7"],
-    sizes: ["Standard Kit"]
+    "colors": [
+      "#db2777",
+      "#ca8a04",
+      "#0284c7"
+    ],
+    "sizes": [
+      "Standard Kit"
+    ]
   },
   {
-    id: 27,
-    name: "Philips Series 9000 Wet & Dry Electric Shaver with SkinIQ",
-    category: "beauty",
-    categoryName: "Beauty & Wellness",
-    price: 14999,
-    originalPrice: 19999,
-    rating: 4.7,
-    reviewCount: 180,
-    image: "https://images.unsplash.com/photo-1621607512214-68297480165e?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 27,
+    "name": "Philips Series 9000 Wet & Dry Electric Shaver with SkinIQ",
+    "category": "beauty",
+    "categoryName": "Beauty & Wellness",
+    "price": 14999,
+    "originalPrice": 19999,
+    "rating": 4.7,
+    "reviewCount": 180,
+    "image": "https://images.unsplash.com/photo-1621607512214-68297480165e?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1621607512214-68297480165e?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "SALE",
-    isFlashDeal: true,
-    stock: 20,
-    description: "The world's most intelligent shaver with AI SkinIQ. Dual SteelPrecision self-sharpening blades and pressure-guard sensor for closest shave with zero skin irritation.",
-    highlights: [
+    "badge": "SALE",
+    "isFlashDeal": true,
+    "stock": 20,
+    "description": "The world's most intelligent shaver with AI SkinIQ. Dual SteelPrecision self-sharpening blades and pressure-guard sensor for closest shave with zero skin irritation.",
+    "highlights": [
       "SkinIQ Technology guides with optimal pressure to protect skin",
       "Dual SteelPrecision blades perform up to 150,000 cutting actions per minute",
       "360-D Flexible heads follow facial contours effortlessly",
       "100% Waterproof for comfortable dry or refreshing wet shave in shower",
       "60 Minutes of cordless shaving on 1-hour fast charge with wireless Quick Clean Pod"
     ],
-    specs: {
+    "specs": {
       "Brand": "Philips",
       "Model": "Series 9000 (S9987/55)",
       "Battery Type": "Lithium-ion (60 Mins Runtime)",
@@ -1099,36 +1268,41 @@ const PRODUCTS_DATA = [
       "Warranty": "2 Years Worldwide Philips Warranty",
       "In The Box": "Shaver, Quick Clean Pod + Cartridge, Travel Case, Charging Cable, Pop-Up Trimmer"
     },
-    colors: ["#0f172a", "#0284c7"],
-    sizes: ["Standard"]
+    "colors": [
+      "#0f172a",
+      "#0284c7"
+    ],
+    "sizes": [
+      "Standard"
+    ]
   },
   {
-    id: 28,
-    name: "Versace Eros Eau De Parfum for Men (100ml)",
-    category: "beauty",
-    categoryName: "Beauty & Wellness",
-    price: 8250,
-    originalPrice: 9900,
-    rating: 4.9,
-    reviewCount: 390,
-    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80",
-    images: [
+    "id": 28,
+    "name": "Versace Eros Eau De Parfum for Men (100ml)",
+    "category": "beauty",
+    "categoryName": "Beauty & Wellness",
+    "price": 8250,
+    "originalPrice": 9900,
+    "rating": 4.9,
+    "reviewCount": 390,
+    "image": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80",
+    "images": [
       "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=900&auto=format&fit=crop&q=80"
     ],
-    badge: "BESTSELLER",
-    isFlashDeal: false,
-    stock: 22,
-    description: "Passionate, heroic, and masculine. A luminous aura with an intense, vibrant, and glowing combination of fresh mint leaves, Italian lemon zest, and green apple.",
-    highlights: [
+    "badge": "BESTSELLER",
+    "isFlashDeal": false,
+    "stock": 22,
+    "description": "Passionate, heroic, and masculine. A luminous aura with an intense, vibrant, and glowing combination of fresh mint leaves, Italian lemon zest, and green apple.",
+    "highlights": [
       "Top Notes: Italian Lemon, Mandarin, Mint Oil, Candied Apple",
       "Heart Notes: Geranium Flower, Clary Sage Essence, Ambermax",
       "Base Notes: Cedarwood Atlas, Vetiver Orpur, Patchouli Coeur, Sandalwood, Vanilla",
       "Concentration: Eau De Parfum (EDP) with 10+ hours long-lasting projection",
       "Iconic turquoise Medusa glass bottle designed by Donatella Versace"
     ],
-    specs: {
+    "specs": {
       "Brand": "Versace",
       "Volume": "100 ml / 3.4 fl.oz",
       "Fragrance Type": "Aromatic Fougère Woody",
@@ -1136,55 +1310,13 @@ const PRODUCTS_DATA = [
       "Warranty": "100% Genuine Imported Fragrance",
       "In The Box": "1 Perfume Bottle (100ml) in Original Sealed Versace Box"
     },
-    colors: ["#0284c7"],
-    sizes: ["50ml", "100ml", "200ml"]
+    "colors": [
+      "#0284c7"
+    ],
+    "sizes": [
+      "50ml",
+      "100ml",
+      "200ml"
+    ]
   }
-];
-
-// Coupons
-const COUPONS = {
-  "SAVE20": { discountPercent: 20, description: "20% OFF on all orders" },
-  "FLASH30": { discountPercent: 30, description: "30% Flash Sale Special" },
-  "WELCOME10": { discountPercent: 10, description: "10% Welcome Discount" },
-  "FREESHIP": { discountPercent: 0, freeShipping: true, description: "Free Express Shipping" }
-};
-
-// Currencies
-const CURRENCIES = {
-  INR: { symbol: "₹", rate: 1, name: "INR (₹)" },
-  USD: { symbol: "$", rate: 0.012, name: "USD ($)" },
-  EUR: { symbol: "€", rate: 0.011, name: "EUR (€)" },
-  GBP: { symbol: "£", rate: 0.0095, name: "GBP (£)" }
-};
-
-// Customer Reviews
-const REVIEWS_DATA = [
-  {
-    id: 1,
-    name: "Rahul Sharma",
-    avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80",
-    rating: 5,
-    comment: "Ordered the Sony WH-1000XM5 and the Jordan 1 Chicago. The multi-angle photos on the website were 100% accurate to the real product received. Sound quality & ANC are phenomenal!"
-  },
-  {
-    id: 2,
-    name: "Priya Patel",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80",
-    rating: 5,
-    comment: "Love the Flipkart-style photo gallery and specs breakdown! On my phone, browsing all 6 photos of the jacket made it so easy to check the fabric and zipper quality before buying."
-  },
-  {
-    id: 3,
-    name: "Amit Verma",
-    avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=120&auto=format&fit=crop&q=80",
-    rating: 5,
-    comment: "The Nike Air Max sneakers look even sharper in person. Quick view specs table answered all my questions regarding sizing and sole material."
-  },
-  {
-    id: 4,
-    name: "Neha Gupta",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
-    rating: 5,
-    comment: "Fast 1-tap checkout with UPI was totally seamless. Got my Versace Eros perfume delivered in perfect sealed packaging."
-  }
-];
+]
