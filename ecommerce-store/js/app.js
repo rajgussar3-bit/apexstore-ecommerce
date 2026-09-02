@@ -832,7 +832,7 @@ function renderWishlistDrawer() {
 }
 
 /* ==========================================================================
-   Product Quick View
+   Product Quick View (Flipkart-Style Multi-Angle Gallery & Detailed Specs)
    ========================================================================== */
 function openQuickView(productId) {
   const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
@@ -847,70 +847,147 @@ function openQuickView(productId) {
   const colors = (product.colors && product.colors.length > 0) ? product.colors : ['#1e293b'];
   const sizes = (product.sizes && product.sizes.length > 0) ? product.sizes : ['Standard'];
   const origPrice = product.original_price || product.originalPrice || product.price;
+  const highlights = product.highlights || product.features || [];
+  const specs = product.specs || {};
 
+  let currentImgIndex = 0;
   let selectedColor = colors[0];
   let selectedSize = sizes[0];
 
   modalContent.innerHTML = `
-    <div class="quick-view-grid">
+    <div class="quick-view-grid" style="max-width:920px;padding:1.5rem;">
+      
+      <!-- Multi-Angle Image Gallery -->
       <div class="qv-gallery">
-        <div class="qv-gallery-main">
-          <img id="qv-main-img" src="${product.image}" alt="${product.name}" />
+        <div class="qv-gallery-main" style="position:relative;background:var(--bg-secondary);border-radius:var(--radius-lg);overflow:hidden;">
+          <img id="qv-main-img" src="${images[0]}" alt="${product.name}" style="width:100%;aspect-ratio:1/1;object-fit:cover;transition:opacity 0.2s ease;" />
+          
+          <!-- Photo Counter Badge -->
+          <span class="gallery-counter-pill" id="qv-img-counter" style="position:absolute;bottom:12px;right:12px;background:rgba(15,23,42,0.75);color:white;padding:3px 10px;border-radius:9999px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px);">
+            📸 1 / ${images.length}
+          </span>
+
+          <!-- Left/Right Gallery Nav Arrows -->
+          ${images.length > 1 ? `
+            <button class="gallery-nav-btn prev" onclick="navigateQvImage(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);color:#0f172a;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);font-weight:800;">‹</button>
+            <button class="gallery-nav-btn next" onclick="navigateQvImage(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);color:#0f172a;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);font-weight:800;">›</button>
+          ` : ''}
         </div>
-        <div class="qv-thumbnails">
+
+        <!-- Thumbnails Strip (4 to 7 photos) -->
+        <div class="qv-thumbnails" style="display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.5rem;margin-top:0.6rem;scrollbar-width:none;">
           ${images.map((img, idx) => `
-            <img src="${img}" class="qv-thumb-img ${idx === 0 ? 'active' : ''}" onclick="changeQvImage('${img}', this)" alt="" />
+            <div class="qv-thumb-wrap ${idx === 0 ? 'active' : ''}" onclick="selectQvThumbnail(${idx})" style="flex-shrink:0;width:58px;height:58px;border-radius:8px;overflow:hidden;border:2px solid ${idx===0?'var(--primary)':'transparent'};cursor:pointer;transition:all 0.2s ease;">
+              <img src="${img}" alt="Angle ${idx+1}" style="width:100%;height:100%;object-fit:cover;" />
+            </div>
           `).join('')}
         </div>
       </div>
 
-      <div class="qv-info">
-        <span class="product-category">${product.category_name || product.categoryName}</span>
-        <h3 class="qv-title">${product.name}</h3>
-
-        <div class="product-rating-wrap" style="margin-bottom:0.75rem;">
-          <div class="rating-stars">${renderStarRating(product.rating || 4.5)}</div>
-          <span class="rating-number">${product.rating || 4.5}</span>
-          <span class="rating-count">(${product.review_count || product.reviewCount || 0} reviews)</span>
-        </div>
-
-        <div class="product-price-row" style="margin-bottom:1rem;">
-          <span class="current-price" style="font-size:1.4rem;">${formatPrice(product.price)}</span>
-          <span class="original-price" style="font-size:0.95rem;">${formatPrice(origPrice)}</span>
-          <span class="discount-tag">${Math.round(((origPrice - product.price)/origPrice)*100)}% OFF</span>
-        </div>
-
-        <p class="qv-desc">${product.description}</p>
-
-        <div class="variant-group">
-          <label class="variant-label">Color:</label>
-          <div class="color-options">
-            ${colors.map((c, i) => `
-              <div class="color-dot ${i === 0 ? 'active' : ''}" style="background-color: ${c}" onclick="selectQvColor('${c}', this)"></div>
-            `).join('')}
+      <!-- Product Details, Specs & Highlights -->
+      <div class="qv-info" style="display:flex;flex-direction:column;gap:0.85rem;">
+        <div>
+          <span class="product-category" style="font-size:0.75rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">${product.category_name || product.categoryName}</span>
+          <h2 class="qv-title" style="font-size:1.35rem;font-weight:800;line-height:1.3;margin-top:0.2rem;">${product.name}</h2>
+          
+          <div class="product-rating-wrap" style="margin-top:0.4rem;">
+            <div class="rating-stars">${renderStarRating(product.rating || 4.5)}</div>
+            <span class="rating-number" style="font-weight:800;">${product.rating || 4.5}</span>
+            <span class="rating-count" style="color:var(--text-muted);font-size:0.75rem;">(${product.review_count || product.reviewCount || 0} Ratings & Reviews)</span>
           </div>
         </div>
 
-        <div class="variant-group">
-          <label class="variant-label">Size / Option:</label>
-          <div class="size-options">
-            ${sizes.map((s, i) => `
-              <button class="size-pill ${i === 0 ? 'active' : ''}" onclick="selectQvSize('${s}', this)">${s}</button>
-            `).join('')}
+        <!-- Price Breakdown -->
+        <div class="product-price-row" style="margin:0;display:flex;align-items:baseline;gap:0.6rem;">
+          <span class="current-price" style="font-size:1.6rem;font-weight:800;color:var(--text-primary);">${formatPrice(product.price)}</span>
+          <span class="original-price" style="font-size:1.05rem;color:var(--text-muted);text-decoration:line-through;">${formatPrice(origPrice)}</span>
+          <span class="discount-tag" style="font-size:0.85rem;font-weight:800;color:var(--success);">${Math.round(((origPrice - product.price)/origPrice)*100)}% OFF</span>
+        </div>
+
+        <!-- Bank Offers Banner -->
+        <div style="background:var(--bg-accent-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:0.65rem 0.85rem;font-size:0.78rem;">
+          <div style="font-weight:800;color:var(--primary);margin-bottom:0.2rem;">🏷️ Available Offers:</div>
+          <div>• <strong>SAVE20</strong> - Flat 20% discount on cart</div>
+          <div>• Free Express Delivery across India (Cash on Delivery Available)</div>
+        </div>
+
+        <!-- Color & Size Selection -->
+        <div style="display:flex;flex-wrap:wrap;gap:1.25rem;">
+          <div class="variant-group">
+            <label class="variant-label" style="font-size:0.8rem;font-weight:800;margin-bottom:0.35rem;display:block;">Available Color:</label>
+            <div class="color-options" style="display:flex;gap:0.45rem;">
+              ${colors.map((c, i) => `
+                <div class="color-dot ${i === 0 ? 'active' : ''}" style="background-color: ${c}" onclick="selectQvColor('${c}', this)"></div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <label class="variant-label" style="font-size:0.8rem;font-weight:800;margin-bottom:0.35rem;display:block;">Size / Variant:</label>
+            <div class="size-options" style="display:flex;gap:0.4rem;">
+              ${sizes.map((s, i) => `
+                <button class="size-pill ${i === 0 ? 'active' : ''}" onclick="selectQvSize('${s}', this)">${s}</button>
+              `).join('')}
+            </div>
           </div>
         </div>
 
-        <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
-          <button class="btn btn-primary btn-block" id="qv-add-btn">
-            Add to Cart
+        <!-- Flipkart-Style Highlights -->
+        ${highlights.length > 0 ? `
+          <div style="border-top:1px solid var(--border-subtle);padding-top:0.75rem;">
+            <h4 style="font-size:0.875rem;font-weight:800;margin-bottom:0.45rem;">Product Highlights:</h4>
+            <ul style="display:flex;flex-direction:column;gap:0.3rem;font-size:0.8rem;color:var(--text-secondary);">
+              ${highlights.map(h => `<li style="display:flex;align-items:flex-start;gap:0.4rem;"><span style="color:var(--success);font-weight:800;">✓</span> <span>${h}</span></li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+
+        <!-- Flipkart-Style Specifications Table -->
+        ${Object.keys(specs).length > 0 ? `
+          <div style="border-top:1px solid var(--border-subtle);padding-top:0.75rem;">
+            <h4 style="font-size:0.875rem;font-weight:800;margin-bottom:0.5rem;">Detailed Specifications:</h4>
+            <div style="display:flex;flex-direction:column;border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;font-size:0.78rem;">
+              ${Object.entries(specs).map(([k, v], idx) => `
+                <div style="display:grid;grid-template-columns:140px 1fr;padding:0.45rem 0.75rem;background:${idx%2===0?'var(--bg-secondary)':'var(--bg-surface)'};border-bottom:1px solid var(--border-subtle);">
+                  <span style="color:var(--text-muted);font-weight:700;">${k}</span>
+                  <span style="color:var(--text-primary);font-weight:600;">${v}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- CTA Buttons -->
+        <div style="display:flex;gap:0.75rem;margin-top:0.75rem;position:sticky;bottom:0;background:var(--bg-surface);padding-top:0.5rem;">
+          <button class="btn btn-primary btn-block" id="qv-add-btn" style="font-size:0.95rem;padding:0.75rem;">
+            🛒 Add to Cart
           </button>
-          <button class="btn btn-secondary" onclick="toggleWishlist(${product.id})" title="Wishlist">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="${state.wishlist.includes(product.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <button class="btn btn-secondary" onclick="toggleWishlist(${product.id})" title="Wishlist" style="padding:0.75rem 1rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="${state.wishlist.includes(product.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           </button>
         </div>
+
       </div>
     </div>
   `;
+
+  // Gallery Navigation Functions
+  window.selectQvThumbnail = function(idx) {
+    currentImgIndex = idx;
+    const mainImg = document.getElementById('qv-main-img');
+    const counter = document.getElementById('qv-img-counter');
+    if (mainImg) mainImg.src = images[idx];
+    if (counter) counter.textContent = `📸 ${idx + 1} / ${images.length}`;
+
+    document.querySelectorAll('.qv-thumb-wrap').forEach((el, i) => {
+      el.style.borderColor = (i === idx) ? 'var(--primary)' : 'transparent';
+    });
+  };
+
+  window.navigateQvImage = function(direction) {
+    currentImgIndex = (currentImgIndex + direction + images.length) % images.length;
+    window.selectQvThumbnail(currentImgIndex);
+  };
 
   document.getElementById('qv-add-btn').onclick = () => {
     addToCart(product.id, selectedColor, selectedSize, 1);
@@ -918,13 +995,6 @@ function openQuickView(productId) {
   };
 
   modal.classList.add('active');
-}
-
-function changeQvImage(imgSrc, el) {
-  const mainImg = document.getElementById('qv-main-img');
-  if (mainImg) mainImg.src = imgSrc;
-  document.querySelectorAll('.qv-thumb-img').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
 }
 
 function selectQvColor(color, el) {
