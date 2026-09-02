@@ -2,11 +2,12 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="ApexStore - Premium modern e-commerce shopping experience for mobile and desktop." />
-  <title>ApexStore | Modern Next-Gen Shopping</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="description" content="ApexStore - Premium mobile & desktop shopping experience with fast delivery and instant checkout." />
+  <title>ApexStore | Next-Gen Shopping Experience</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,32 +25,105 @@
        ========================================================================= -->
   <div class="announcement-bar">
     <div class="container announcement-content">
-      <span class="announcement-badge">FLASH SALE</span>
-      <span>Use coupon <strong>SAVE20</strong> for 20% OFF | Free Express Delivery on orders above ₹999</span>
+      <span class="announcement-badge">⚡ SALE</span>
+      <span>Code <strong>SAVE20</strong> for 20% OFF | Free Express Delivery over ₹999</span>
     </div>
   </div>
 
   <!-- =========================================================================
-       2. Site Header (Navbar)
+       2. Site Header (App-like Top Bar & Search)
        ========================================================================= -->
   <header class="site-header" id="site-header">
-    <div class="container header-inner">
+    <div class="container">
       
-      <!-- Brand Logo -->
-      <a href="index.html" class="brand-logo">
-        <div class="brand-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
-        </div>
-        <span class="brand-name">ApexStore</span>
-      </a>
+      <!-- Top Row: Logo, Currency, Theme & Actions -->
+      <div class="header-top-row">
+        <!-- Brand Logo -->
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <span class="brand-name">ApexStore</span>
+        </a>
 
-      <!-- Search Bar -->
-      <div class="search-wrapper" id="search-wrapper">
-        <div class="search-form">
+        <!-- Desktop Search Bar -->
+        <div class="search-wrapper-desktop">
+          <div class="search-form">
+            <span class="search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              id="desktop-search-input" 
+              class="search-input" 
+              placeholder="Search sneakers, iPhones, headphones, jackets..." 
+              autocomplete="off" 
+            />
+            <button id="desktop-search-clear" class="search-clear-btn" title="Clear">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <div class="search-suggestions" id="desktop-search-suggestions"></div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <!-- Currency Selector -->
+          <select id="currency-select" class="currency-select" title="Currency">
+            <option value="INR">₹ INR</option>
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+            <option value="GBP">£ GBP</option>
+          </select>
+
+          <!-- Theme Toggle -->
+          <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme" onclick="toggleTheme()">
+            <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+
+          <!-- Wishlist (Desktop Shortcut) -->
+          <button class="icon-btn" id="wishlist-drawer-trigger" title="Wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+          </button>
+
+          <!-- Cart (Always visible shortcut) -->
+          <button class="icon-btn" id="cart-drawer-trigger" title="Cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="badge-count cart-badge-count" style="display:none;">0</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Search Input Strip (Always visible for easy 1-tap search) -->
+      <div class="mobile-search-strip">
+        <div class="search-form" style="position:relative;">
           <span class="search-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <circle cx="11" cy="11" r="8"></circle>
@@ -58,96 +132,95 @@
           </span>
           <input 
             type="text" 
-            id="search-input" 
-            class="search-input" 
-            placeholder="Search headphones, iPhones, sneakers, watches..." 
+            id="mobile-search-input" 
+            class="mobile-search-input" 
+            placeholder="Search 'Sony Headphones', 'Nike', 'Watch'..." 
             autocomplete="off" 
           />
-          <button id="search-clear" class="search-clear-btn" title="Clear Search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+          <button id="mobile-search-clear" class="search-clear-btn" title="Clear">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
+          <div class="search-suggestions" id="mobile-search-suggestions"></div>
         </div>
-        <!-- Live Autocomplete Suggestions -->
-        <div class="search-suggestions" id="search-suggestions"></div>
-      </div>
-
-      <!-- Header Actions -->
-      <div class="header-actions">
-        <!-- Currency Selector -->
-        <select id="currency-select" class="currency-select" title="Select Currency">
-          <option value="INR">INR (₹)</option>
-          <option value="USD">USD ($)</option>
-          <option value="EUR">EUR (€)</option>
-          <option value="GBP">GBP (£)</option>
-        </select>
-
-        <!-- Mobile Search Toggle Button -->
-        <button class="icon-btn" id="mobile-search-toggle" title="Search" style="display:none;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-
-        <!-- Dark/Light Theme Toggle -->
-        <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme" onclick="toggleTheme()">
-          <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-        </button>
-
-        <!-- Wishlist Button -->
-        <button class="icon-btn" id="wishlist-drawer-trigger" title="My Wishlist">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-          </svg>
-          <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
-        </button>
-
-        <!-- Cart Button -->
-        <button class="icon-btn" id="cart-drawer-trigger" title="Shopping Cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-          <span class="badge-count cart-badge-count" style="display:none;">0</span>
-        </button>
       </div>
 
     </div>
   </header>
 
-  <!-- Sub Navigation Bar (Desktop Categories) -->
+  <!-- Desktop Subnav -->
   <nav class="sub-nav">
     <div class="container sub-nav-inner">
-      <button class="nav-link active" data-category="all" onclick="filterByCategory('all')">All Products</button>
-      <button class="nav-link" data-category="electronics" onclick="filterByCategory('electronics')">Electronics</button>
-      <button class="nav-link" data-category="fashion" onclick="filterByCategory('fashion')">Fashion & Streetwear</button>
-      <button class="nav-link" data-category="footwear" onclick="filterByCategory('footwear')">Footwear</button>
-      <button class="nav-link" data-category="accessories" onclick="filterByCategory('accessories')">Watches & Accessories</button>
-      <button class="nav-link" data-category="home" onclick="filterByCategory('home')">Home & Living</button>
-      <button class="nav-link" data-category="beauty" onclick="filterByCategory('beauty')">Beauty & Grooming</button>
+      <button class="nav-link active" data-category="all" onclick="filterByCategory('all')">✨ All Products</button>
+      <button class="nav-link" data-category="electronics" onclick="filterByCategory('electronics')">📱 Electronics</button>
+      <button class="nav-link" data-category="fashion" onclick="filterByCategory('fashion')">👕 Fashion & Streetwear</button>
+      <button class="nav-link" data-category="footwear" onclick="filterByCategory('footwear')">👟 Footwear</button>
+      <button class="nav-link" data-category="accessories" onclick="filterByCategory('accessories')">⌚ Watches & Accessories</button>
+      <button class="nav-link" data-category="home" onclick="filterByCategory('home')">🏠 Home & Living</button>
+      <button class="nav-link" data-category="beauty" onclick="filterByCategory('beauty')">✨ Beauty & Grooming</button>
     </div>
   </nav>
 
+  <!-- =========================================================================
+       3. Mobile Visual Category Stories / Carousel (App-like 1-tap Filter)
+       ========================================================================= -->
+  <section class="mobile-stories-section">
+    <div class="container">
+      <div class="stories-scroll-container">
+        <div class="story-pill-item active" data-category="all" onclick="filterByCategory('all')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">✨</div>
+          </div>
+          <span class="story-label">All</span>
+        </div>
+
+        <div class="story-pill-item" data-category="electronics" onclick="filterByCategory('electronics')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">📱</div>
+          </div>
+          <span class="story-label">Electronics</span>
+        </div>
+
+        <div class="story-pill-item" data-category="fashion" onclick="filterByCategory('fashion')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">👕</div>
+          </div>
+          <span class="story-label">Fashion</span>
+        </div>
+
+        <div class="story-pill-item" data-category="footwear" onclick="filterByCategory('footwear')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">👟</div>
+          </div>
+          <span class="story-label">Footwear</span>
+        </div>
+
+        <div class="story-pill-item" data-category="accessories" onclick="filterByCategory('accessories')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">⌚</div>
+          </div>
+          <span class="story-label">Watches</span>
+        </div>
+
+        <div class="story-pill-item" data-category="home" onclick="filterByCategory('home')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">🏠</div>
+          </div>
+          <span class="story-label">Home</span>
+        </div>
+
+        <div class="story-pill-item" data-category="beauty" onclick="filterByCategory('beauty')">
+          <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">🧴</div>
+          </div>
+          <span class="story-label">Beauty</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <main>
     <!-- =========================================================================
-         3. Hero Carousel Section
+         4. Hero Slider Section
          ========================================================================= -->
     <section class="hero-section">
       <div class="container">
@@ -155,72 +228,28 @@
           <div class="hero-slide" id="hero-slide">
             <!-- Rendered by JS -->
           </div>
-          <!-- Slider Navigation Arrows -->
-          <button class="slider-arrow prev" id="hero-prev" title="Previous Slide">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <button class="slider-arrow prev" id="hero-prev" title="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button class="slider-arrow next" id="hero-next" title="Next Slide">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          <button class="slider-arrow next" id="hero-next" title="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-        </div>
-
-        <!-- Trust & Value Propositions -->
-        <div class="features-strip">
-          <div class="feature-box">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-            </div>
-            <div>
-              <div class="feature-title">Free Express Delivery</div>
-              <div class="feature-desc">On all orders above ₹999</div>
-            </div>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-            </div>
-            <div>
-              <div class="feature-title">100% Secure Payments</div>
-              <div class="feature-desc">UPI, Cards, Net Banking & COD</div>
-            </div>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-            </div>
-            <div>
-              <div class="feature-title">7 Days Easy Return</div>
-              <div class="feature-desc">Hassle-free replacement policy</div>
-            </div>
-          </div>
-
-          <div class="feature-box">
-            <div class="feature-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            </div>
-            <div>
-              <div class="feature-title">24/7 Dedicated Support</div>
-              <div class="feature-desc">Instant live chat & phone help</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
     <!-- =========================================================================
-         4. Flash Sale Banner with Live Timer
+         5. Flash Deals with Live Countdown
          ========================================================================= -->
     <section class="flash-deals-section">
       <div class="container">
         <div class="flash-deals-card">
           <div class="flash-info">
             <h3>
-              <span>⚡ Deal of the Day</span>
-              <span style="font-size:0.75rem;background:#ef4444;padding:0.2rem 0.6rem;border-radius:9999px;">LIMITED TIME</span>
+              <span>⚡ Flash Deals of the Day</span>
+              <span style="font-size:0.68rem;background:#ef4444;padding:0.15rem 0.5rem;border-radius:9999px;">UP TO 50% OFF</span>
             </h3>
-            <p>Grab extraordinary discounts on our top rated audio gear, smartwatches, and designer apparel.</p>
+            <p>Special limited time prices on premium headphones, sneakers, and apparel.</p>
           </div>
 
           <div class="countdown-box">
@@ -244,120 +273,96 @@
     </section>
 
     <!-- =========================================================================
-         5. Categories Pill Explorer
-         ========================================================================= -->
-    <section class="categories-section" id="categories-section">
-      <div class="container">
-        <div class="section-header">
-          <div class="section-title-wrap">
-            <h2>Explore by Category</h2>
-            <p>Select a category to filter products instantly</p>
-          </div>
-        </div>
-
-        <div class="category-pills">
-          <button class="category-pill-btn active" data-category="all" onclick="filterByCategory('all')">
-            <span>✨ All Categories</span>
-          </button>
-          <button class="category-pill-btn" data-category="electronics" onclick="filterByCategory('electronics')">
-            <span>📱 Electronics</span>
-          </button>
-          <button class="category-pill-btn" data-category="fashion" onclick="filterByCategory('fashion')">
-            <span>👕 Fashion</span>
-          </button>
-          <button class="category-pill-btn" data-category="footwear" onclick="filterByCategory('footwear')">
-            <span>👟 Footwear</span>
-          </button>
-          <button class="category-pill-btn" data-category="accessories" onclick="filterByCategory('accessories')">
-            <span>⌚ Watches & Accessories</span>
-          </button>
-          <button class="category-pill-btn" data-category="home" onclick="filterByCategory('home')">
-            <span>🏠 Home & Living</span>
-          </button>
-          <button class="category-pill-btn" data-category="beauty" onclick="filterByCategory('beauty')">
-            <span>✨ Beauty & Grooming</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================================================================
-         6. Main Product Catalog & Filter Layout
+         6. Product Catalog & Filter Layout
          ========================================================================= -->
     <section class="products-section" id="products-section">
       <div class="container">
+        
+        <!-- Mobile Sticky Filter & Sort Pill Bar -->
+        <div class="mobile-filter-bar">
+          <button class="mobile-filter-chip-btn" id="mobile-filter-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            Filters
+          </button>
+
+          <div style="display:flex;align-items:center;gap:0.4rem;">
+            <span style="font-size:0.75rem;color:var(--text-muted);font-weight:700;">Sort:</span>
+            <select id="mobile-sort-select" class="mobile-sort-select">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+              <option value="discount">Max Discount</option>
+            </select>
+          </div>
+        </div>
+
         <div class="shop-layout">
 
-          <!-- Desktop / Mobile Filter Sidebar -->
-          <aside class="filter-sidebar" id="filter-sidebar">
+          <!-- Filter Sidebar (Desktop Sidebar / Mobile Bottom Sheet) -->
+          <aside class="filter-sidebar drawer" id="filter-sidebar">
+            <div class="bottom-sheet-drag-handle"></div>
             <div class="filter-header">
-              <h3>Filters</h3>
+              <h3>Filter Products</h3>
               <div style="display:flex;align-items:center;gap:0.75rem;">
                 <button class="reset-filter-btn" onclick="resetFilters()">Reset All</button>
-                <button class="drawer-close-btn" id="close-filter-btn" style="display:none;">
+                <button class="drawer-close-btn" id="close-filter-btn">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
               </div>
             </div>
 
-            <!-- Price Range Filter -->
-            <div class="filter-group">
-              <div class="filter-group-title">Price Range</div>
-              <div class="price-range-wrap">
-                <input type="range" id="price-slider" class="price-slider" min="500" max="150000" step="500" value="150000" />
-                <div class="price-labels">
-                  <span>₹500</span>
-                  <span id="price-max-label">₹1,50,000</span>
+            <div class="drawer-body" style="padding: 0;">
+              <!-- Price Range -->
+              <div class="filter-group">
+                <div class="filter-group-title">Price Range</div>
+                <div class="price-range-wrap">
+                  <input type="range" id="price-slider" class="price-slider" min="500" max="150000" step="500" value="150000" />
+                  <div class="price-labels">
+                    <span>₹500</span>
+                    <span id="price-max-label">₹1,50,000</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Minimum Rating Filter -->
-            <div class="filter-group">
-              <div class="filter-group-title">Customer Rating</div>
-              <div class="filter-options-list">
-                <label class="filter-checkbox-label">
-                  <input type="radio" name="rating-filter" id="rating-all" value="0" checked onchange="filterByRating(0)" />
-                  <span>All Ratings</span>
-                </label>
-                <label class="filter-checkbox-label">
-                  <input type="radio" name="rating-filter" value="4.5" onchange="filterByRating(4.5)" />
-                  <span>4.5 ★ & above</span>
-                </label>
-                <label class="filter-checkbox-label">
-                  <input type="radio" name="rating-filter" value="4" onchange="filterByRating(4)" />
-                  <span>4.0 ★ & above</span>
-                </label>
-                <label class="filter-checkbox-label">
-                  <input type="radio" name="rating-filter" value="3.5" onchange="filterByRating(3.5)" />
-                  <span>3.5 ★ & above</span>
-                </label>
+              <!-- Rating Filter -->
+              <div class="filter-group">
+                <div class="filter-group-title">Minimum Rating</div>
+                <div class="filter-options-list">
+                  <label class="filter-checkbox-label">
+                    <input type="radio" name="rating-filter" id="rating-all" value="0" checked onchange="filterByRating(0)" />
+                    <span>All Ratings</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="radio" name="rating-filter" value="4.5" onchange="filterByRating(4.5)" />
+                    <span>4.5 ★ & above</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="radio" name="rating-filter" value="4" onchange="filterByRating(4)" />
+                    <span>4.0 ★ & above</span>
+                  </label>
+                  <label class="filter-checkbox-label">
+                    <input type="radio" name="rating-filter" value="3.5" onchange="filterByRating(3.5)" />
+                    <span>3.5 ★ & above</span>
+                  </label>
+                </div>
               </div>
-            </div>
 
-            <!-- Promo Banner in Sidebar -->
-            <div style="background:var(--primary-gradient);color:white;padding:1.25rem;border-radius:var(--radius-md);margin-top:1.5rem;text-align:center;">
-              <h5 style="font-weight:800;font-size:1.1rem;margin-bottom:0.25rem;">EXTRA 30% OFF</h5>
-              <p style="font-size:0.8rem;opacity:0.9;margin-bottom:0.75rem;">Use code <strong>FLASH30</strong> on checkout today!</p>
-              <button class="btn btn-outline-white btn-sm btn-block" onclick="openQuickView(1)">Claim Deal</button>
+              <!-- Apply Filters Button for Mobile -->
+              <button class="btn btn-primary btn-block" onclick="closeAllDrawers()" style="margin-top:1rem;">
+                Apply Filters
+              </button>
             </div>
           </aside>
 
           <!-- Products Content -->
           <div class="products-content">
-            <!-- Toolbar -->
-            <div class="products-toolbar">
+            <!-- Desktop Toolbar -->
+            <div class="products-toolbar-desktop">
               <div class="products-count" id="products-count-label">Showing all products</div>
 
               <div class="toolbar-controls">
-                <!-- Mobile Filter Trigger -->
-                <button class="mobile-filter-trigger" id="mobile-filter-btn">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                  Filters
-                </button>
-
-                <!-- Sort By Select -->
-                <select id="sort-select" class="sort-select" title="Sort Products">
+                <select id="desktop-sort-select" class="sort-select">
                   <option value="featured">Sort by: Featured</option>
                   <option value="price-low">Price: Low to High</option>
                   <option value="price-high">Price: High to Low</option>
@@ -367,7 +372,7 @@
               </div>
             </div>
 
-            <!-- Products Grid Container -->
+            <!-- Product Grid Container -->
             <div class="product-grid" id="product-grid">
               <!-- Rendered via JS -->
             </div>
@@ -378,16 +383,16 @@
     </section>
 
     <!-- =========================================================================
-         7. Customer Testimonials Section
+         7. Reviews Section
          ========================================================================= -->
-    <section class="reviews-section">
+    <section class="reviews-section" style="padding:2.5rem 0;background:var(--bg-surface);border-top:1px solid var(--border-subtle);margin-top:2rem;">
       <div class="container">
-        <div class="section-header" style="text-align:center; justify-content:center; flex-direction:column; align-items:center; margin-bottom:2rem;">
-          <h2 style="font-size:1.8rem;font-weight:800;">Trusted by 50,000+ Happy Shoppers</h2>
-          <p style="color:var(--text-muted);">Real reviews from genuine verified customers across India and worldwide</p>
+        <div style="text-align:center;margin-bottom:1.5rem;">
+          <h2 style="font-size:1.5rem;font-weight:800;">Loved by 50,000+ Happy Shoppers</h2>
+          <p style="color:var(--text-muted);font-size:0.85rem;">Verified customer ratings and reviews</p>
         </div>
 
-        <div class="reviews-grid" id="reviews-grid">
+        <div class="reviews-grid" id="reviews-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1rem;">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -397,59 +402,32 @@
   <!-- =========================================================================
        8. Footer
        ========================================================================= -->
-  <footer class="site-footer">
+  <footer class="site-footer" style="background:#090d16;color:#94a3b8;padding:3rem 0 2rem;font-size:0.85rem;border-top:1px solid #1e293b;">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h4>ApexStore</h4>
-          <p style="line-height:1.7;margin-bottom:1rem;">Your premier destination for high-performance electronics, trendy fashion apparel, and modern lifestyle essentials. Designed for seamless shopping on laptops and smartphones.</p>
-          <div style="font-size:0.85rem;color:#cbd5e1;">📍 Mumbai | Bengaluru | Delhi NCR • India</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:2rem;margin-bottom:2rem;">
+        <div style="max-width:360px;">
+          <h4 style="color:white;font-size:1.25rem;font-weight:800;margin-bottom:0.5rem;">ApexStore</h4>
+          <p style="line-height:1.6;font-size:0.825rem;">Next-gen electronics, fashion, and lifestyle essentials delivered fast across India and worldwide.</p>
         </div>
-
-        <div class="footer-col">
-          <h5>Quick Links</h5>
-          <div class="footer-links">
+        <div>
+          <h5 style="color:white;font-weight:700;margin-bottom:0.75rem;">Quick Links</h5>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;">
             <a href="javascript:void(0)" onclick="filterByCategory('all')">All Products</a>
-            <a href="javascript:void(0)" onclick="filterByCategory('electronics')">Electronics</a>
-            <a href="javascript:void(0)" onclick="filterByCategory('fashion')">Fashion & Apparel</a>
-            <a href="javascript:void(0)" onclick="filterByCategory('footwear')">Footwear</a>
             <a href="javascript:void(0)" onclick="openOrdersModal()">Track My Orders</a>
+            <a href="admin.html">Admin Dashboard</a>
           </div>
-        </div>
-
-        <div class="footer-col">
-          <h5>Customer Care</h5>
-          <div class="footer-links">
-            <a href="javascript:void(0)">Shipping & Returns</a>
-            <a href="javascript:void(0)">Terms & Conditions</a>
-            <a href="javascript:void(0)">Privacy Policy</a>
-            <a href="javascript:void(0)">FAQ & Help Center</a>
-            <a href="javascript:void(0)">24/7 Support Desk</a>
-          </div>
-        </div>
-
-        <div class="footer-col">
-          <h5>Stay Updated</h5>
-          <p style="font-size:0.85rem;line-height:1.6;">Subscribe to get special discounts, free giveaway alerts, and early access deals.</p>
-          <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed to newsletter successfully! 🎉', 'success'); this.reset();">
-            <input type="email" required placeholder="Enter your email" class="newsletter-input" />
-            <button type="submit" class="btn btn-primary btn-sm">Join</button>
-          </form>
         </div>
       </div>
 
-      <div class="footer-bottom">
-        <div>© 2026 ApexStore Inc. All rights reserved. Built with ❤️ for speed & responsiveness.</div>
-        <div style="display:flex;gap:1rem;color:#cbd5e1;">
-          <span>🔒 256-Bit SSL Encryption</span>
-          <span>⚡ Instant UPI & Card Checkout</span>
-        </div>
+      <div style="border-top:1px solid #1e293b;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;flex-wrap:wrap;gap:0.75rem;">
+        <div>© 2026 ApexStore Inc. Fast & Mobile-Friendly.</div>
+        <div style="color:#cbd5e1;">🔒 256-Bit SSL Encrypted & UPI Verified</div>
       </div>
     </div>
   </footer>
 
   <!-- =========================================================================
-       9. Mobile Bottom Navigation (App-like Feel)
+       9. Mobile Bottom App Bar (Native Shopping App Feel)
        ========================================================================= -->
   <nav class="mobile-bottom-nav">
     <button class="mobile-nav-item active" id="mob-nav-home">
@@ -460,6 +438,11 @@
     <button class="mobile-nav-item" id="mob-nav-categories">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
       <span>Categories</span>
+    </button>
+
+    <button class="mobile-nav-item" id="mob-nav-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span>Search</span>
     </button>
 
     <button class="mobile-nav-item" id="mob-nav-wishlist">
@@ -473,42 +456,35 @@
       <span class="badge-count cart-badge-count" style="display:none;top:0;right:18px;">0</span>
       <span>Cart</span>
     </button>
-
-    <button class="mobile-nav-item" id="mob-nav-orders">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span>Orders</span>
-    </button>
   </nav>
 
   <!-- =========================================================================
-       10. Slide-Out Drawers (Backdrop, Cart & Wishlist)
+       10. Slide-Out Drawers / Bottom Sheets (Backdrop, Cart & Wishlist)
        ========================================================================= -->
   <div class="drawer-backdrop" id="drawer-backdrop"></div>
 
-  <!-- Shopping Cart Drawer -->
+  <!-- Shopping Cart Bottom Sheet -->
   <div class="drawer" id="cart-drawer">
+    <div class="bottom-sheet-drag-handle"></div>
     <div class="drawer-header">
       <div class="drawer-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-        Your Shopping Cart
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        Shopping Cart
       </div>
       <button class="drawer-close-btn" id="close-cart-btn" title="Close Cart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
 
-    <!-- Free Shipping Progress -->
     <div class="free-shipping-bar" id="free-shipping-progress"></div>
 
-    <!-- Cart Items List -->
     <div class="drawer-body" id="cart-items-list">
       <!-- Rendered via JS -->
     </div>
 
-    <!-- Cart Footer -->
     <div class="drawer-footer" id="cart-footer">
       <div class="coupon-row">
-        <input type="text" id="coupon-input" class="coupon-input" placeholder="Promo code (e.g. SAVE20)" />
+        <input type="text" id="coupon-input" class="coupon-input" placeholder="Coupon (e.g. SAVE20)" />
         <button class="btn btn-secondary btn-sm" onclick="applyCoupon()">Apply</button>
       </div>
 
@@ -524,34 +500,31 @@
           <span id="cart-discount">-₹0</span>
         </div>
         <div class="price-row">
-          <span>Estimated Shipping</span>
+          <span>Delivery</span>
           <span id="cart-shipping">FREE</span>
         </div>
-        <div class="price-row">
-          <span>GST (5%)</span>
-          <span id="cart-tax">₹0</span>
-        </div>
         <div class="price-row total-row">
-          <span>Grand Total</span>
+          <span>Total Payable</span>
           <span id="cart-total">₹0</span>
         </div>
       </div>
 
       <button class="btn btn-primary btn-block" id="proceed-to-checkout-btn">
         Proceed to Checkout
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- Wishlist Drawer -->
+  <!-- Wishlist Bottom Sheet -->
   <div class="drawer" id="wishlist-drawer">
+    <div class="bottom-sheet-drag-handle"></div>
     <div class="drawer-header">
       <div class="drawer-title">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         Saved Items
       </div>
-      <button class="drawer-close-btn" id="close-wishlist-btn" title="Close Wishlist">
+      <button class="drawer-close-btn" id="close-wishlist-btn" title="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
@@ -562,10 +535,8 @@
   </div>
 
   <!-- =========================================================================
-       11. Interactive Modals (Quick View, Checkout, Orders)
+       11. Modals (Quick View, Checkout, Orders)
        ========================================================================= -->
-  
-  <!-- Product Quick View Modal -->
   <div class="modal-overlay" id="quick-view-modal">
     <div class="modal-container">
       <button class="modal-close-btn" onclick="closeAllModals()" title="Close">
@@ -575,7 +546,7 @@
     </div>
   </div>
 
-  <!-- Multi-Step Checkout Modal -->
+  <!-- Checkout Modal -->
   <div class="modal-overlay" id="checkout-modal">
     <div class="modal-container checkout-modal-container" id="checkout-modal-inner">
       <button class="modal-close-btn" onclick="closeAllModals()" title="Close">
@@ -583,20 +554,18 @@
       </button>
 
       <div class="checkout-header">
-        <h3 style="font-size:1.3rem;font-weight:800;">Secure Express Checkout</h3>
-        
-        <!-- Step Indicators -->
+        <h3 style="font-size:1.2rem;font-weight:800;">Fast Express Checkout</h3>
         <div class="checkout-steps">
           <div class="checkout-step active" data-step="1">
             <div class="step-circle">1</div>
             <span class="step-label">Shipping</span>
           </div>
-          <div style="flex:1;height:2px;background:var(--border-subtle);margin:0 8px;"></div>
+          <div style="flex:1;height:2px;background:var(--border-subtle);margin:0 6px;"></div>
           <div class="checkout-step" data-step="2">
             <div class="step-circle">2</div>
             <span class="step-label">Payment</span>
           </div>
-          <div style="flex:1;height:2px;background:var(--border-subtle);margin:0 8px;"></div>
+          <div style="flex:1;height:2px;background:var(--border-subtle);margin:0 6px;"></div>
           <div class="checkout-step" data-step="3">
             <div class="step-circle">3</div>
             <span class="step-label">Review</span>
@@ -605,9 +574,8 @@
       </div>
 
       <div class="checkout-body">
-        <!-- Step 1: Shipping Address -->
+        <!-- Step 1 -->
         <div class="checkout-form-step active" data-step="1">
-          <h4 style="font-weight:700;font-size:1rem;margin-bottom:0.5rem;">Delivery Address</h4>
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Full Name *</label>
@@ -615,12 +583,12 @@
             </div>
             <div class="form-group">
               <label class="form-label">Mobile Number *</label>
-              <input type="tel" id="ship-phone" class="form-input" placeholder="e.g. 9876543210" value="9876543210" required />
+              <input type="tel" id="ship-phone" class="form-input" placeholder="9876543210" value="9876543210" required />
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">Street Address / Flat No. *</label>
-            <input type="text" id="ship-address" class="form-input" placeholder="Flat 402, Sunshine Heights, MG Road" value="Flat 402, Sunshine Heights, MG Road" required />
+            <label class="form-label">Delivery Address *</label>
+            <input type="text" id="ship-address" class="form-input" placeholder="Flat No., Building, Street Name" value="Flat 402, Sunshine Heights, MG Road" required />
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -633,18 +601,14 @@
             </div>
           </div>
 
-          <div style="display:flex;justify-content:flex-end;margin-top:1.5rem;">
-            <button class="btn btn-primary" onclick="nextCheckoutStep()">
-              Continue to Payment
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
+          <button class="btn btn-primary btn-block" onclick="nextCheckoutStep()" style="margin-top:1rem;">
+            Continue to Payment
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
         </div>
 
-        <!-- Step 2: Payment Methods -->
+        <!-- Step 2 -->
         <div class="checkout-form-step" data-step="2">
-          <h4 style="font-weight:700;font-size:1rem;margin-bottom:0.5rem;">Select Payment Method</h4>
-          
           <div class="payment-methods">
             <div class="payment-card-option active" onclick="selectPaymentMethod('UPI / QR Code', this)">
               <div class="payment-icon" style="background:#e0e7ff;color:#4f46e5;">⚡</div>
@@ -662,43 +626,38 @@
               </div>
             </div>
 
-            <div class="payment-card-option" onclick="selectPaymentMethod('Net Banking', this)">
-              <div class="payment-icon" style="background:#d1fae5;color:#059669;">🏦</div>
-              <div>
-                <div class="payment-title">Net Banking</div>
-                <div class="payment-desc">HDFC, ICICI, SBI & all banks</div>
-              </div>
-            </div>
-
             <div class="payment-card-option" onclick="selectPaymentMethod('Cash on Delivery', this)">
               <div class="payment-icon" style="background:#fee2e2;color:#dc2626;">💵</div>
               <div>
                 <div class="payment-title">Cash on Delivery</div>
-                <div class="payment-desc">Pay upon delivery at doorstep</div>
+                <div class="payment-desc">Pay upon doorstep arrival</div>
+              </div>
+            </div>
+
+            <div class="payment-card-option" onclick="selectPaymentMethod('Net Banking', this)">
+              <div class="payment-icon" style="background:#d1fae5;color:#059669;">🏦</div>
+              <div>
+                <div class="payment-title">Net Banking</div>
+                <div class="payment-desc">All Indian banks supported</div>
               </div>
             </div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;margin-top:2rem;">
+          <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
             <button class="btn btn-secondary" onclick="prevCheckoutStep()">Back</button>
-            <button class="btn btn-primary" onclick="nextCheckoutStep()">
+            <button class="btn btn-primary btn-block" onclick="nextCheckoutStep()">
               Review Order
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
         </div>
 
-        <!-- Step 3: Order Review & Place -->
+        <!-- Step 3 -->
         <div class="checkout-form-step" data-step="3">
-          <h4 style="font-weight:700;font-size:1rem;margin-bottom:0.5rem;">Review & Place Order</h4>
-          
-          <div id="checkout-review-summary" style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;">
-            <!-- Rendered via JS -->
-          </div>
+          <div id="checkout-review-summary" style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:1rem;"></div>
 
-          <div style="display:flex;justify-content:space-between;margin-top:1.75rem;">
+          <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
             <button class="btn btn-secondary" onclick="prevCheckoutStep()">Back</button>
-            <button class="btn btn-primary" onclick="placeOrder()">
+            <button class="btn btn-primary btn-block" onclick="placeOrder()">
               🔒 Place Order Now
             </button>
           </div>
@@ -707,30 +666,25 @@
     </div>
   </div>
 
-  <!-- Orders History / Tracking Modal -->
+  <!-- Orders Tracking Modal -->
   <div class="modal-overlay" id="orders-modal">
-    <div class="modal-container" style="max-width:560px;">
+    <div class="modal-container" style="max-width:540px;">
       <button class="modal-close-btn" onclick="closeAllModals()" title="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
-      <div style="padding:1.5rem 1.75rem;border-bottom:1px solid var(--border-subtle);">
-        <h3 style="font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:0.5rem;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-          My Orders & Live Tracking
+      <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border-subtle);">
+        <h3 style="font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:0.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          My Orders & Tracking
         </h3>
       </div>
-      <div id="orders-list-body" style="padding:1.5rem;max-height:60vh;overflow-y:auto;"></div>
+      <div id="orders-list-body" style="padding:1.25rem;max-height:65vh;overflow-y:auto;"></div>
     </div>
   </div>
 
-  <!-- =========================================================================
-       12. Floating Toast Notifications Container
-       ========================================================================= -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- =========================================================================
-       13. Application Scripts
-       ========================================================================= -->
+  <!-- Scripts -->
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/app.js"></script>

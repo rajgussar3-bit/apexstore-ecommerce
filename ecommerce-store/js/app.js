@@ -1,6 +1,6 @@
 /**
- * ApexStore - Core Application Logic with Backend API Integration
- * Connects to FastAPI Backend with SQLite Persistence & Graceful Offline Fallback
+ * ApexStore - High Performance Mobile & Desktop Application Logic
+ * Full API Integration, Local Storage Persistence, and Ultra-Smooth Mobile UX
  */
 
 // Global State
@@ -23,39 +23,38 @@ const state = {
 // Hero Slides Data
 const HERO_SLIDES = [
   {
-    pill: "⚡ Flash Season Deals",
-    title: "Next-Gen Audio & Smart Wearables",
-    subtitle: "Experience premium Active Noise Cancellation and high-fidelity sound with up to 40% discount this week.",
-    btnText: "Shop Electronics",
+    pill: "⚡ Flash Deals",
+    title: "Next-Gen Audio & Wearables",
+    subtitle: "Active Noise Cancellation and Hi-Fi sound with up to 40% discount today.",
+    btnText: "Shop Audio",
     category: "electronics",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1600&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&auto=format&fit=crop&q=80"
   },
   {
-    pill: "🔥 Spring / Summer 2026",
-    title: "Urban Streetwear & Minimalist Luxury",
-    subtitle: "Heavyweight French Terry hoodies, raw denim jackets, and tailored aesthetics made for everyday comfort.",
-    btnText: "Explore Fashion",
+    pill: "🔥 Summer 2026",
+    title: "Urban Streetwear & Denim",
+    subtitle: "Heavyweight French Terry hoodies, raw denim jackets & luxury streetwear.",
+    btnText: "Shop Fashion",
     category: "fashion",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop&q=80"
   },
   {
-    pill: "✨ Smart Living & Home",
-    title: "Modern Aesthetics for Work & Relaxation",
-    subtitle: "Ergonomic lighting, artisan ceramics, and ultrasonic diffusers designed to upgrade your daily lifestyle.",
-    btnText: "Shop Home Collection",
+    pill: "✨ Smart Living",
+    title: "Ergonomic Home & Lifestyle",
+    subtitle: "Smart lamps, artisan mugs, and aromatherapy diffusers for modern living.",
+    btnText: "Shop Home",
     category: "home",
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1600&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80"
   }
 ];
 
-// Free shipping minimum threshold (in INR)
 const FREE_SHIPPING_THRESHOLD = 999;
 
 /* ==========================================================================
    Utility Helpers
    ========================================================================== */
 function formatPrice(inrAmount) {
-  const curr = CURRENCIES[state.currency] || CURRENCIES.INR;
+  const curr = (typeof CURRENCIES !== 'undefined' && CURRENCIES[state.currency]) ? CURRENCIES[state.currency] : { symbol: "₹", rate: 1 };
   const converted = inrAmount * curr.rate;
   
   if (state.currency === 'INR') {
@@ -73,7 +72,6 @@ function saveState() {
   localStorage.setItem('apex_theme', state.theme);
 }
 
-// Toast Notifications
 function showToast(message, type = 'success') {
   const container = document.getElementById('toast-container');
   if (!container) return;
@@ -82,8 +80,8 @@ function showToast(message, type = 'success') {
   toast.className = `toast ${type}`;
 
   const iconSvg = type === 'success'
-    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
-    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
 
   toast.innerHTML = `
     <div class="toast-icon">${iconSvg}</div>
@@ -94,12 +92,12 @@ function showToast(message, type = 'success') {
 
   setTimeout(() => {
     toast.classList.add('toast-leave');
-    setTimeout(() => toast.remove(), 300);
-  }, 3200);
+    setTimeout(() => toast.remove(), 280);
+  }, 2800);
 }
 
 /* ==========================================================================
-   Fetch Products from Backend API (with fallback)
+   Fetch Products from Backend (with fallback)
    ========================================================================== */
 async function loadProductsFromBackend() {
   try {
@@ -121,11 +119,9 @@ async function loadProductsFromBackend() {
    DOM Initialization
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
-  // Apply saved theme
   document.documentElement.setAttribute('data-theme', state.theme);
   updateThemeToggleIcons();
 
-  // Initialize currency selector
   const currencySelect = document.getElementById('currency-select');
   if (currencySelect) {
     currencySelect.value = state.currency;
@@ -133,32 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
       state.currency = e.target.value;
       saveState();
       renderAll();
-      showToast(`Currency changed to ${CURRENCIES[state.currency].name}`, 'info');
+      showToast(`Currency set to ${state.currency}`, 'info');
     });
   }
 
-  // Initialize Hero Slider
   initHeroSlider();
-
-  // Initialize Flash Sale Countdown
   startFlashCountdown();
-
-  // Initialize Search & Filter Event Listeners
   setupSearchAndFilters();
-
-  // Render Everything
   renderAll();
-
-  // Fetch latest products from FastAPI backend
   loadProductsFromBackend();
-
-  // Setup Modals and Drawers
   setupDrawersAndModals();
-
-  // Setup Checkout steps
   setupCheckout();
-
-  // Render Reviews
   renderReviews();
 });
 
@@ -169,7 +150,6 @@ function initHeroSlider() {
   const slideElem = document.getElementById('hero-slide');
   const prevBtn = document.getElementById('hero-prev');
   const nextBtn = document.getElementById('hero-next');
-
   if (!slideElem) return;
 
   function renderSlide() {
@@ -181,11 +161,11 @@ function initHeroSlider() {
         <h1 class="hero-title">${slide.title}</h1>
         <p class="hero-subtitle">${slide.subtitle}</p>
         <div class="hero-cta-group">
-          <button class="btn btn-primary" onclick="filterByCategory('${slide.category}')">
+          <button class="btn btn-primary btn-sm" onclick="filterByCategory('${slide.category}')">
             ${slide.btnText}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
-          <a href="#products-section" class="btn btn-outline-white">Browse All</a>
+          <a href="#products-section" class="btn btn-outline-white btn-sm">Explore</a>
         </div>
       </div>
     `;
@@ -207,21 +187,19 @@ function initHeroSlider() {
     });
   }
 
-  // Auto slide every 6 seconds
   setInterval(() => {
     state.heroIndex = (state.heroIndex + 1) % HERO_SLIDES.length;
     renderSlide();
-  }, 6000);
+  }, 6500);
 }
 
 /* ==========================================================================
-   Flash Sale Live Countdown Timer
+   Flash Countdown
    ========================================================================== */
 function startFlashCountdown() {
   const hoursEl = document.getElementById('timer-hours');
   const minsEl = document.getElementById('timer-mins');
   const secsEl = document.getElementById('timer-secs');
-
   if (!hoursEl || !minsEl || !secsEl) return;
 
   function update() {
@@ -257,11 +235,9 @@ function getFilteredProducts() {
   const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
 
   return source.filter(product => {
-    // Category filter
     if (state.currentCategory !== 'all' && product.category !== state.currentCategory) {
       return false;
     }
-    // Search query
     if (state.searchQuery.trim()) {
       const q = state.searchQuery.toLowerCase();
       const matchName = product.name.toLowerCase().includes(q);
@@ -269,11 +245,9 @@ function getFilteredProducts() {
       const matchCat = (product.category_name || product.categoryName || '').toLowerCase().includes(q);
       if (!matchName && !matchDesc && !matchCat) return false;
     }
-    // Price filter
     if (product.price > state.maxPrice) {
       return false;
     }
-    // Rating filter
     if (state.currentRating > 0 && product.rating < state.currentRating) {
       return false;
     }
@@ -283,11 +257,13 @@ function getFilteredProducts() {
     if (state.sortBy === 'price-high') return b.price - a.price;
     if (state.sortBy === 'rating') return b.rating - a.rating;
     if (state.sortBy === 'discount') {
-      const discA = (a.original_price || a.originalPrice - a.price) / (a.original_price || a.originalPrice);
-      const discB = (b.original_price || b.originalPrice - b.price) / (b.original_price || b.originalPrice);
+      const origA = a.original_price || a.originalPrice || a.price;
+      const origB = b.original_price || b.originalPrice || b.price;
+      const discA = (origA - a.price) / origA;
+      const discB = (origB - b.price) / origB;
       return discB - discA;
     }
-    return a.id - b.id; // Featured default
+    return a.id - b.id;
   });
 }
 
@@ -304,14 +280,14 @@ function renderProductGrid() {
 
   if (products.length === 0) {
     grid.innerHTML = `
-      <div class="empty-state">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem 1rem;">
+        <svg class="empty-icon" style="width:48px;height:48px;margin:0 auto 0.75rem;color:var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <h3 class="empty-title">No products found</h3>
-        <p class="empty-desc">We couldn't find any products matching your current filters or search terms.</p>
-        <button class="btn btn-primary btn-sm" onclick="resetFilters()">Reset All Filters</button>
+        <h4 style="font-weight:800;font-size:1.1rem;margin-bottom:0.25rem;">No products match your search</h4>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Try clearing your filters or searching for something else.</p>
+        <button class="btn btn-primary btn-sm" onclick="resetFilters()">Reset Filters</button>
       </div>
     `;
     return;
@@ -323,25 +299,21 @@ function renderProductGrid() {
     const discountPercent = Math.round(((origPrice - p.price) / origPrice) * 100);
     const catName = p.category_name || p.categoryName || 'General';
 
+    // Check if item is currently in cart
+    const cartItem = state.cart.find(item => item.id === p.id);
+    const cartQty = cartItem ? cartItem.quantity : 0;
+
     return `
       <div class="product-card" data-id="${p.id}">
         <div class="product-img-wrap" onclick="openQuickView(${p.id})">
           ${p.badge ? `<span class="card-badge ${p.badge.toLowerCase()}">${p.badge}</span>` : ''}
           <img src="${p.image}" alt="${p.name}" class="product-img" loading="lazy" />
           
-          <div class="card-actions-floating" onclick="event.stopPropagation()">
-            <button class="floating-action-btn ${isWishlisted ? 'active' : ''}" title="Save to Wishlist" onclick="toggleWishlist(${p.id})">
-              <svg viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </button>
-            <button class="floating-action-btn" title="Quick View" onclick="openQuickView(${p.id})">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-            </button>
-          </div>
+          <button class="floating-wishlist-btn ${isWishlisted ? 'active' : ''}" title="Wishlist" onclick="event.stopPropagation(); toggleWishlist(${p.id});">
+            <svg viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
         </div>
 
         <div class="product-details">
@@ -349,9 +321,7 @@ function renderProductGrid() {
           <h4 class="product-title" onclick="openQuickView(${p.id})" title="${p.name}">${p.name}</h4>
           
           <div class="product-rating-wrap">
-            <div class="rating-stars">
-              ${renderStarRating(p.rating || 4.5)}
-            </div>
+            <div class="rating-stars">${renderStarRating(p.rating || 4.5)}</div>
             <span class="rating-number">${p.rating || 4.5}</span>
             <span class="rating-count">(${p.review_count || p.reviewCount || 0})</span>
           </div>
@@ -362,18 +332,42 @@ function renderProductGrid() {
             <span class="discount-tag">${discountPercent}% OFF</span>
           </div>
 
-          <button class="add-to-cart-btn" onclick="addToCart(${p.id})">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            Add to Cart
-          </button>
+          <div class="card-cart-action-wrap">
+            ${cartQty > 0 ? `
+              <div class="card-stepper">
+                <button class="card-stepper-btn" onclick="quickCardQtyChange(${p.id}, -1)">-</button>
+                <span class="card-stepper-val">${cartQty} in cart</span>
+                <button class="card-stepper-btn" onclick="quickCardQtyChange(${p.id}, 1)">+</button>
+              </div>
+            ` : `
+              <button class="card-add-btn" onclick="addToCart(${p.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add to Cart
+              </button>
+            `}
+          </div>
         </div>
       </div>
     `;
   }).join('');
+}
+
+function quickCardQtyChange(productId, delta) {
+  const index = state.cart.findIndex(item => item.id === productId);
+  if (index > -1) {
+    state.cart[index].quantity += delta;
+    if (state.cart[index].quantity <= 0) {
+      state.cart.splice(index, 1);
+      showToast('Item removed from cart', 'info');
+    }
+  } else if (delta > 0) {
+    addToCart(productId);
+    return;
+  }
+  saveState();
+  updateBadgeCounts();
+  renderProductGrid();
+  renderCartDrawer();
 }
 
 function renderStarRating(rating) {
@@ -389,73 +383,81 @@ function renderStarRating(rating) {
 }
 
 /* ==========================================================================
-   Filter & Search Event Listeners
-   ========================================================================= */
+   Filter & Search Listeners
+   ========================================================================== */
 function setupSearchAndFilters() {
-  const searchInput = document.getElementById('search-input');
-  const searchClear = document.getElementById('search-clear');
-  const suggestionsBox = document.getElementById('search-suggestions');
-  const sortSelect = document.getElementById('sort-select');
+  const dSearch = document.getElementById('desktop-search-input');
+  const dClear = document.getElementById('desktop-search-clear');
+  const dSuggestions = document.getElementById('desktop-search-suggestions');
+
+  const mSearch = document.getElementById('mobile-search-input');
+  const mClear = document.getElementById('mobile-search-clear');
+  const mSuggestions = document.getElementById('mobile-search-suggestions');
+
+  function handleSearch(val, isMobile) {
+    state.searchQuery = val;
+    if (dSearch && dSearch.value !== val) dSearch.value = val;
+    if (mSearch && mSearch.value !== val) mSearch.value = val;
+
+    if (dClear) dClear.classList.toggle('visible', !!val);
+    if (mClear) mClear.classList.toggle('visible', !!val);
+
+    const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
+    const targetSuggestions = isMobile ? mSuggestions : dSuggestions;
+
+    if (val.trim().length > 1) {
+      const matches = source.filter(p => p.name.toLowerCase().includes(val.toLowerCase())).slice(0, 5);
+      if (matches.length > 0 && targetSuggestions) {
+        targetSuggestions.innerHTML = matches.map(m => `
+          <div class="search-suggestion-item" onclick="openQuickView(${m.id})">
+            <img src="${m.image}" class="suggestion-img" alt="${m.name}" />
+            <div class="suggestion-info">
+              <div class="suggestion-title">${m.name}</div>
+              <div class="suggestion-price">${formatPrice(m.price)}</div>
+            </div>
+          </div>
+        `).join('');
+        targetSuggestions.classList.add('active');
+      } else if (targetSuggestions) {
+        targetSuggestions.classList.remove('active');
+      }
+    } else if (targetSuggestions) {
+      targetSuggestions.classList.remove('active');
+    }
+
+    renderProductGrid();
+  }
+
+  if (dSearch) dSearch.addEventListener('input', (e) => handleSearch(e.target.value, false));
+  if (mSearch) mSearch.addEventListener('input', (e) => handleSearch(e.target.value, true));
+
+  if (dClear) dClear.addEventListener('click', () => handleSearch('', false));
+  if (mClear) mClear.addEventListener('click', () => handleSearch('', true));
+
+  document.addEventListener('click', (e) => {
+    if (dSuggestions && !dSuggestions.contains(e.target) && dSearch && !dSearch.contains(e.target)) {
+      dSuggestions.classList.remove('active');
+    }
+    if (mSuggestions && !mSuggestions.contains(e.target) && mSearch && !mSearch.contains(e.target)) {
+      mSuggestions.classList.remove('active');
+    }
+  });
+
+  const dSort = document.getElementById('desktop-sort-select');
+  const mSort = document.getElementById('mobile-sort-select');
+
+  function handleSort(val) {
+    state.sortBy = val;
+    if (dSort) dSort.value = val;
+    if (mSort) mSort.value = val;
+    renderProductGrid();
+  }
+
+  if (dSort) dSort.addEventListener('change', (e) => handleSort(e.target.value));
+  if (mSort) mSort.addEventListener('change', (e) => handleSort(e.target.value));
+
   const priceSlider = document.getElementById('price-slider');
   const priceMaxLabel = document.getElementById('price-max-label');
-
-  // Search input live autocomplete
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      if (searchClear) searchClear.classList.toggle('visible', !!state.searchQuery);
-
-      const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
-      if (state.searchQuery.trim().length > 1) {
-        const matches = source.filter(p => p.name.toLowerCase().includes(state.searchQuery.toLowerCase())).slice(0, 5);
-        if (matches.length > 0 && suggestionsBox) {
-          suggestionsBox.innerHTML = matches.map(m => `
-            <div class="search-suggestion-item" onclick="openQuickView(${m.id})">
-              <img src="${m.image}" class="suggestion-img" alt="${m.name}" />
-              <div class="suggestion-info">
-                <div class="suggestion-title">${m.name}</div>
-                <div class="suggestion-price">${formatPrice(m.price)}</div>
-              </div>
-            </div>
-          `).join('');
-          suggestionsBox.classList.add('active');
-        } else if (suggestionsBox) {
-          suggestionsBox.classList.remove('active');
-        }
-      } else if (suggestionsBox) {
-        suggestionsBox.classList.remove('active');
-      }
-
-      renderProductGrid();
-    });
-
-    // Close suggestions on outside click
-    document.addEventListener('click', (e) => {
-      if (!searchInput.contains(e.target) && suggestionsBox) {
-        suggestionsBox.classList.remove('active');
-      }
-    });
-  }
-
-  if (searchClear) {
-    searchClear.addEventListener('click', () => {
-      searchInput.value = '';
-      state.searchQuery = '';
-      searchClear.classList.remove('visible');
-      if (suggestionsBox) suggestionsBox.classList.remove('active');
-      renderProductGrid();
-    });
-  }
-
-  // Sort select
-  if (sortSelect) {
-    sortSelect.addEventListener('change', (e) => {
-      state.sortBy = e.target.value;
-      renderProductGrid();
-    });
-  }
-
-  // Price range slider
   if (priceSlider) {
     priceSlider.addEventListener('input', (e) => {
       state.maxPrice = Number(e.target.value);
@@ -464,32 +466,28 @@ function setupSearchAndFilters() {
     });
   }
 
-  // Mobile Filter Drawer Toggle
-  const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+  const mobFilterBtn = document.getElementById('mobile-filter-btn');
   const filterSidebar = document.getElementById('filter-sidebar');
   const closeFilterBtn = document.getElementById('close-filter-btn');
   const backdrop = document.getElementById('drawer-backdrop');
 
-  if (mobileFilterBtn && filterSidebar) {
-    mobileFilterBtn.addEventListener('click', () => {
-      filterSidebar.classList.add('mobile-open');
+  if (mobFilterBtn && filterSidebar) {
+    mobFilterBtn.addEventListener('click', () => {
+      filterSidebar.classList.add('active');
       backdrop.classList.add('active');
     });
   }
 
-  if (closeFilterBtn && filterSidebar) {
-    closeFilterBtn.addEventListener('click', () => {
-      filterSidebar.classList.remove('mobile-open');
-      backdrop.classList.remove('active');
-    });
+  if (closeFilterBtn) {
+    closeFilterBtn.addEventListener('click', closeAllDrawers);
   }
 }
 
 function filterByCategory(category) {
   state.currentCategory = category;
 
-  document.querySelectorAll('.category-pill-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.category === category);
+  document.querySelectorAll('.story-pill-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.category === category);
   });
 
   document.querySelectorAll('.nav-link').forEach(link => {
@@ -516,8 +514,10 @@ function resetFilters() {
   state.searchQuery = '';
   state.sortBy = 'featured';
 
-  const searchInput = document.getElementById('search-input');
-  if (searchInput) searchInput.value = '';
+  const dSearch = document.getElementById('desktop-search-input');
+  const mSearch = document.getElementById('mobile-search-input');
+  if (dSearch) dSearch.value = '';
+  if (mSearch) mSearch.value = '';
 
   const priceSlider = document.getElementById('price-slider');
   if (priceSlider) priceSlider.value = 150000;
@@ -529,12 +529,12 @@ function resetFilters() {
   const allRatingRadio = document.getElementById('rating-all');
   if (allRatingRadio) allRatingRadio.checked = true;
 
-  document.querySelectorAll('.category-pill-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.category === 'all');
+  document.querySelectorAll('.story-pill-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.category === 'all');
   });
 
   renderProductGrid();
-  showToast('Filters reset to default', 'info');
+  showToast('Filters reset', 'info');
 }
 
 /* ==========================================================================
@@ -572,8 +572,9 @@ function addToCart(productId, selectedColor = null, selectedSize = null, qty = 1
 
   saveState();
   updateBadgeCounts();
+  renderProductGrid();
   renderCartDrawer();
-  showToast(`Added "${product.name.slice(0, 24)}..." to cart!`, 'success');
+  showToast(`Added to cart!`, 'success');
 }
 
 function updateCartQty(index, delta) {
@@ -582,11 +583,12 @@ function updateCartQty(index, delta) {
 
   if (state.cart[index].quantity <= 0) {
     state.cart.splice(index, 1);
-    showToast('Item removed from cart', 'info');
+    showToast('Item removed', 'info');
   }
 
   saveState();
   updateBadgeCounts();
+  renderProductGrid();
   renderCartDrawer();
 }
 
@@ -595,8 +597,9 @@ function removeCartItem(index) {
   state.cart.splice(index, 1);
   saveState();
   updateBadgeCounts();
+  renderProductGrid();
   renderCartDrawer();
-  showToast('Item removed from cart', 'info');
+  showToast('Item removed', 'info');
 }
 
 function calculateCartTotals() {
@@ -614,7 +617,7 @@ function calculateCartTotals() {
   }
 
   const shipping = subtotal > 0 && !isFreeShipping ? 99 : 0;
-  const tax = Math.round((subtotal - discount) * 0.05); // 5% GST
+  const tax = Math.round((subtotal - discount) * 0.05);
   const total = Math.max(0, subtotal - discount + shipping + tax);
 
   return { subtotal, discount, shipping, tax, total, isFreeShipping };
@@ -628,7 +631,6 @@ function renderCartDrawer() {
 
   const totals = calculateCartTotals();
 
-  // Free shipping progress calculation
   if (freeShippingBar) {
     const progress = Math.min(100, Math.round((totals.subtotal / FREE_SHIPPING_THRESHOLD) * 100));
     const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - totals.subtotal);
@@ -639,8 +641,8 @@ function renderCartDrawer() {
       freeShippingBar.style.display = 'block';
       freeShippingBar.innerHTML = `
         <div class="free-shipping-text">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-          ${remaining === 0 ? '🎉 You have unlocked FREE Express Delivery!' : `Add ${formatPrice(remaining)} more for <strong>FREE Delivery</strong>`}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          ${remaining === 0 ? '🎉 You unlocked FREE Express Delivery!' : `Add ${formatPrice(remaining)} for <strong>FREE Delivery</strong>`}
         </div>
         <div class="progress-track">
           <div class="progress-fill" style="width: ${progress}%"></div>
@@ -651,15 +653,15 @@ function renderCartDrawer() {
 
   if (state.cart.length === 0) {
     cartBody.innerHTML = `
-      <div class="empty-state" style="border:none; padding: 3rem 1rem;">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <div class="empty-state" style="border:none; padding: 2.5rem 1rem; text-align:center;">
+        <svg class="empty-icon" style="width:48px;height:48px;margin:0 auto 0.75rem;color:var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <circle cx="9" cy="21" r="1"></circle>
           <circle cx="20" cy="21" r="1"></circle>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
-        <h4 class="empty-title">Your cart is empty</h4>
-        <p class="empty-desc">Discover our best sellers and add your favorite items to cart.</p>
-        <button class="btn btn-primary btn-sm" onclick="closeAllDrawers(); filterByCategory('all');">Start Shopping</button>
+        <h4 style="font-weight:800;font-size:1.1rem;margin-bottom:0.25rem;">Your cart is empty</h4>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Add top-rated items to your bag.</p>
+        <button class="btn btn-primary btn-sm" onclick="closeAllDrawers(); filterByCategory('all');">Explore Store</button>
       </div>
     `;
     if (cartFooter) cartFooter.style.display = 'none';
@@ -673,10 +675,7 @@ function renderCartDrawer() {
       <img src="${item.image}" alt="${item.name}" class="cart-item-img" />
       <div class="cart-item-info">
         <h5 class="cart-item-title">${item.name}</h5>
-        <div class="cart-item-meta">
-          <span>Size: ${item.size}</span> | 
-          <span style="display:inline-flex;align-items:center;gap:3px;">Color: <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${item.color};border:1px solid #ccc;"></span></span>
-        </div>
+        <div class="cart-item-meta">Size: ${item.size}</div>
         <div class="cart-item-price-row">
           <span class="cart-item-price">${formatPrice(item.price * item.quantity)}</span>
           <div style="display:flex;align-items:center;">
@@ -685,8 +684,8 @@ function renderCartDrawer() {
               <span class="qty-val">${item.quantity}</span>
               <button class="qty-btn" onclick="updateCartQty(${idx}, 1)">+</button>
             </div>
-            <button class="item-remove-btn" title="Remove Item" onclick="removeCartItem(${idx})">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <button class="item-remove-btn" title="Remove" onclick="removeCartItem(${idx})">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
         </div>
@@ -694,18 +693,15 @@ function renderCartDrawer() {
     </div>
   `).join('');
 
-  // Update footer pricing
   const subtotalEl = document.getElementById('cart-subtotal');
   const discountEl = document.getElementById('cart-discount');
   const discountRow = document.getElementById('cart-discount-row');
   const shippingEl = document.getElementById('cart-shipping');
-  const taxEl = document.getElementById('cart-tax');
   const grandTotalEl = document.getElementById('cart-total');
   const couponAppliedTag = document.getElementById('coupon-applied-tag');
 
   if (subtotalEl) subtotalEl.textContent = formatPrice(totals.subtotal);
   if (shippingEl) shippingEl.textContent = totals.shipping === 0 ? 'FREE' : formatPrice(totals.shipping);
-  if (taxEl) taxEl.textContent = formatPrice(totals.tax);
   if (grandTotalEl) grandTotalEl.textContent = formatPrice(totals.total);
 
   if (state.appliedCoupon) {
@@ -715,7 +711,7 @@ function renderCartDrawer() {
       couponAppliedTag.style.display = 'flex';
       couponAppliedTag.innerHTML = `
         <span>🎉 Coupon <strong>${state.appliedCoupon.code}</strong> Applied!</span>
-        <button onclick="removeCoupon()" style="color:#ef4444;font-size:0.75rem;font-weight:700;">Remove</button>
+        <button onclick="removeCoupon()" style="color:#ef4444;font-size:0.75rem;font-weight:800;">Remove</button>
       `;
     }
   } else {
@@ -730,11 +726,10 @@ async function applyCoupon() {
   const code = input.value.trim().toUpperCase();
 
   if (!code) {
-    showToast('Please enter a coupon code', 'warning');
+    showToast('Enter a promo code', 'warning');
     return;
   }
 
-  // Try validating with Backend API
   try {
     const url = (typeof getApiUrl === 'function') ? getApiUrl('/api/coupons/validate') : '/api/coupons/validate';
     const res = await fetch(url, {
@@ -751,20 +746,19 @@ async function applyCoupon() {
         description: data.description
       };
       renderCartDrawer();
-      showToast(`Coupon "${code}" applied: ${data.description}`, 'success');
+      showToast(`Coupon "${code}" applied!`, 'success');
       return;
     }
   } catch (err) {
     console.log('Validating with local coupon table.');
   }
 
-  // Fallback to local coupons
-  if (COUPONS[code]) {
+  if (typeof COUPONS !== 'undefined' && COUPONS[code]) {
     state.appliedCoupon = { code, ...COUPONS[code] };
     renderCartDrawer();
-    showToast(`Coupon "${code}" applied: ${COUPONS[code].description}`, 'success');
+    showToast(`Coupon "${code}" applied!`, 'success');
   } else {
-    showToast('Invalid coupon code! Try SAVE20, FLASH30, or WELCOME10', 'warning');
+    showToast('Invalid coupon! Try SAVE20, FLASH30, or WELCOME10', 'warning');
   }
 }
 
@@ -781,15 +775,13 @@ function removeCoupon() {
    ========================================================================== */
 function toggleWishlist(productId) {
   const index = state.wishlist.indexOf(productId);
-  const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
-  const product = source.find(p => p.id === productId);
 
   if (index > -1) {
     state.wishlist.splice(index, 1);
-    showToast(`Removed from Wishlist`, 'info');
+    showToast('Removed from Wishlist', 'info');
   } else {
     state.wishlist.push(productId);
-    showToast(`Saved to Wishlist!`, 'success');
+    showToast('Saved to Wishlist!', 'success');
   }
 
   saveState();
@@ -807,12 +799,12 @@ function renderWishlistDrawer() {
 
   if (wishlistedProducts.length === 0) {
     wishlistBody.innerHTML = `
-      <div class="empty-state" style="border:none; padding: 3rem 1rem;">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <div class="empty-state" style="border:none; padding: 2.5rem 1rem; text-align:center;">
+        <svg class="empty-icon" style="width:48px;height:48px;margin:0 auto 0.75rem;color:var(--text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
-        <h4 class="empty-title">Your wishlist is empty</h4>
-        <p class="empty-desc">Save your favorite items here to purchase later.</p>
+        <h4 style="font-weight:800;font-size:1.1rem;margin-bottom:0.25rem;">Wishlist is empty</h4>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Tap the heart on any product to save it here.</p>
         <button class="btn btn-primary btn-sm" onclick="closeAllDrawers(); filterByCategory('all');">Explore Products</button>
       </div>
     `;
@@ -827,10 +819,10 @@ function renderWishlistDrawer() {
         <div class="cart-item-meta">${p.category_name || p.categoryName || 'General'}</div>
         <div class="cart-item-price-row">
           <span class="cart-item-price">${formatPrice(p.price)}</span>
-          <div style="display:flex;gap:0.5rem;">
-            <button class="btn btn-primary btn-sm" style="padding:0.35rem 0.75rem;font-size:0.75rem;" onclick="addToCart(${p.id}); toggleWishlist(${p.id});">Move to Cart</button>
+          <div style="display:flex;gap:0.4rem;">
+            <button class="btn btn-primary btn-sm" style="padding:0.3rem 0.65rem;font-size:0.75rem;" onclick="addToCart(${p.id}); toggleWishlist(${p.id});">Move to Cart</button>
             <button class="item-remove-btn" onclick="toggleWishlist(${p.id})">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
         </div>
@@ -840,7 +832,7 @@ function renderWishlistDrawer() {
 }
 
 /* ==========================================================================
-   Product Quick View Modal
+   Product Quick View
    ========================================================================== */
 function openQuickView(productId) {
   const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
@@ -876,21 +868,20 @@ function openQuickView(productId) {
         <span class="product-category">${product.category_name || product.categoryName}</span>
         <h3 class="qv-title">${product.name}</h3>
 
-        <div class="product-rating-wrap" style="margin-bottom:1rem;">
+        <div class="product-rating-wrap" style="margin-bottom:0.75rem;">
           <div class="rating-stars">${renderStarRating(product.rating || 4.5)}</div>
           <span class="rating-number">${product.rating || 4.5}</span>
-          <span class="rating-count">(${product.review_count || product.reviewCount || 0} customer reviews)</span>
+          <span class="rating-count">(${product.review_count || product.reviewCount || 0} reviews)</span>
         </div>
 
-        <div class="product-price-row" style="margin-bottom:1.25rem;">
-          <span class="current-price" style="font-size:1.6rem;">${formatPrice(product.price)}</span>
-          <span class="original-price" style="font-size:1.1rem;">${formatPrice(origPrice)}</span>
+        <div class="product-price-row" style="margin-bottom:1rem;">
+          <span class="current-price" style="font-size:1.4rem;">${formatPrice(product.price)}</span>
+          <span class="original-price" style="font-size:0.95rem;">${formatPrice(origPrice)}</span>
           <span class="discount-tag">${Math.round(((origPrice - product.price)/origPrice)*100)}% OFF</span>
         </div>
 
         <p class="qv-desc">${product.description}</p>
 
-        <!-- Color Variant -->
         <div class="variant-group">
           <label class="variant-label">Color:</label>
           <div class="color-options">
@@ -900,9 +891,8 @@ function openQuickView(productId) {
           </div>
         </div>
 
-        <!-- Size Variant -->
         <div class="variant-group">
-          <label class="variant-label">Option / Size:</label>
+          <label class="variant-label">Size / Option:</label>
           <div class="size-options">
             ${sizes.map((s, i) => `
               <button class="size-pill ${i === 0 ? 'active' : ''}" onclick="selectQvSize('${s}', this)">${s}</button>
@@ -910,14 +900,12 @@ function openQuickView(productId) {
           </div>
         </div>
 
-        <!-- Action CTA -->
-        <div style="display:flex;gap:1rem;margin-top:1.5rem;">
+        <div style="display:flex;gap:0.75rem;margin-top:1.25rem;">
           <button class="btn btn-primary btn-block" id="qv-add-btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
             Add to Cart
           </button>
           <button class="btn btn-secondary" onclick="toggleWishlist(${product.id})" title="Wishlist">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="${state.wishlist.includes(product.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="${state.wishlist.includes(product.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
           </button>
         </div>
       </div>
@@ -950,14 +938,14 @@ function selectQvSize(size, el) {
 }
 
 /* ==========================================================================
-   Multi-Step Checkout Flow & Order Processing (Connected to Backend API)
+   Checkout & Orders
    ========================================================================== */
 let checkoutStep = 1;
 let selectedPaymentMethod = 'UPI / QR Code';
 
 function openCheckout() {
   if (state.cart.length === 0) {
-    showToast('Your cart is empty! Add items first.', 'warning');
+    showToast('Your cart is empty!', 'warning');
     return;
   }
 
@@ -992,7 +980,7 @@ function nextCheckoutStep() {
     const pincode = document.getElementById('ship-pincode').value.trim();
 
     if (!name || !phone || !address || !pincode) {
-      showToast('Please fill out all required shipping fields', 'warning');
+      showToast('Fill in all shipping details', 'warning');
       return;
     }
   }
@@ -1023,18 +1011,17 @@ function renderCheckoutSummary() {
   const address = document.getElementById('ship-address').value.trim();
 
   summaryEl.innerHTML = `
-    <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border-subtle);">
-      <div style="font-weight:700;margin-bottom:0.25rem;">Deliver to: ${name}</div>
-      <div style="font-size:0.85rem;color:var(--text-secondary);">${address}</div>
-      <div style="font-size:0.85rem;color:var(--primary);font-weight:600;margin-top:0.4rem;">Payment via: ${selectedPaymentMethod}</div>
+    <div style="margin-bottom:0.75rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border-subtle);">
+      <div style="font-weight:800;font-size:0.9rem;margin-bottom:0.2rem;">${name}</div>
+      <div style="font-size:0.8rem;color:var(--text-secondary);">${address}</div>
+      <div style="font-size:0.8rem;color:var(--primary);font-weight:700;margin-top:0.3rem;">Payment: ${selectedPaymentMethod}</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.875rem;">
+    <div style="display:flex;flex-direction:column;gap:0.3rem;font-size:0.825rem;">
       <div style="display:flex;justify-content:space-between;"><span>Items (${state.cart.length})</span> <span>${formatPrice(totals.subtotal)}</span></div>
       ${totals.discount > 0 ? `<div style="display:flex;justify-content:space-between;color:var(--success);"><span>Discount</span> <span>-${formatPrice(totals.discount)}</span></div>` : ''}
-      <div style="display:flex;justify-content:space-between;"><span>Shipping</span> <span>${totals.shipping === 0 ? 'FREE' : formatPrice(totals.shipping)}</span></div>
-      <div style="display:flex;justify-content:space-between;"><span>GST (5%)</span> <span>${formatPrice(totals.tax)}</span></div>
-      <div style="display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;margin-top:0.5rem;border-top:1px dashed var(--border-subtle);padding-top:0.5rem;">
-        <span>Total Payable</span> <span>${formatPrice(totals.total)}</span>
+      <div style="display:flex;justify-content:space-between;"><span>Delivery</span> <span>${totals.shipping === 0 ? 'FREE' : formatPrice(totals.shipping)}</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:800;font-size:1.05rem;margin-top:0.4rem;border-top:1px dashed var(--border-subtle);padding-top:0.4rem;">
+        <span>Total</span> <span>${formatPrice(totals.total)}</span>
       </div>
     </div>
   `;
@@ -1066,7 +1053,6 @@ async function placeOrder() {
 
   let createdOrderObj = null;
 
-  // Submit to FastAPI Backend API
   try {
     const url = (typeof getApiUrl === 'function') ? getApiUrl('/api/orders') : '/api/orders';
     const res = await fetch(url, {
@@ -1090,7 +1076,6 @@ async function placeOrder() {
     console.log('Using local order generator.');
   }
 
-  // Fallback if backend offline
   if (!createdOrderObj) {
     createdOrderObj = {
       orderId: `APX-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -1103,24 +1088,18 @@ async function placeOrder() {
     };
   }
 
-  // Save order in state
   state.orders.unshift(createdOrderObj);
   state.cart = [];
   state.appliedCoupon = null;
   saveState();
   updateBadgeCounts();
+  renderProductGrid();
   renderCartDrawer();
 
-  // Show Success View in Modal
   renderOrderSuccess(createdOrderObj);
 
-  // Trigger celebration confetti
   if (window.confetti) {
-    window.confetti({
-      particleCount: 120,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
+    window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
   }
 }
 
@@ -1133,44 +1112,38 @@ function renderOrderSuccess(order) {
       <div class="success-icon-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;">Order Placed Successfully!</h2>
-      <p style="color:var(--text-secondary);font-size:0.95rem;">Thank you, ${order.shippingInfo.name}! Your order ID is <strong style="color:var(--primary);">${order.orderId}</strong>.</p>
+      <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:0.25rem;">Order Placed!</h3>
+      <p style="color:var(--text-secondary);font-size:0.85rem;">Order ID: <strong style="color:var(--primary);">${order.orderId}</strong></p>
 
       <div class="invoice-preview-card">
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;font-weight:700;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-weight:700;">
           <span>Invoice #${order.orderId}</span>
-          <span style="color:var(--success);">Paid via ${order.paymentMethod}</span>
+          <span style="color:var(--success);">${order.paymentMethod}</span>
         </div>
-        <div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:0.8rem;">Date: ${order.date}</div>
-        <div style="display:flex;flex-direction:column;gap:0.35rem;border-top:1px solid var(--border-subtle);padding-top:0.5rem;">
+        <div style="display:flex;flex-direction:column;gap:0.25rem;border-top:1px solid var(--border-subtle);padding-top:0.4rem;">
           ${order.items.map(it => `
             <div style="display:flex;justify-content:space-between;">
               <span>${it.name} (x${it.quantity})</span>
               <span>${formatPrice(it.price * it.quantity)}</span>
             </div>
           `).join('')}
-          <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px dashed var(--border-subtle);padding-top:0.4rem;margin-top:0.4rem;">
-            <span>Total Paid:</span>
+          <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px dashed var(--border-subtle);padding-top:0.4rem;margin-top:0.25rem;">
+            <span>Total:</span>
             <span>${formatPrice(order.totals.total)}</span>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;">
-        <button class="btn btn-primary" onclick="window.print()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-          Print Invoice
-        </button>
-        <button class="btn btn-secondary" onclick="closeAllModals(); openOrdersModal();">
-          Track Order
-        </button>
+      <div style="display:flex;gap:0.75rem;justify-content:center;margin-top:1.25rem;">
+        <button class="btn btn-primary btn-sm" onclick="window.print()">Print Invoice</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeAllModals(); openOrdersModal();">Track Status</button>
       </div>
     </div>
   `;
 }
 
 /* ==========================================================================
-   Order Tracking & History Modal
+   Order Tracking
    ========================================================================== */
 async function openOrdersModal() {
   closeAllDrawers();
@@ -1178,7 +1151,6 @@ async function openOrdersModal() {
   const body = document.getElementById('orders-list-body');
   if (!modal || !body) return;
 
-  // Try fetching latest live orders from backend
   try {
     const url = (typeof getApiUrl === 'function') ? getApiUrl('/api/orders?limit=20') : '/api/orders?limit=20';
     const res = await fetch(url);
@@ -1201,45 +1173,43 @@ async function openOrdersModal() {
 
   if (state.orders.length === 0) {
     body.innerHTML = `
-      <div class="empty-state" style="border:none; padding:3rem 1rem;">
-        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-        <h4 class="empty-title">No orders yet</h4>
-        <p class="empty-desc">Once you place an order, you can track its delivery status here.</p>
+      <div class="empty-state" style="border:none; padding:2rem 1rem; text-align:center;">
+        <h4 style="font-weight:800;font-size:1rem;margin-bottom:0.25rem;">No orders yet</h4>
+        <p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:1rem;">Your placed orders and delivery status appear here.</p>
         <button class="btn btn-primary btn-sm" onclick="closeAllModals();">Start Shopping</button>
       </div>
     `;
   } else {
     body.innerHTML = state.orders.map(o => `
-      <div style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <div style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:1rem;margin-bottom:0.75rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
           <div>
-            <span style="font-weight:800;font-size:1rem;">Order #${o.orderId}</span>
-            <div style="font-size:0.75rem;color:var(--text-muted);">${o.date}</div>
+            <span style="font-weight:800;font-size:0.9rem;">#${o.orderId}</span>
+            <div style="font-size:0.7rem;color:var(--text-muted);">${o.date}</div>
           </div>
-          <span style="background:var(--success-light);color:#065f46;padding:0.2rem 0.6rem;border-radius:var(--radius-full);font-size:0.75rem;font-weight:700;">${o.status}</span>
+          <span style="background:var(--success-light);color:#065f46;padding:0.15rem 0.5rem;border-radius:var(--radius-full);font-size:0.7rem;font-weight:800;">${o.status}</span>
         </div>
 
-        <!-- Tracking Timeline -->
-        <div style="display:flex;justify-content:space-between;margin:1.25rem 0;position:relative;">
+        <div style="display:flex;justify-content:space-between;margin:0.85rem 0;position:relative;">
           <div style="text-align:center;flex:1;">
-            <div style="width:24px;height:24px;border-radius:50%;background:var(--success);color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.25rem;font-size:0.7rem;">✓</div>
-            <span style="font-size:0.7rem;font-weight:700;">Placed</span>
+            <div style="width:20px;height:20px;border-radius:50%;background:var(--success);color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.2rem;font-size:0.65rem;">✓</div>
+            <span style="font-size:0.65rem;font-weight:700;">Placed</span>
           </div>
           <div style="text-align:center;flex:1;">
-            <div style="width:24px;height:24px;border-radius:50%;background:${o.status!=='Placed'?'var(--success)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.25rem;font-size:0.7rem;">✓</div>
-            <span style="font-size:0.7rem;font-weight:700;">Confirmed</span>
+            <div style="width:20px;height:20px;border-radius:50%;background:${o.status!=='Placed'?'var(--success)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.2rem;font-size:0.65rem;">✓</div>
+            <span style="font-size:0.65rem;font-weight:700;">Confirmed</span>
           </div>
           <div style="text-align:center;flex:1;">
-            <div style="width:24px;height:24px;border-radius:50%;background:${(o.status==='Shipped'||o.status==='Delivered')?'var(--primary)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.25rem;font-size:0.7rem;">🚚</div>
-            <span style="font-size:0.7rem;font-weight:700;color:var(--primary);">Shipped</span>
+            <div style="width:20px;height:20px;border-radius:50%;background:${(o.status==='Shipped'||o.status==='Delivered')?'var(--primary)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.2rem;font-size:0.65rem;">🚚</div>
+            <span style="font-size:0.65rem;font-weight:700;color:var(--primary);">Shipped</span>
           </div>
           <div style="text-align:center;flex:1;">
-            <div style="width:24px;height:24px;border-radius:50%;background:${o.status==='Delivered'?'var(--success)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.25rem;font-size:0.7rem;">📦</div>
-            <span style="font-size:0.7rem;color:var(--text-muted);">Delivered</span>
+            <div style="width:20px;height:20px;border-radius:50%;background:${o.status==='Delivered'?'var(--success)':'var(--border-subtle)'};color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 0.2rem;font-size:0.65rem;">📦</div>
+            <span style="font-size:0.65rem;color:var(--text-muted);">Delivered</span>
           </div>
         </div>
 
-        <div style="border-top:1px solid var(--border-subtle);padding-top:0.75rem;display:flex;justify-content:space-between;align-items:center;font-size:0.875rem;">
+        <div style="border-top:1px solid var(--border-subtle);padding-top:0.5rem;display:flex;justify-content:space-between;font-size:0.8rem;">
           <span>${o.items.length} item(s)</span>
           <span style="font-weight:800;">${formatPrice(o.totals.total)}</span>
         </div>
@@ -1256,7 +1226,6 @@ async function openOrdersModal() {
 function setupDrawersAndModals() {
   const backdrop = document.getElementById('drawer-backdrop');
 
-  // Cart Drawer Triggers
   const cartTrigger = document.getElementById('cart-drawer-trigger');
   const cartDrawer = document.getElementById('cart-drawer');
   const closeCartBtn = document.getElementById('close-cart-btn');
@@ -1269,11 +1238,8 @@ function setupDrawersAndModals() {
     });
   }
 
-  if (closeCartBtn) {
-    closeCartBtn.addEventListener('click', closeAllDrawers);
-  }
+  if (closeCartBtn) closeCartBtn.addEventListener('click', closeAllDrawers);
 
-  // Wishlist Drawer Triggers
   const wishlistTrigger = document.getElementById('wishlist-drawer-trigger');
   const wishlistDrawer = document.getElementById('wishlist-drawer');
   const closeWishlistBtn = document.getElementById('close-wishlist-btn');
@@ -1286,30 +1252,42 @@ function setupDrawersAndModals() {
     });
   }
 
-  if (closeWishlistBtn) {
-    closeWishlistBtn.addEventListener('click', closeAllDrawers);
-  }
+  if (closeWishlistBtn) closeWishlistBtn.addEventListener('click', closeAllDrawers);
 
-  // Mobile Bottom Navigation Links
+  // Mobile Bottom App Bar Navigation
   const mobNavHome = document.getElementById('mob-nav-home');
   const mobNavCategories = document.getElementById('mob-nav-categories');
+  const mobNavSearch = document.getElementById('mob-nav-search');
   const mobNavWishlist = document.getElementById('mob-nav-wishlist');
   const mobNavCart = document.getElementById('mob-nav-cart');
-  const mobNavOrders = document.getElementById('mob-nav-orders');
 
   if (mobNavHome) {
     mobNavHome.addEventListener('click', () => {
       closeAllDrawers();
       closeAllModals();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      setActiveMobTab(mobNavHome);
     });
   }
 
   if (mobNavCategories) {
     mobNavCategories.addEventListener('click', () => {
       closeAllDrawers();
-      const catSection = document.getElementById('categories-section');
+      const catSection = document.querySelector('.mobile-stories-section');
       if (catSection) catSection.scrollIntoView({ behavior: 'smooth' });
+      setActiveMobTab(mobNavCategories);
+    });
+  }
+
+  if (mobNavSearch) {
+    mobNavSearch.addEventListener('click', () => {
+      closeAllDrawers();
+      const mInput = document.getElementById('mobile-search-input');
+      if (mInput) {
+        mInput.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      setActiveMobTab(mobNavSearch);
     });
   }
 
@@ -1319,6 +1297,7 @@ function setupDrawersAndModals() {
       wishlistDrawer.classList.add('active');
       backdrop.classList.add('active');
       renderWishlistDrawer();
+      setActiveMobTab(mobNavWishlist);
     });
   }
 
@@ -1328,16 +1307,10 @@ function setupDrawersAndModals() {
       cartDrawer.classList.add('active');
       backdrop.classList.add('active');
       renderCartDrawer();
+      setActiveMobTab(mobNavCart);
     });
   }
 
-  if (mobNavOrders) {
-    mobNavOrders.addEventListener('click', () => {
-      openOrdersModal();
-    });
-  }
-
-  // Backdrop click closes everything
   if (backdrop) {
     backdrop.addEventListener('click', () => {
       closeAllDrawers();
@@ -1345,32 +1318,21 @@ function setupDrawersAndModals() {
     });
   }
 
-  // Close modals on ESC key
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeAllDrawers();
       closeAllModals();
     }
   });
+}
 
-  // Mobile search toggle button
-  const mobileSearchBtn = document.getElementById('mobile-search-toggle');
-  const searchWrapper = document.getElementById('search-wrapper');
-  if (mobileSearchBtn && searchWrapper) {
-    mobileSearchBtn.addEventListener('click', () => {
-      searchWrapper.classList.toggle('mobile-expanded');
-      const input = document.getElementById('search-input');
-      if (input && searchWrapper.classList.contains('mobile-expanded')) {
-        input.focus();
-      }
-    });
-  }
+function setActiveMobTab(tabEl) {
+  document.querySelectorAll('.mobile-nav-item').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
 }
 
 function closeAllDrawers() {
   document.querySelectorAll('.drawer').forEach(d => d.classList.remove('active'));
-  const filterSidebar = document.getElementById('filter-sidebar');
-  if (filterSidebar) filterSidebar.classList.remove('mobile-open');
   const backdrop = document.getElementById('drawer-backdrop');
   if (backdrop) backdrop.classList.remove('active');
 }
@@ -1379,19 +1341,11 @@ function closeAllModals() {
   document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
 }
 
-/* ==========================================================================
-   Checkout Setup
-   ========================================================================== */
 function setupCheckout() {
   const proceedBtn = document.getElementById('proceed-to-checkout-btn');
-  if (proceedBtn) {
-    proceedBtn.addEventListener('click', openCheckout);
-  }
+  if (proceedBtn) proceedBtn.addEventListener('click', openCheckout);
 }
 
-/* ==========================================================================
-   Theme Switcher (Dark / Light)
-   ========================================================================== */
 function toggleTheme() {
   state.theme = state.theme === 'light' ? 'dark' : 'light';
   document.documentElement.setAttribute('data-theme', state.theme);
@@ -1413,9 +1367,6 @@ function updateThemeToggleIcons() {
   }
 }
 
-/* ==========================================================================
-   Badge Counts & Sync
-   ========================================================================== */
 function updateBadgeCounts() {
   const cartCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
   const wishlistCount = state.wishlist.length;
@@ -1437,36 +1388,25 @@ function updateBadgeCounts() {
   });
 }
 
-/* ==========================================================================
-   Reviews Rendering
-   ========================================================================== */
 function renderReviews() {
   const grid = document.getElementById('reviews-grid');
-  if (!grid) return;
+  if (!grid || typeof REVIEWS_DATA === 'undefined') return;
 
   grid.innerHTML = REVIEWS_DATA.map(r => `
-    <div class="review-card">
-      <div class="review-header">
-        <img src="${r.avatar}" alt="${r.name}" class="reviewer-avatar" />
+    <div class="review-card" style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:1rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+        <img src="${r.avatar}" alt="${r.name}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;" />
         <div>
-          <div class="reviewer-name">${r.name}</div>
-          <div class="review-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Verified Buyer • ${r.date}
-          </div>
+          <div style="font-size:0.875rem;font-weight:700;">${r.name}</div>
+          <div style="font-size:0.7rem;color:var(--success);font-weight:700;">Verified Buyer</div>
         </div>
       </div>
-      <div class="rating-stars" style="margin-bottom:0.75rem;">
-        ${renderStarRating(r.rating)}
-      </div>
-      <p class="review-text">"${r.comment}"</p>
+      <div class="rating-stars" style="margin-bottom:0.5rem;">${renderStarRating(r.rating)}</div>
+      <p style="font-size:0.825rem;color:var(--text-secondary);line-height:1.4;">"${r.comment}"</p>
     </div>
   `).join('');
 }
 
-/* ==========================================================================
-   Master Render Trigger
-   ========================================================================== */
 function renderAll() {
   updateBadgeCounts();
   renderProductGrid();
