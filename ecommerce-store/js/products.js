@@ -14,13 +14,12 @@ const PRODUCTS_DATA = [
     originalPrice: 34990,
     rating: 4.8,
     reviewCount: 342,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=900&auto=format&fit=crop&q=80", // Over-ear front hero
-      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=900&auto=format&fit=crop&q=80", // Angled earcups & headband
-      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=900&auto=format&fit=crop&q=80", // Earcup cushion close-up
-      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=900&auto=format&fit=crop&q=80", // Side profile view
-      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=900&auto=format&fit=crop&q=80"  // Lifestyle listening
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "BESTSELLER",
     isFlashDeal: true,
@@ -56,13 +55,12 @@ const PRODUCTS_DATA = [
     originalPrice: 149900,
     rating: 4.9,
     reviewCount: 890,
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&auto=format&fit=crop&q=80", // Titanium back & triple camera
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02560?w=900&auto=format&fit=crop&q=80", // Front Dynamic Island OLED display
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=900&auto=format&fit=crop&q=80", // Titanium brushed side frame
-      "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=900&auto=format&fit=crop&q=80", // In-hand ergonomics
-      "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=900&auto=format&fit=crop&q=80"  // Screen iOS interface
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: false,
@@ -99,13 +97,12 @@ const PRODUCTS_DATA = [
     originalPrice: 134900,
     rating: 4.9,
     reviewCount: 420,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&auto=format&fit=crop&q=80", // Open front display view
-      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=900&auto=format&fit=crop&q=80", // Top anodized lid & Apple logo
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=900&auto=format&fit=crop&q=80", // Magic keyboard & Force Touch trackpad
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=900&auto=format&fit=crop&q=80", // Side slim silhouette ports
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=900&auto=format&fit=crop&q=80"  // Working workspace aesthetic
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "NEW",
     isFlashDeal: false,
@@ -141,13 +138,12 @@ const PRODUCTS_DATA = [
     originalPrice: 89900,
     rating: 4.7,
     reviewCount: 215,
-    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=900&auto=format&fit=crop&q=80", // 49mm Titanium case & face
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&auto=format&fit=crop&q=80", // Side orange action button & crown
-      "https://images.unsplash.com/photo-1510017803434-a899398421b3?w=900&auto=format&fit=crop&q=80", // Ocean rubber strap texture
-      "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=900&auto=format&fit=crop&q=80", // Wrist biometric sensors in action
-      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=900&auto=format&fit=crop&q=80"  // Outdoor adventure view
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "SALE",
     isFlashDeal: true,
@@ -183,13 +179,12 @@ const PRODUCTS_DATA = [
     originalPrice: 59990,
     rating: 4.9,
     reviewCount: 680,
-    image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=900&auto=format&fit=crop&q=80", // PS5 console & controller
-      "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=900&auto=format&fit=crop&q=80", // DualSense controller close-up
-      "https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=900&auto=format&fit=crop&q=80", // Side console curve & LEDs
-      "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13?w=900&auto=format&fit=crop&q=80", // Gaming setup in action
-      "https://images.unsplash.com/photo-1612287233207-6f81c9e42289?w=900&auto=format&fit=crop&q=80"  // Retail unboxing view
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: true,
@@ -223,13 +218,12 @@ const PRODUCTS_DATA = [
     originalPrice: 149999,
     rating: 4.8,
     reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=900&auto=format&fit=crop&q=80", // Quad camera rings back
-      "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=900&auto=format&fit=crop&q=80", // Front bezel-less 120Hz screen
-      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=900&auto=format&fit=crop&q=80", // Flat titanium edge & speaker
-      "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=900&auto=format&fit=crop&q=80", // Camera lens array detail
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02560?w=900&auto=format&fit=crop&q=80"  // In-hand premium feel
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "NEW",
     isFlashDeal: false,
@@ -264,13 +258,12 @@ const PRODUCTS_DATA = [
     originalPrice: 13999,
     rating: 4.8,
     reviewCount: 512,
-    image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=900&auto=format&fit=crop&q=80", // Front speaker grill
-      "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=900&auto=format&fit=crop&q=80", // Dual passive bass radiators
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=900&auto=format&fit=crop&q=80", // Water resistance splash
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=900&auto=format&fit=crop&q=80", // Outdoor gathering ambiance
-      "https://images.unsplash.com/photo-1528148343865-51218c4a13e6?w=900&auto=format&fit=crop&q=80"  // Portable lanyard strap
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1545454675-3531b543be5d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: true,
@@ -310,14 +303,12 @@ const PRODUCTS_DATA = [
     originalPrice: 6999,
     rating: 4.6,
     reviewCount: 184,
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=900&auto=format&fit=crop&q=80", // Model front view
-      "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=900&auto=format&fit=crop&q=80", // Back silhouette & hem
-      "https://images.unsplash.com/photo-1544441893-675973e31985?w=900&auto=format&fit=crop&q=80", // Fabric texture & zipper teeth
-      "https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=900&auto=format&fit=crop&q=80", // Utility sleeve pocket
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&auto=format&fit=crop&q=80", // Urban streetwear style
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&auto=format&fit=crop&q=80"  // Outerwear fit
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "50% OFF",
     isFlashDeal: true,
@@ -351,12 +342,12 @@ const PRODUCTS_DATA = [
     originalPrice: 3999,
     rating: 4.8,
     reviewCount: 290,
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=900&auto=format&fit=crop&q=80", // Front relaxed fit
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&auto=format&fit=crop&q=80", // Double hood profile
-      "https://images.unsplash.com/photo-1544441893-675973e31985?w=900&auto=format&fit=crop&q=80", // Cotton loops & ribbed cuffs
-      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&auto=format&fit=crop&q=80"  // Casual lifestyle
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "BESTSELLER",
     isFlashDeal: false,
@@ -389,12 +380,12 @@ const PRODUCTS_DATA = [
     originalPrice: 4999,
     rating: 4.7,
     reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=900&auto=format&fit=crop&q=80", // Full denim leg profile
-      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=900&auto=format&fit=crop&q=80", // Waistband & red tab
-      "https://images.unsplash.com/photo-1582552938357-32b906df40cb?w=900&auto=format&fit=crop&q=80", // Pocket rivets & stitching
-      "https://images.unsplash.com/photo-1604176354204-9268737828e4?w=900&auto=format&fit=crop&q=80"  // Hem selvedge cuff
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: false,
@@ -432,14 +423,12 @@ const PRODUCTS_DATA = [
     originalPrice: 12999,
     rating: 4.8,
     reviewCount: 450,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&auto=format&fit=crop&q=80", // Side profile & Air unit
-      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=900&auto=format&fit=crop&q=80", // Top laces angle
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&auto=format&fit=crop&q=80", // Heel cushion bubble
-      "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=900&auto=format&fit=crop&q=80", // Outsole tread grip
-      "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=900&auto=format&fit=crop&q=80", // On-feet walking
-      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&auto=format&fit=crop&q=80"  // Street vibe
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: true,
@@ -475,12 +464,12 @@ const PRODUCTS_DATA = [
     originalPrice: 10999,
     rating: 4.9,
     reviewCount: 520,
-    image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=900&auto=format&fit=crop&q=80", // Samba leather & 3-stripes
-      "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=900&auto=format&fit=crop&q=80", // Suede T-toe overlay
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900&auto=format&fit=crop&q=80", // Gum sole profile
-      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=900&auto=format&fit=crop&q=80"  // Casual retro styling
+      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "BESTSELLER",
     isFlashDeal: false,
@@ -514,12 +503,12 @@ const PRODUCTS_DATA = [
     originalPrice: 19999,
     rating: 4.9,
     reviewCount: 780,
-    image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80", // Chicago high-top profile
-      "https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=900&auto=format&fit=crop&q=80", // Swoosh & wings logo
-      "https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?w=900&auto=format&fit=crop&q=80", // Ankle collar padding
-      "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=900&auto=format&fit=crop&q=80"  // Red concentric outsole
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: true,
@@ -557,13 +546,12 @@ const PRODUCTS_DATA = [
     originalPrice: 11995,
     rating: 4.6,
     reviewCount: 167,
-    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=900&auto=format&fit=crop&q=80", // Dial face & sub-dials
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=900&auto=format&fit=crop&q=80", // Crown and chrono pushers
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=900&auto=format&fit=crop&q=80", // Brown leather strap
-      "https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=900&auto=format&fit=crop&q=80", // Stainless caseback
-      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&auto=format&fit=crop&q=80"  // On-wrist formal style
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "SALE",
     isFlashDeal: true,
@@ -598,11 +586,12 @@ const PRODUCTS_DATA = [
     originalPrice: 12590,
     rating: 4.8,
     reviewCount: 420,
-    image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=900&auto=format&fit=crop&q=80", // Front teardrop frame
-      "https://images.unsplash.com/photo-1508296695146-257a814070b4?w=900&auto=format&fit=crop&q=80", // Gold wire temple angle
-      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=900&auto=format&fit=crop&q=80"  // Leather case & lens etch
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: true,
@@ -642,13 +631,12 @@ const PRODUCTS_DATA = [
     originalPrice: 4999,
     rating: 4.7,
     reviewCount: 230,
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=900&auto=format&fit=crop&q=80", // Illuminated arm
-      "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=900&auto=format&fit=crop&q=80", // 15W wireless charging base
-      "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?w=900&auto=format&fit=crop&q=80", // Dual-axis hinge
-      "https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=900&auto=format&fit=crop&q=80", // Touch brightness slider
-      "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=900&auto=format&fit=crop&q=80"  // Night study ambiance
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "SALE",
     isFlashDeal: true,
@@ -683,11 +671,12 @@ const PRODUCTS_DATA = [
     originalPrice: 58900,
     rating: 4.9,
     reviewCount: 310,
-    image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=900&auto=format&fit=crop&q=80", // Slim stick body
-      "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=900&auto=format&fit=crop&q=80", // Laser fluffy cleaner head
-      "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=900&auto=format&fit=crop&q=80"  // Wall docking station
+      "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1558317374-067fb5f30001?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "HOT",
     isFlashDeal: false,
@@ -726,13 +715,12 @@ const PRODUCTS_DATA = [
     originalPrice: 1799,
     rating: 4.9,
     reviewCount: 680,
-    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=900&auto=format&fit=crop&q=80", // Glass dropper bottle
-      "https://images.unsplash.com/photo-1608248597359-00f7cfcb7e25?w=900&auto=format&fit=crop&q=80", // Serum texture pipette
-      "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=900&auto=format&fit=crop&q=80", // Active ingredients
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=900&auto=format&fit=crop&q=80", // Skin application glow
-      "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=900&auto=format&fit=crop&q=80"  // Outer packaging
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "BESTSELLER",
     isFlashDeal: true,
@@ -766,11 +754,12 @@ const PRODUCTS_DATA = [
     originalPrice: 9900,
     rating: 4.9,
     reviewCount: 390,
-    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=900&auto=format&fit=crop&q=80", // Medusa turquoise bottle
-      "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900&auto=format&fit=crop&q=80", // Golden spray cap
-      "https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=900&auto=format&fit=crop&q=80"  // Luxury fragrance display
+      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80", // Front angle
+      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80&flip=h", // Side/flipped angle
+      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=2", // Close-up detail
+      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600&auto=format&fit=crop&q=80&crop=focalpoint&fp-z=1.5&fp-y=0.8"  // Secondary detail
     ],
     badge: "BESTSELLER",
     isFlashDeal: false,
