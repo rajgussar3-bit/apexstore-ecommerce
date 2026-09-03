@@ -320,17 +320,22 @@ function renderProductGrid() {
           <span class="product-category">${catName}</span>
           <h4 class="product-title" onclick="openQuickView(${p.id})" title="${p.name}">${p.name}</h4>
           
-          <div class="product-rating-wrap">
-            <div class="rating-stars">${renderStarRating(p.rating || 4.5)}</div>
-            <span class="rating-number">${p.rating || 4.5}</span>
-            <span class="rating-count">(${p.review_count || p.reviewCount || 0})</span>
+          <div class="product-rating-row">
+            <div class="fk-rating-pill">
+              ${p.rating || 4.5}
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="fk-rating-count">(${p.review_count || p.reviewCount || 0})</span>
+            <div class="fk-assured-badge"><span>✦</span> Assured</div>
           </div>
 
           <div class="product-price-row">
             <span class="current-price">${formatPrice(p.price)}</span>
             <span class="original-price">${formatPrice(origPrice)}</span>
-            <span class="discount-tag">${discountPercent}% OFF</span>
+            <span class="discount-tag">${discountPercent}% off</span>
           </div>
+
+          <div class="fk-free-delivery">Free delivery</div>
 
           <div class="card-cart-action-wrap">
             ${cartQty > 0 ? `
@@ -834,11 +839,19 @@ function renderWishlistDrawer() {
 /* ==========================================================================
    Product Quick View (Flipkart-Style Multi-Angle Gallery & Detailed Specs)
    ========================================================================== */
+/* ==========================================================================
+   Product Detail Page (Authentic Flipkart Mobile & Desktop Experience)
+   ========================================================================== */
+let activePdpProduct = null;
+let activePdpSelectedColor = null;
+let activePdpSelectedSize = null;
+
 function openQuickView(productId) {
   const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
   const product = source.find(p => p.id === productId);
   if (!product) return;
 
+  activePdpProduct = product;
   const modal = document.getElementById('quick-view-modal');
   const modalContent = document.getElementById('quick-view-content');
   if (!modal || !modalContent) return;
@@ -847,164 +860,304 @@ function openQuickView(productId) {
   const colors = (product.colors && product.colors.length > 0) ? product.colors : ['#1e293b'];
   const sizes = (product.sizes && product.sizes.length > 0) ? product.sizes : ['Standard'];
   const origPrice = product.original_price || product.originalPrice || product.price;
+  const discountPercent = Math.round(((origPrice - product.price) / origPrice) * 100);
   const highlights = product.highlights || product.features || [];
   const specs = product.specs || {};
+  const isWishlisted = state.wishlist.includes(product.id);
 
   let currentImgIndex = 0;
-  let selectedColor = colors[0];
-  let selectedSize = sizes[0];
+  activePdpSelectedColor = colors[0];
+  activePdpSelectedSize = sizes[0];
 
   modalContent.innerHTML = `
-    <div class="quick-view-grid" style="max-width:920px;padding:1.5rem;">
+    <div style="display:flex;flex-direction:column;height:100%;width:100%;">
       
-      <!-- Multi-Angle Image Gallery -->
-      <div class="qv-gallery">
-        <div class="qv-gallery-main" style="position:relative;background:var(--bg-secondary);border-radius:var(--radius-lg);overflow:hidden;">
-          <img id="qv-main-img" src="${images[0]}" alt="${product.name}" style="width:100%;aspect-ratio:1/1;object-fit:cover;transition:opacity 0.2s ease;" />
-          
-          <!-- Photo Counter Badge -->
-          <span class="gallery-counter-pill" id="qv-img-counter" style="position:absolute;bottom:12px;right:12px;background:rgba(15,23,42,0.75);color:white;padding:3px 10px;border-radius:9999px;font-size:0.75rem;font-weight:700;backdrop-filter:blur(4px);">
-            📸 1 / ${images.length}
-          </span>
-
-          <!-- Left/Right Gallery Nav Arrows -->
-          ${images.length > 1 ? `
-            <button class="gallery-nav-btn prev" onclick="navigateQvImage(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);color:#0f172a;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);font-weight:800;">‹</button>
-            <button class="gallery-nav-btn next" onclick="navigateQvImage(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.85);color:#0f172a;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);font-weight:800;">›</button>
-          ` : ''}
+      <!-- 1. Flipkart Mobile Sticky Top Bar (Back Arrow, Title, Share, Wishlist, Cart) -->
+      <div class="fk-pdp-top-bar">
+        <button class="fk-back-btn" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Back</span>
+        </button>
+        <div style="font-size:0.85rem;font-weight:700;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-primary);">
+          ${product.name}
         </div>
-
-        <!-- Thumbnails Strip (4 to 7 photos) -->
-        <div class="qv-thumbnails" style="display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.5rem;margin-top:0.6rem;scrollbar-width:none;">
-          ${images.map((img, idx) => `
-            <div class="qv-thumb-wrap ${idx === 0 ? 'active' : ''}" onclick="selectQvThumbnail(${idx})" style="flex-shrink:0;width:58px;height:58px;border-radius:8px;overflow:hidden;border:2px solid ${idx===0?'var(--primary)':'transparent'};cursor:pointer;transition:all 0.2s ease;">
-              <img src="${img}" alt="Angle ${idx+1}" style="width:100%;height:100%;object-fit:cover;" />
-            </div>
-          `).join('')}
+        <div class="fk-pdp-actions">
+          <button onclick="shareProduct('${encodeURIComponent(product.name)}')" title="Share" style="color:var(--text-primary);padding:4px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          </button>
+          <button id="pdp-wishlist-btn" onclick="toggleWishlist(${product.id}); updatePdpWishlistIcon(${product.id});" title="Wishlist" style="color:${isWishlisted ? '#ff6161' : 'var(--text-primary)'};padding:4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+          <button onclick="closeAllModals(); openCartDrawer();" title="Cart" style="position:relative;color:var(--text-primary);padding:4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="badge-count cart-badge-count" style="${state.cart.length > 0 ? '' : 'display:none;'}">${state.cart.reduce((t, i) => t + i.quantity, 0)}</span>
+          </button>
         </div>
       </div>
 
-      <!-- Product Details, Specs & Highlights -->
-      <div class="qv-info" style="display:flex;flex-direction:column;gap:0.85rem;">
-        <div>
-          <span class="product-category" style="font-size:0.75rem;color:var(--text-muted);font-weight:800;text-transform:uppercase;">${product.category_name || product.categoryName}</span>
-          <h2 class="qv-title" style="font-size:1.35rem;font-weight:800;line-height:1.3;margin-top:0.2rem;">${product.name}</h2>
+      <!-- 2. Scrollable Body -->
+      <div class="fk-pdp-scroll-body">
+        
+        <!-- Multi-Angle Image Gallery with Touch Swipe -->
+        <div class="fk-gallery-container" id="pdp-touch-gallery">
+          <div class="fk-main-img-wrap">
+            <img id="fk-pdp-img" src="${images[0]}" alt="${product.name}" class="fk-main-img" />
+          </div>
+
+          <!-- Photo Counter Pill -->
+          <div class="fk-photo-counter" id="fk-pdp-counter">
+            📸 1 / ${images.length}
+          </div>
+
+          <!-- Thumbnails Strip -->
+          <div class="fk-thumbnails-strip">
+            ${images.map((img, idx) => `
+              <div class="fk-thumb-item ${idx === 0 ? 'active' : ''}" onclick="selectFkImage(${idx})">
+                <img src="${img}" alt="Angle ${idx + 1}" />
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Product Basic Info Card -->
+        <div class="fk-product-info-box">
+          <div class="product-category" style="font-size:0.72rem;color:var(--text-muted);font-weight:800;margin-bottom:0.2rem;">
+            ${product.category_name || product.categoryName || 'Top Product'}
+          </div>
+          <h1 class="fk-pdp-title">${product.name}</h1>
           
-          <div class="product-rating-wrap" style="margin-top:0.4rem;">
-            <div class="rating-stars">${renderStarRating(product.rating || 4.5)}</div>
-            <span class="rating-number" style="font-weight:800;">${product.rating || 4.5}</span>
-            <span class="rating-count" style="color:var(--text-muted);font-size:0.75rem;">(${product.review_count || product.reviewCount || 0} Ratings & Reviews)</span>
+          <div class="fk-pdp-rating-row">
+            <div class="fk-rating-pill">
+              ${product.rating || 4.5}
+              <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <span class="fk-rating-count">${product.review_count || product.reviewCount || 342} Ratings & 48 Reviews</span>
+            <div class="fk-assured-badge"><span>✦</span> Assured</div>
           </div>
-        </div>
 
-        <!-- Price Breakdown -->
-        <div class="product-price-row" style="margin:0;display:flex;align-items:baseline;gap:0.6rem;">
-          <span class="current-price" style="font-size:1.6rem;font-weight:800;color:var(--text-primary);">${formatPrice(product.price)}</span>
-          <span class="original-price" style="font-size:1.05rem;color:var(--text-muted);text-decoration:line-through;">${formatPrice(origPrice)}</span>
-          <span class="discount-tag" style="font-size:0.85rem;font-weight:800;color:var(--success);">${Math.round(((origPrice - product.price)/origPrice)*100)}% OFF</span>
-        </div>
+          <!-- Price & Discounts -->
+          <div style="margin-bottom:0.35rem;">
+            <span style="background:#e8f5e9;color:#388e3c;padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:800;">Special Price</span>
+          </div>
+          <div class="fk-pdp-price-box">
+            <span class="fk-pdp-current-price">${formatPrice(product.price)}</span>
+            <span class="fk-pdp-original-price">${formatPrice(origPrice)}</span>
+            <span class="fk-pdp-discount">${discountPercent}% off</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:0.65rem;">Inclusive of all taxes</div>
 
-        <!-- Bank Offers Banner -->
-        <div style="background:var(--bg-accent-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:0.65rem 0.85rem;font-size:0.78rem;">
-          <div style="font-weight:800;color:var(--primary);margin-bottom:0.2rem;">🏷️ Available Offers:</div>
-          <div>• <strong>SAVE20</strong> - Flat 20% discount on cart</div>
-          <div>• Free Express Delivery across India (Cash on Delivery Available)</div>
-        </div>
+          <!-- Color & Size Options -->
+          <div style="display:flex;flex-direction:column;gap:0.75rem;padding-top:0.65rem;border-top:1px solid var(--border-subtle);">
+            <div>
+              <div style="font-size:0.8rem;font-weight:800;margin-bottom:0.4rem;">Color:</div>
+              <div style="display:flex;gap:0.5rem;">
+                ${colors.map((c, i) => `
+                  <div class="color-dot ${i === 0 ? 'active' : ''}" style="background-color:${c};width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid ${i === 0 ? 'var(--primary)' : 'var(--border-subtle)'};" onclick="selectFkColor('${c}', this)"></div>
+                `).join('')}
+              </div>
+            </div>
 
-        <!-- Color & Size Selection -->
-        <div style="display:flex;flex-wrap:wrap;gap:1.25rem;">
-          <div class="variant-group">
-            <label class="variant-label" style="font-size:0.8rem;font-weight:800;margin-bottom:0.35rem;display:block;">Available Color:</label>
-            <div class="color-options" style="display:flex;gap:0.45rem;">
-              ${colors.map((c, i) => `
-                <div class="color-dot ${i === 0 ? 'active' : ''}" style="background-color: ${c}" onclick="selectQvColor('${c}', this)"></div>
-              `).join('')}
+            <div>
+              <div style="font-size:0.8rem;font-weight:800;margin-bottom:0.4rem;">Size / Variant:</div>
+              <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+                ${sizes.map((s, i) => `
+                  <button class="size-pill ${i === 0 ? 'active' : ''}" style="padding:0.4rem 0.85rem;border-radius:4px;border:1px solid ${i === 0 ? 'var(--primary)' : 'var(--border-subtle)'};background:${i === 0 ? 'var(--primary-light)' : 'var(--bg-surface)'};color:${i === 0 ? 'var(--primary)' : 'var(--text-primary)'};font-size:0.8rem;font-weight:700;" onclick="selectFkSize('${s}', this)">
+                    ${s}
+                  </button>
+                `).join('')}
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="variant-group">
-            <label class="variant-label" style="font-size:0.8rem;font-weight:800;margin-bottom:0.35rem;display:block;">Size / Variant:</label>
-            <div class="size-options" style="display:flex;gap:0.4rem;">
-              ${sizes.map((s, i) => `
-                <button class="size-pill ${i === 0 ? 'active' : ''}" onclick="selectQvSize('${s}', this)">${s}</button>
-              `).join('')}
-            </div>
+        <!-- Flipkart Bank Offers Accordion -->
+        <div class="fk-offers-card">
+          <div style="font-size:0.825rem;font-weight:800;color:var(--text-primary);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.35rem;">
+            🏷️ <strong>Available Offers</strong>
+          </div>
+          <div class="fk-offer-item">
+            <span style="color:#388e3c;font-weight:800;">•</span>
+            <span><strong>Bank Offer</strong>: 5% Unlimited Cashback on Flipkart Axis Bank / UPI Cards</span>
+          </div>
+          <div class="fk-offer-item">
+            <span style="color:#388e3c;font-weight:800;">•</span>
+            <span><strong>Special Price</strong>: Get extra ${discountPercent}% off (price inclusive of discount)</span>
+          </div>
+          <div class="fk-offer-item">
+            <span style="color:#388e3c;font-weight:800;">•</span>
+            <span><strong>Coupon Offer</strong>: Use coupon code <strong>SAVE20</strong> at checkout for flat 20% discount</span>
           </div>
         </div>
 
-        <!-- Flipkart-Style Highlights -->
+        <!-- Delivery & Services Card -->
+        <div class="fk-delivery-card">
+          <div class="fk-delivery-check-row">
+            <div>
+              <span style="color:var(--text-muted);">Deliver to: </span>
+              <strong style="color:var(--text-primary);">Mumbai - 400001</strong>
+            </div>
+            <button style="color:var(--primary);font-weight:800;font-size:0.8rem;" onclick="showToast('Pincode verified for Express Delivery!', 'success')">Change</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;color:#388e3c;font-weight:700;font-size:0.825rem;">
+            <span>🚚</span> FREE Delivery by <strong>Tomorrow, 5 PM</strong>
+          </div>
+          <div class="fk-features-grid">
+            <div>🔄 7 Days Replacement</div>
+            <div>💵 Cash on Delivery Available</div>
+            <div>🛡️ 1 Year Brand Warranty</div>
+            <div>✦ Apex Assured Quality</div>
+          </div>
+        </div>
+
+        <!-- Product Highlights -->
         ${highlights.length > 0 ? `
-          <div style="border-top:1px solid var(--border-subtle);padding-top:0.75rem;">
-            <h4 style="font-size:0.875rem;font-weight:800;margin-bottom:0.45rem;">Product Highlights:</h4>
-            <ul style="display:flex;flex-direction:column;gap:0.3rem;font-size:0.8rem;color:var(--text-secondary);">
-              ${highlights.map(h => `<li style="display:flex;align-items:flex-start;gap:0.4rem;"><span style="color:var(--success);font-weight:800;">✓</span> <span>${h}</span></li>`).join('')}
+          <div style="margin:0 1rem 0.85rem;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:6px;padding:0.85rem;">
+            <div style="font-size:0.85rem;font-weight:800;margin-bottom:0.5rem;color:var(--text-primary);">Product Highlights:</div>
+            <ul style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.8rem;color:var(--text-secondary);">
+              ${highlights.map(h => `<li style="display:flex;align-items:flex-start;gap:0.45rem;"><span style="color:#388e3c;font-weight:800;">✓</span> <span>${h}</span></li>`).join('')}
             </ul>
           </div>
         ` : ''}
 
-        <!-- Flipkart-Style Specifications Table -->
+        <!-- Flipkart Specifications Table -->
         ${Object.keys(specs).length > 0 ? `
-          <div style="border-top:1px solid var(--border-subtle);padding-top:0.75rem;">
-            <h4 style="font-size:0.875rem;font-weight:800;margin-bottom:0.5rem;">Detailed Specifications:</h4>
-            <div style="display:flex;flex-direction:column;border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden;font-size:0.78rem;">
-              ${Object.entries(specs).map(([k, v], idx) => `
-                <div style="display:grid;grid-template-columns:140px 1fr;padding:0.45rem 0.75rem;background:${idx%2===0?'var(--bg-secondary)':'var(--bg-surface)'};border-bottom:1px solid var(--border-subtle);">
-                  <span style="color:var(--text-muted);font-weight:700;">${k}</span>
-                  <span style="color:var(--text-primary);font-weight:600;">${v}</span>
-                </div>
-              `).join('')}
+          <div class="fk-specs-card">
+            <div style="padding:0.75rem;background:var(--bg-secondary);border-bottom:1px solid var(--border-subtle);font-size:0.85rem;font-weight:800;">
+              Specifications
             </div>
+            ${Object.entries(specs).map(([k, v]) => `
+              <div class="fk-spec-row">
+                <span class="fk-spec-label">${k}</span>
+                <span class="fk-spec-val">${v}</span>
+              </div>
+            `).join('')}
           </div>
         ` : ''}
 
-        <!-- CTA Buttons -->
-        <div style="display:flex;gap:0.75rem;margin-top:0.75rem;position:sticky;bottom:0;background:var(--bg-surface);padding-top:0.5rem;">
-          <button class="btn btn-primary btn-block" id="qv-add-btn" style="font-size:0.95rem;padding:0.75rem;">
-            🛒 Add to Cart
-          </button>
-          <button class="btn btn-secondary" onclick="toggleWishlist(${product.id})" title="Wishlist" style="padding:0.75rem 1rem;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="${state.wishlist.includes(product.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-          </button>
+        <!-- Ratings & Customer Feedback -->
+        <div style="margin:0 1rem 1.5rem;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:6px;padding:0.85rem;">
+          <div style="font-size:0.85rem;font-weight:800;margin-bottom:0.65rem;">Ratings & Reviews</div>
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.85rem;">
+            <div style="text-align:center;">
+              <div style="font-size:2rem;font-weight:900;color:var(--text-primary);line-height:1;">${product.rating || 4.5} ★</div>
+              <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.25rem;">${product.review_count || 342} Ratings</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:0.25rem;font-size:0.7rem;">
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span>5★</span><div style="flex:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;"><div style="width:78%;height:100%;background:#388e3c;"></div></div><span>78%</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span>4★</span><div style="flex:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;"><div style="width:16%;height:100%;background:#388e3c;"></div></div><span>16%</span></div>
+              <div style="display:flex;align-items:center;gap:0.4rem;"><span>3★</span><div style="flex:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;"><div style="width:4%;height:100%;background:#ff9f00;"></div></div><span>4%</span></div>
+            </div>
+          </div>
         </div>
 
       </div>
+
+      <!-- 3. THE ICONIC FLIPKART DUAL STICKY ACTION BUTTON BAR -->
+      <div class="fk-sticky-action-bar">
+        <button class="fk-cart-btn-left" onclick="quickAddCurrentToCart()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Add to Cart</span>
+        </button>
+        <button class="fk-buy-btn-right" onclick="quickBuyCurrentNow()">
+          <span>⚡ BUY NOW</span>
+        </button>
+      </div>
+
     </div>
   `;
 
-  // Gallery Navigation Functions
-  window.selectQvThumbnail = function(idx) {
+  // Image selection
+  window.selectFkImage = function(idx) {
     currentImgIndex = idx;
-    const mainImg = document.getElementById('qv-main-img');
-    const counter = document.getElementById('qv-img-counter');
-    if (mainImg) mainImg.src = images[idx];
-    if (counter) counter.textContent = `📸 ${idx + 1} / ${images.length}`;
-
-    document.querySelectorAll('.qv-thumb-wrap').forEach((el, i) => {
-      el.style.borderColor = (i === idx) ? 'var(--primary)' : 'transparent';
+    const imgEl = document.getElementById('fk-pdp-img');
+    const counterEl = document.getElementById('fk-pdp-counter');
+    if (imgEl) imgEl.src = images[idx];
+    if (counterEl) counterEl.textContent = `📸 ${idx + 1} / ${images.length}`;
+    document.querySelectorAll('.fk-thumb-item').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
     });
   };
 
-  window.navigateQvImage = function(direction) {
-    currentImgIndex = (currentImgIndex + direction + images.length) % images.length;
-    window.selectQvThumbnail(currentImgIndex);
-  };
-
-  document.getElementById('qv-add-btn').onclick = () => {
-    addToCart(product.id, selectedColor, selectedSize, 1);
-    closeAllModals();
-  };
+  // Touch Swipe on PDP Mobile Image
+  const touchArea = document.getElementById('pdp-touch-gallery');
+  if (touchArea) {
+    let startX = 0;
+    touchArea.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    touchArea.addEventListener('touchend', (e) => {
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          // Swipe left -> next image
+          window.selectFkImage((currentImgIndex + 1) % images.length);
+        } else {
+          // Swipe right -> prev image
+          window.selectFkImage((currentImgIndex - 1 + images.length) % images.length);
+        }
+      }
+    }, { passive: true });
+  }
 
   modal.classList.add('active');
 }
 
-function selectQvColor(color, el) {
-  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-  if (el) el.classList.add('active');
+function selectFkColor(color, el) {
+  activePdpSelectedColor = color;
+  document.querySelectorAll('.color-dot').forEach(d => {
+    d.style.borderColor = 'var(--border-subtle)';
+  });
+  if (el) el.style.borderColor = 'var(--primary)';
 }
 
-function selectQvSize(size, el) {
-  document.querySelectorAll('.size-pill').forEach(p => p.classList.remove('active'));
-  if (el) el.classList.add('active');
+function selectFkSize(size, el) {
+  activePdpSelectedSize = size;
+  document.querySelectorAll('.size-pill').forEach(p => {
+    p.style.borderColor = 'var(--border-subtle)';
+    p.style.background = 'var(--bg-surface)';
+    p.style.color = 'var(--text-primary)';
+  });
+  if (el) {
+    el.style.borderColor = 'var(--primary)';
+    el.style.background = 'var(--primary-light)';
+    el.style.color = 'var(--primary)';
+  }
+}
+
+function updatePdpWishlistIcon(productId) {
+  const btn = document.getElementById('pdp-wishlist-btn');
+  if (!btn) return;
+  const isWish = state.wishlist.includes(productId);
+  btn.style.color = isWish ? '#ff6161' : 'var(--text-primary)';
+  btn.querySelector('svg').setAttribute('fill', isWish ? 'currentColor' : 'none');
+}
+
+function shareProduct(encodedName) {
+  const name = decodeURIComponent(encodedName);
+  if (navigator.share) {
+    navigator.share({
+      title: name,
+      text: `Check out ${name} on ApexStore!`,
+      url: window.location.href
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    showToast('Product link copied to clipboard! 📋', 'success');
+  }
+}
+
+function quickAddCurrentToCart() {
+  if (!activePdpProduct) return;
+  addToCart(activePdpProduct.id, activePdpSelectedColor, activePdpSelectedSize, 1);
+  showToast(`Added ${activePdpProduct.name.substring(0, 24)}... to cart! 🛒`, 'success');
+}
+
+function quickBuyCurrentNow() {
+  if (!activePdpProduct) return;
+  addToCart(activePdpProduct.id, activePdpSelectedColor, activePdpSelectedSize, 1);
+  closeAllModals();
+  openCheckout();
 }
 
 /* ==========================================================================
