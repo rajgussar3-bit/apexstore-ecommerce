@@ -2547,3 +2547,492 @@ select:focus-visible {
     background: #374151;
   }
 }
+
+/* --------------------------------------------------------------------------
+   30. Flipkart SuperCoins Header Pill
+   -------------------------------------------------------------------------- */
+.supercoins-header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition: all var(--transition-fast);
+}
+
+.supercoins-header-pill:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.04);
+}
+
+.supercoin-icon {
+  font-size: 0.85rem;
+}
+
+.supercoin-badge {
+  background: #ff9f00;
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 2px;
+}
+
+/* Search Action Buttons in Header */
+.header-mic-btn,
+.header-camera-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.header-mic-btn:hover,
+.header-camera-btn:hover {
+  color: var(--primary);
+  background: #f1f5f9;
+}
+
+[data-theme="dark"] .header-mic-btn,
+[data-theme="dark"] .header-camera-btn {
+  color: #cbd5e1;
+}
+
+/* --------------------------------------------------------------------------
+   31. Flipkart Deals of the Day Horizontal Carousel
+   -------------------------------------------------------------------------- */
+.flash-deal-pill {
+  font-size: 0.68rem;
+  background: #ef4444;
+  color: #ffffff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 800;
+}
+
+.deals-carousel-strip {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.65rem 0 0.25rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+.deals-carousel-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.deal-mini-card {
+  flex: 0 0 140px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 769px) {
+  .deal-mini-card {
+    flex: 0 0 170px;
+    padding: 0.75rem;
+  }
+}
+
+.deal-mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.deal-mini-img-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  margin-bottom: 0.45rem;
+  overflow: hidden;
+}
+
+.deal-mini-img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.deal-mini-card:hover .deal-mini-img {
+  transform: scale(1.06);
+}
+
+.deal-mini-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 100%;
+}
+
+.deal-mini-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #388e3c;
+  margin-bottom: 0.15rem;
+}
+
+.deal-mini-price {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   32. Voice Search Animated Modal
+   -------------------------------------------------------------------------- */
+.voice-modal-box {
+  max-width: 400px !important;
+}
+
+.voice-modal-content {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.voice-mic-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2874f0 0%, #1d4ed8 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 8px rgba(40, 116, 240, 0.2);
+  animation: pulseMic 1.6s infinite;
+}
+
+@keyframes pulseMic {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 116, 240, 0.4);
+    transform: scale(0.98);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(40, 116, 240, 0);
+    transform: scale(1.04);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 116, 240, 0);
+    transform: scale(0.98);
+  }
+}
+
+.voice-waves {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  margin-top: 1rem;
+}
+
+.wave-bar {
+  width: 4px;
+  height: 8px;
+  background: #2874f0;
+  border-radius: 2px;
+  animation: soundWave 0.8s ease-in-out infinite alternate;
+}
+
+.wave-bar:nth-child(2) { animation-delay: 0.15s; height: 16px; }
+.wave-bar:nth-child(3) { animation-delay: 0.3s; height: 22px; }
+.wave-bar:nth-child(4) { animation-delay: 0.45s; height: 14px; }
+.wave-bar:nth-child(5) { animation-delay: 0.6s; height: 9px; }
+
+@keyframes soundWave {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1.4); }
+}
+
+.voice-suggestions-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 0.3rem;
+}
+
+.voice-chip {
+  padding: 0.35rem 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.voice-chip:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   33. Camera AI Visual Lens Scanner Modal
+   -------------------------------------------------------------------------- */
+.camera-modal-box {
+  max-width: 420px !important;
+}
+
+.camera-modal-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.camera-viewfinder {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #090d16;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewfinder-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: #22c55e;
+  border-style: solid;
+}
+
+.viewfinder-corner.top-left {
+  top: 14px;
+  left: 14px;
+  border-width: 3px 0 0 3px;
+}
+
+.viewfinder-corner.top-right {
+  top: 14px;
+  right: 14px;
+  border-width: 3px 3px 0 0;
+}
+
+.viewfinder-corner.bottom-left {
+  bottom: 14px;
+  left: 14px;
+  border-width: 0 0 3px 3px;
+}
+
+.viewfinder-corner.bottom-right {
+  bottom: 14px;
+  right: 14px;
+  border-width: 0 3px 3px 0;
+}
+
+.laser-scanner-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #22c55e;
+  box-shadow: 0 0 10px 2px #22c55e;
+  animation: laserScan 2s ease-in-out infinite alternate;
+}
+
+@keyframes laserScan {
+  0% { top: 15%; }
+  100% { top: 85%; }
+}
+
+.viewfinder-center-reticle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.camera-sample-actions {
+  display: flex;
+  gap: 0.45rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.camera-sample-btn {
+  padding: 0.4rem 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.camera-sample-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* --------------------------------------------------------------------------
+   34. Real Indian UPI QR Payment Modal
+   -------------------------------------------------------------------------- */
+.upi-modal-box {
+  max-width: 440px !important;
+}
+
+.upi-modal-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.upi-top-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.upi-qr-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+[data-theme="dark"] .upi-qr-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.upi-qr-frame {
+  width: 170px;
+  height: 170px;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upi-qr-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upi-id-badge {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 0.65rem;
+}
+
+.upi-payable-amount {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.upi-countdown-strip {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   35. Flipkart Style Hero Slide Enhancements
+   -------------------------------------------------------------------------- */
+.hero-slider-container {
+  min-height: 220px;
+}
+
+.hero-slide {
+  border-radius: 8px;
+  transition: background 0.4s ease;
+}
+
+.hero-slide-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #ffe500;
+  color: #000000;
+  padding: 0.2rem 0.65rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.btn-outline-white {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Bounce animation for coins */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}

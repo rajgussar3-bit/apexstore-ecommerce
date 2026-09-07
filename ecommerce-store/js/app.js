@@ -20,35 +20,81 @@ const state = {
   heroIndex: 0
 };
 
-// Hero Slides Data
+// Hero Slides Data (Authentic High-Energy Flipkart Big Billion Days Aesthetics)
 const HERO_SLIDES = [
   {
-    pill: "⚡ Flash Deals",
-    title: "Next-Gen Audio & Wearables",
-    subtitle: "Active Noise Cancellation and Hi-Fi sound with up to 40% discount today.",
-    btnText: "Shop Audio",
+    pill: "💥 BIG BILLION DAYS",
+    title: "INDIA'S BIGGEST TECH SALE",
+    subtitle: "Up to 80% OFF on iPhone 15 Pro, S24 Ultra & Sony ANC Audio. Extra ₹1,500 Off on HDFC & Axis Bank Cards!",
+    btnText: "Shop Electronics",
     category: "electronics",
+    bgStyle: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #f59e0b 100%)",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&auto=format&fit=crop&q=80"
   },
   {
-    pill: "🔥 Summer 2026",
-    title: "Urban Streetwear & Denim",
-    subtitle: "Heavyweight French Terry hoodies, raw denim jackets & luxury streetwear.",
-    btnText: "Shop Fashion",
-    category: "fashion",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop&q=80"
+    pill: "👟 SNEAKER FESTIVAL",
+    title: "AIR JORDAN 1 & NIKE PULSE",
+    subtitle: "Authentic OG Chicago Colorways, Adidas Samba & Streetwear Hoodies. Starting at ₹1,999 today!",
+    btnText: "Shop Sneakers",
+    category: "footwear",
+    bgStyle: "linear-gradient(135deg, #991b1b 0%, #dc2626 55%, #fb923c 100%)",
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&auto=format&fit=crop&q=80"
   },
   {
-    pill: "✨ Smart Living",
-    title: "Ergonomic Home & Lifestyle",
-    subtitle: "Smart lamps, artisan mugs, and aromatherapy diffusers for modern living.",
-    btnText: "Shop Home",
-    category: "home",
-    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=1200&auto=format&fit=crop&q=80"
+    pill: "✨ SMART LIVING FEST",
+    title: "LUXURY WATCHES & HOME",
+    subtitle: "Fossil Chronograph, Dyson V12 Detect & Versace Eros EDP. 100% Genuine with Free Fast Delivery!",
+    btnText: "Explore Luxury",
+    category: "accessories",
+    bgStyle: "linear-gradient(135deg, #090d16 0%, #1e293b 55%, #3b82f6 100%)",
+    image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=1200&auto=format&fit=crop&q=80"
   }
 ];
 
 const FREE_SHIPPING_THRESHOLD = 999;
+
+/* ==========================================================================
+   Web Audio API Haptic Audio Feedback
+   ========================================================================== */
+function playCartChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.28);
+  } catch (e) {}
+}
+
+function playSuccessChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.09);
+      gain.gain.setValueAtTime(0.14, ctx.currentTime + i * 0.09);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.09 + 0.28);
+      osc.start(ctx.currentTime + i * 0.09);
+      osc.stop(ctx.currentTime + i * 0.09 + 0.28);
+    });
+  } catch (e) {}
+}
 
 /* ==========================================================================
    Utility Helpers
@@ -146,18 +192,16 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ==========================================================================
    Hero Slider
    ========================================================================== */
-function initHeroSlider() {
+window.setHeroSlide = function(idx) {
+  state.heroIndex = idx;
   const slideElem = document.getElementById('hero-slide');
-  const prevBtn = document.getElementById('hero-prev');
-  const nextBtn = document.getElementById('hero-next');
-  if (!slideElem) return;
-
-  function renderSlide() {
+  if (slideElem) {
     const slide = HERO_SLIDES[state.heroIndex];
-    slideElem.style.backgroundImage = `url('${slide.image}')`;
+    slideElem.style.background = `${slide.bgStyle}, url('${slide.image}') center/cover no-repeat`;
+    slideElem.style.backgroundBlendMode = 'overlay';
     slideElem.innerHTML = `
       <div class="hero-content">
-        <span class="hero-pill">${slide.pill}</span>
+        <span class="hero-slide-badge">${slide.pill}</span>
         <h1 class="hero-title">${slide.title}</h1>
         <p class="hero-subtitle">${slide.subtitle}</p>
         <div class="hero-cta-group">
@@ -165,32 +209,44 @@ function initHeroSlider() {
             ${slide.btnText}
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
-          <a href="#products-section" class="btn btn-outline-white btn-sm">Explore</a>
+          <a href="#products-section" class="btn btn-outline-white btn-sm">Explore All</a>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:1rem;align-items:center;">
+          ${HERO_SLIDES.map((_, i) => `
+            <span style="width:${i === state.heroIndex ? '22px' : '7px'};height:5px;border-radius:3px;background:${i === state.heroIndex ? '#ffe500' : 'rgba(255,255,255,0.45)'};transition:all 0.3s ease;display:inline-block;cursor:pointer;" onclick="setHeroSlide(${i})"></span>
+          `).join('')}
         </div>
       </div>
     `;
   }
+};
 
-  renderSlide();
+function initHeroSlider() {
+  const slideElem = document.getElementById('hero-slide');
+  const prevBtn = document.getElementById('hero-prev');
+  const nextBtn = document.getElementById('hero-next');
+  if (!slideElem) return;
+
+  setHeroSlide(state.heroIndex);
 
   if (prevBtn) {
     prevBtn.addEventListener('click', () => {
-      state.heroIndex = (state.heroIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
-      renderSlide();
+      const prevIdx = (state.heroIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
+      setHeroSlide(prevIdx);
     });
   }
 
   if (nextBtn) {
     nextBtn.addEventListener('click', () => {
-      state.heroIndex = (state.heroIndex + 1) % HERO_SLIDES.length;
-      renderSlide();
+      const nextIdx = (state.heroIndex + 1) % HERO_SLIDES.length;
+      setHeroSlide(nextIdx);
     });
   }
 
   setInterval(() => {
-    state.heroIndex = (state.heroIndex + 1) % HERO_SLIDES.length;
-    renderSlide();
-  }, 6500);
+    const nextIdx = (state.heroIndex + 1) % HERO_SLIDES.length;
+    setHeroSlide(nextIdx);
+  }, 6000);
 }
 
 /* ==========================================================================
@@ -579,7 +635,8 @@ function addToCart(productId, selectedColor = null, selectedSize = null, qty = 1
   updateBadgeCounts();
   renderProductGrid();
   renderCartDrawer();
-  showToast(`Added to cart!`, 'success');
+  playCartChime();
+  showToast(`🛒 "${product.name.slice(0, 24)}..." added to cart!`, 'success');
 }
 
 function updateCartQty(index, delta) {
@@ -996,7 +1053,7 @@ function openQuickView(productId) {
               <span style="color:var(--text-muted);">Deliver to: </span>
               <strong style="color:var(--text-primary);">Mumbai - 400001</strong>
             </div>
-            <button style="color:var(--primary);font-weight:800;font-size:0.8rem;" onclick="showToast('Pincode verified for Express Delivery!', 'success')">Change</button>
+            <button style="color:var(--primary);font-weight:800;font-size:0.8rem;" onclick="promptChangePincode()">Change</button>
           </div>
           <div style="display:flex;align-items:center;gap:0.4rem;color:#388e3c;font-weight:700;font-size:0.825rem;">
             <span>🚚</span> FREE Delivery by <strong>Tomorrow, 5 PM</strong>
@@ -1252,15 +1309,31 @@ function renderCheckoutSummary() {
 
 async function placeOrder() {
   const totals = calculateCartTotals();
+  if (state.cart.length === 0) {
+    showToast('Your shopping cart is empty!', 'warning');
+    return;
+  }
+
+  // If user selected UPI, show the interactive Bharat UPI QR Code
+  if (selectedPaymentMethod === 'UPI / QR Code') {
+    openUpiQrModal(totals.total);
+    return;
+  }
+
+  executeFinalOrderPlacement();
+}
+
+async function executeFinalOrderPlacement() {
+  const totals = calculateCartTotals();
   const orderDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
   const orderPayload = {
     shipping: {
-      name: document.getElementById('ship-name').value.trim(),
-      phone: document.getElementById('ship-phone').value.trim(),
-      address: document.getElementById('ship-address').value.trim(),
-      city: document.getElementById('ship-city').value.trim(),
-      pincode: document.getElementById('ship-pincode').value.trim()
+      name: document.getElementById('ship-name').value.trim() || 'Rahul Sharma',
+      phone: document.getElementById('ship-phone').value.trim() || '9876543210',
+      address: document.getElementById('ship-address').value.trim() || 'Flat 402, MG Road',
+      city: document.getElementById('ship-city').value.trim() || 'Mumbai',
+      pincode: document.getElementById('ship-pincode').value.trim() || '400001'
     },
     items: state.cart.map(item => ({
       id: item.id,
@@ -1319,10 +1392,17 @@ async function placeOrder() {
   renderProductGrid();
   renderCartDrawer();
 
+  // Play audio celebration chime!
+  playSuccessChime();
+
+  // Render animated order success screen
   renderOrderSuccess(createdOrderObj);
 
   if (window.confetti) {
-    window.confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    window.confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+    setTimeout(() => {
+      window.confetti({ particleCount: 80, spread: 100, origin: { y: 0.5 } });
+    }, 400);
   }
 }
 
@@ -1331,35 +1411,44 @@ function renderOrderSuccess(order) {
   if (!checkoutContainer) return;
 
   checkoutContainer.innerHTML = `
-    <div class="order-success-view">
-      <div class="success-icon-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <div class="order-success-view" style="padding:1.5rem 1rem;text-align:center;">
+      <div style="width:65px;height:65px;border-radius:50%;background:#e8f5e9;color:#2e7d32;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;box-shadow:0 4px 14px rgba(46,125,50,0.25);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:0.25rem;">Order Placed!</h3>
-      <p style="color:var(--text-secondary);font-size:0.85rem;">Order ID: <strong style="color:var(--primary);">${order.orderId}</strong></p>
+      <h3 style="font-size:1.4rem;font-weight:900;color:var(--text-primary);margin-bottom:0.25rem;">Order Placed Successfully! 🎉</h3>
+      <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1rem;">Order ID: <strong style="color:var(--primary);">${order.orderId}</strong></p>
 
-      <div class="invoice-preview-card">
-        <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-weight:700;">
-          <span>Invoice #${order.orderId}</span>
-          <span style="color:var(--success);">${order.paymentMethod}</span>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:0.25rem;border-top:1px solid var(--border-subtle);padding-top:0.4rem;">
-          ${order.items.map(it => `
-            <div style="display:flex;justify-content:space-between;">
-              <span>${it.name} (x${it.quantity})</span>
-              <span>${formatPrice(it.price * it.quantity)}</span>
-            </div>
-          `).join('')}
-          <div style="display:flex;justify-content:space-between;font-weight:800;border-top:1px dashed var(--border-subtle);padding-top:0.4rem;margin-top:0.25rem;">
-            <span>Total:</span>
-            <span>${formatPrice(order.totals.total)}</span>
+      <!-- Flipkart Delivery Progress Steps -->
+      <div style="background:var(--bg-secondary);border:1px solid var(--border-subtle);border-radius:10px;padding:1rem;margin-bottom:1rem;text-align:left;">
+        <div style="font-size:0.8rem;font-weight:800;color:var(--text-primary);margin-bottom:0.75rem;">Delivery Status:</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.78rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;color:#388e3c;font-weight:700;">
+            <span>✓</span> <span>Order Confirmed (Today)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;color:#388e3c;font-weight:700;">
+            <span>✓</span> <span>Packed & Shipped from Apex Hub</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;color:var(--text-primary);font-weight:800;">
+            <span>🚚</span> <span>Out for Delivery by Tomorrow, 5 PM</span>
           </div>
         </div>
       </div>
 
+      <!-- Invoice Summary -->
+      <div class="invoice-preview-card" style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:8px;padding:0.85rem;text-align:left;font-size:0.8rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;font-weight:700;">
+          <span>Payment Mode:</span>
+          <span style="color:#2e7d32;font-weight:800;">${order.paymentMethod}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-weight:900;border-top:1px dashed var(--border-subtle);padding-top:0.4rem;font-size:0.95rem;">
+          <span>Total Paid:</span>
+          <span style="color:var(--primary);">${formatPrice(order.totals.total)}</span>
+        </div>
+      </div>
+
       <div style="display:flex;gap:0.75rem;justify-content:center;margin-top:1.25rem;">
-        <button class="btn btn-primary btn-sm" onclick="window.print()">Print Invoice</button>
-        <button class="btn btn-secondary btn-sm" onclick="closeAllModals(); openOrdersModal();">Track Status</button>
+        <button class="btn btn-secondary btn-sm" onclick="window.print()">Print Invoice</button>
+        <button class="btn btn-primary btn-sm" onclick="closeAllModals(); openOrdersModal();">Track Order</button>
       </div>
     </div>
   `;
@@ -1630,9 +1719,162 @@ function renderReviews() {
   `).join('');
 }
 
+/* ==========================================================================
+   Flipkart Interactive Features: Deals, Voice, Camera, SuperCoins & UPI
+   ========================================================================== */
+
+// 1. Horizontal Deals Carousel
+function renderDealsCarousel() {
+  const container = document.getElementById('deals-horizontal-scroll');
+  if (!container) return;
+
+  const source = state.products.length > 0 ? state.products : PRODUCTS_DATA;
+  // Pick top 7 deals (phones, audio, shoes, watches)
+  const dealProducts = source.slice(0, 7);
+
+  container.innerHTML = dealProducts.map(p => {
+    const origPrice = p.original_price || p.originalPrice || p.price;
+    const discountPercent = Math.round(((origPrice - p.price) / origPrice) * 100);
+
+    return `
+      <div class="deal-mini-card" onclick="openQuickView(${p.id})">
+        <div class="deal-mini-img-wrap">
+          <img src="${p.image}" alt="${p.name}" class="deal-mini-img" loading="lazy" />
+        </div>
+        <div class="deal-mini-title" title="${p.name}">${p.name}</div>
+        <div class="deal-mini-badge">${discountPercent}% OFF</div>
+        <div class="deal-mini-price">${formatPrice(p.price)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 2. Voice Search Modal Handlers
+window.openVoiceSearchModal = function() {
+  closeAllModals();
+  closeAllDrawers();
+  const modal = document.getElementById('voice-search-modal');
+  if (modal) modal.classList.add('active');
+};
+
+window.closeVoiceSearchModal = function() {
+  const modal = document.getElementById('voice-search-modal');
+  if (modal) modal.classList.remove('active');
+};
+
+window.voiceSearchSample = function(term) {
+  closeVoiceSearchModal();
+  const mInput = document.getElementById('mobile-search-input');
+  const dInput = document.getElementById('desktop-search-input');
+  if (mInput) mInput.value = term;
+  if (dInput) dInput.value = term;
+  state.searchQuery = term;
+  renderProductGrid();
+  showToast(`🎙️ Searching for "${term}"...`, 'info');
+  const prodSec = document.getElementById('products-section');
+  if (prodSec) prodSec.scrollIntoView({ behavior: 'smooth' });
+};
+
+// 3. Camera Visual AI Search Handlers
+window.openCameraSearchModal = function() {
+  closeAllModals();
+  closeAllDrawers();
+  const modal = document.getElementById('camera-search-modal');
+  if (modal) modal.classList.add('active');
+};
+
+window.closeCameraSearchModal = function() {
+  const modal = document.getElementById('camera-search-modal');
+  if (modal) modal.classList.remove('active');
+};
+
+window.cameraScanSample = function(category) {
+  closeCameraSearchModal();
+  showToast(`📷 Visual match detected: ${category.toUpperCase()}!`, 'success');
+  filterByCategory(category);
+  const prodSec = document.getElementById('products-section');
+  if (prodSec) prodSec.scrollIntoView({ behavior: 'smooth' });
+};
+
+// 4. SuperCoins Rewards Modal Handlers
+window.openSuperCoinsModal = function() {
+  closeAllModals();
+  closeAllDrawers();
+  const modal = document.getElementById('supercoins-modal');
+  if (modal) modal.classList.add('active');
+};
+
+// 5. Interactive Pincode Checker in PDP
+window.promptChangePincode = function() {
+  const pincode = prompt("Enter your 6-digit Indian PIN code (e.g. 110001, 400001, 560001, 302001):", "400001");
+  if (!pincode) return;
+  const pin = pincode.trim();
+  if (!/^\d{6}$/.test(pin)) {
+    showToast("Please enter a valid 6-digit Indian PIN code", "warning");
+    return;
+  }
+
+  let city = "India";
+  if (pin.startsWith("11")) city = "New Delhi";
+  else if (pin.startsWith("40")) city = "Mumbai";
+  else if (pin.startsWith("56")) city = "Bengaluru";
+  else if (pin.startsWith("60")) city = "Chennai";
+  else if (pin.startsWith("70")) city = "Kolkata";
+  else if (pin.startsWith("50")) city = "Hyderabad";
+  else if (pin.startsWith("30")) city = "Jaipur";
+  else if (pin.startsWith("38")) city = "Ahmedabad";
+  else if (pin.startsWith("41")) city = "Pune";
+  else if (pin.startsWith("20")) city = "Noida / UP";
+
+  const pRow = document.querySelector('.fk-delivery-check-row strong');
+  if (pRow) pRow.textContent = `${city} - ${pin}`;
+  showToast(`⚡ Delivery verified for ${city} (${pin}): FREE Delivery by Tomorrow, 5 PM!`, 'success');
+};
+
+// 6. Real Bharat UPI QR Modal Handlers
+let upiTimerInterval = null;
+window.openUpiQrModal = function(amount) {
+  closeAllModals();
+  const modal = document.getElementById('upi-qr-modal');
+  const amountEl = document.getElementById('upi-modal-amount');
+  const qrImg = document.getElementById('upi-qr-image');
+  const timerEl = document.getElementById('upi-qr-timer');
+  if (!modal) return;
+
+  if (amountEl) amountEl.textContent = formatPrice(amount);
+  if (qrImg) {
+    const upiUri = encodeURIComponent(`upi://pay?pa=apexstore@upi&pn=ApexStore&am=${amount}&cu=INR`);
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${upiUri}`;
+  }
+
+  // 5 minute countdown
+  let timeLeft = 300;
+  if (upiTimerInterval) clearInterval(upiTimerInterval);
+  upiTimerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft <= 0) {
+      clearInterval(upiTimerInterval);
+      if (timerEl) timerEl.textContent = 'Expired';
+    } else {
+      const m = Math.floor(timeLeft / 60);
+      const s = timeLeft % 60;
+      if (timerEl) timerEl.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+  }, 1000);
+
+  modal.classList.add('active');
+};
+
+window.completeUpiPayment = function() {
+  if (upiTimerInterval) clearInterval(upiTimerInterval);
+  closeAllModals();
+  executeFinalOrderPlacement();
+};
+
 function renderAll() {
   updateBadgeCounts();
   renderProductGrid();
+  renderDealsCarousel();
   renderCartDrawer();
   renderWishlistDrawer();
 }
