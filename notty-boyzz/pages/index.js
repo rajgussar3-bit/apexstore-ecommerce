@@ -46,7 +46,14 @@ export default function Home() {
       return;
     }
 
-    // 2. Validate mobile
+    // 2. Validate Age
+    const ageNum = parseInt(formData.age, 10);
+    if (isNaN(ageNum) || ageNum < 18 || ageNum > 75) {
+      alert('Kripya valid age enter karein (18 se 75 saal ke beech)');
+      return;
+    }
+
+    // 3. Validate mobile
     const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(formData.mobile)) {
       alert('Kripya sahi 10-digit mobile number enter karein (starting with 6,7,8,9)');
@@ -61,6 +68,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          age: ageNum,
           city: 'Udaipur',
           whatsapp: formData.sameAsMobile ? formData.mobile : (formData.whatsapp || formData.mobile)
         })

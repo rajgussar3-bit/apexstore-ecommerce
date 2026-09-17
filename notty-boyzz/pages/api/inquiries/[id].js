@@ -1,4 +1,4 @@
-import { getInquiries, saveInquiries } from '../../../lib/storage';
+import { getInquiries, saveInquiries } from '../../../lib/storage.js';
 
 export default async function handler(req, res) {
   const { id } = req.query;

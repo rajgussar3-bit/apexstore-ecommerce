@@ -1,7 +1,12 @@
-import { getInquiries, saveInquiries } from '../../../lib/storage';
-import { isMaleName } from '../../../lib/maleDetector';
+import { getInquiries, saveInquiries } from '../../../lib/storage.js';
+import { isMaleName } from '../../../lib/maleDetector.js';
 
 export default async function handler(req, res) {
+  // Prevent any caching of live inquiry data
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+
   if (req.method === 'GET') {
     const inquiries = await getInquiries();
     inquiries.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -35,11 +40,12 @@ export default async function handler(req, res) {
       hour: '2-digit', minute: '2-digit', hour12: true
     });
 
+    const parsedAge = age ? (parseInt(age, 10) || Number(age) || null) : null;
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const newEntry = {
       id: `NBZ-${randomNum}`,
       name: name.trim(),
-      age: age ? parseInt(age, 10) : null,
+      age: parsedAge,
       mobile: mobile.trim(),
       whatsapp: (whatsapp && whatsapp.trim()) ? whatsapp.trim() : mobile.trim(),
       category: category || 'Romantic & Loving Companion',

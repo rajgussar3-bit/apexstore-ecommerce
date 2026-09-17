@@ -1,43 +1,29 @@
 import fs from 'fs';
 import path from 'path';
 
+const STORE_ID = process.env.DATA_STORE_ID || 'store_gx5PTjAgyPR8vHc1';
+const BLOB_URL = 'https://gx5ptjagypr8vhc1.public.blob.vercel-storage.com/inquiries.json?download=1';
+
 const SEED_DATA = [
   {
-    id: "NBZ-1001",
-    name: "Simran Kaur",
+    id: "NBZ-3513",
+    name: "Simran",
     age: 23,
-    mobile: "9876543210",
-    whatsapp: "9876543210",
+    mobile: "8824382600",
+    whatsapp: "8824382600",
     category: "Romantic & Loving Companion",
-    city: "Delhi NCR",
-    note: "Looking for a gentle, handsome companion",
+    city: "Udaipur",
+    note: "Looking for romantic & caring companion in Udaipur",
     clientType: "Female Client",
     status: "New",
-    createdAt: "2026-09-17T11:00:00.000Z",
-    formattedDate: "17 Sep 2026, 11:00 AM"
-  },
-  {
-    id: "NBZ-1002",
-    name: "Pooja Verma",
-    age: 25,
-    mobile: "9812345678",
-    whatsapp: "9812345678",
-    category: "Handsome Bodybuilder Date",
-    city: "Mumbai",
-    note: "Need a fit gentleman for dinner date",
-    clientType: "Female Client",
-    status: "Contacted",
-    createdAt: "2026-09-17T10:15:00.000Z",
-    formattedDate: "17 Sep 2026, 10:15 AM"
+    createdAt: "2026-09-17T10:46:31.233Z",
+    formattedDate: "17 Sep 2026, 04:16 PM"
   }
 ];
 
-// Memory cache across warm serverless requests
 let memoryStore = null;
 
-// Determine writable data path
 function getFilePath() {
-  // On Vercel, current working dir is read-only. /tmp is writable.
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     return path.join('/tmp', 'notty_inquiries.json');
   }
@@ -45,71 +31,99 @@ function getFilePath() {
 }
 
 export async function getInquiries() {
-  // 1. Check Upstash Redis if configured on Vercel
-  const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-
-  if (redisUrl && redisToken) {
-    try {
-      const res = await fetch(`${redisUrl}/get/notty_inquiries`, {
-        headers: { Authorization: `Bearer ${redisToken}` }
+  // 1. Fetch latest persistent data from Vercel Blob cloud via list + etag
+  try {
+    const { list } = await import('@vercel/blob');
+    const { blobs } = await list({ prefix: 'inquiries.json', storeId: STORE_ID });
+    const blob = blobs.find(b => b.pathname === 'inquiries.json');
+    if (blob) {
+      const cleanEtag = (blob.etag || '').replace(/"/g, '');
+      const url = `${blob.url}?v=${cleanEtag}`;
+      const res = await fetch(url, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
       });
-      const data = await res.json();
-      if (data.result) {
-        return JSON.parse(data.result);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          memoryStore = data;
+          return memoryStore;
+        }
       }
-    } catch (e) {
-      console.warn('Redis read error, falling back:', e);
     }
+  } catch (err) {
+    console.warn('[STORAGE] Cloud Blob list error, falling back to direct URL:', err?.message || err);
   }
 
-  // 2. Memory / File store fallback
-  if (memoryStore) return memoryStore;
+  // 2. Direct public URL fallback
+  try {
+    const res = await fetch(`${BLOB_URL}&nocache=${Date.now()}`, {
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        memoryStore = data;
+        return memoryStore;
+      }
+    }
+  } catch (e) {}
 
+  // 3. Fallback to in-memory store
+  if (memoryStore && Array.isArray(memoryStore) && memoryStore.length > 0) {
+    return memoryStore;
+  }
+
+  // 4. Fallback to local file
   const filePath = getFilePath();
   try {
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf8');
-      memoryStore = JSON.parse(content || '[]');
-      return memoryStore;
+      const parsed = JSON.parse(content || '[]');
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        memoryStore = parsed;
+        return memoryStore;
+      }
     }
   } catch (e) {
-    console.warn('File read error:', e);
+    console.warn('[STORAGE] File read error:', e?.message || e);
   }
 
+  // 5. Default to authentic Udaipur seed data
   memoryStore = [...SEED_DATA];
-  await saveInquiries(memoryStore);
+  try {
+    await saveInquiries(memoryStore);
+  } catch (e) {}
   return memoryStore;
 }
 
 export async function saveInquiries(data) {
   memoryStore = data;
 
-  // 1. Save to Upstash Redis if configured
-  const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-
-  if (redisUrl && redisToken) {
-    try {
-      await fetch(`${redisUrl}/set/notty_inquiries`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${redisToken}` },
-        body: JSON.stringify(JSON.stringify(data))
-      });
-    } catch (e) {
-      console.warn('Redis save error:', e);
-    }
-  }
-
-  // 2. Save to local / /tmp file
-  const filePath = getFilePath();
+  // 1. Save to local file backup
   try {
+    const filePath = getFilePath();
     const dir = path.dirname(filePath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-  } catch (e) {
-    console.warn('File write error (cached in memory):', e);
+  } catch (err) {
+    console.warn('[STORAGE] Local file save warning:', err?.message || err);
   }
+
+  // 2. Persist to Vercel Blob cloud
+  try {
+    const { put } = await import('@vercel/blob');
+    await put('inquiries.json', JSON.stringify(data, null, 2), {
+      access: 'public',
+      storeId: STORE_ID,
+      addRandomSuffix: false,
+      allowOverwrite: true
+    });
+  } catch (err) {
+    console.error('[STORAGE] Vercel Blob put error:', err);
+  }
+
+  return memoryStore;
 }

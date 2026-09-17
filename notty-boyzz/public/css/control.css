@@ -678,3 +678,194 @@
   }
 }
 
+/* ==========================================================================
+   AGE BADGE & MOBILE CARDS STYLES
+   ========================================================================== */
+
+.age-badge-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  background: rgba(255, 0, 122, 0.12);
+  border: 1px solid rgba(255, 0, 122, 0.35);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(255, 0, 122, 0.15);
+}
+
+.age-val {
+  color: #ff5da8;
+  font-size: 1.1rem;
+  font-weight: 900;
+  font-family: monospace;
+}
+
+.age-unit {
+  color: #fda4af;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.desktop-table-wrap {
+  display: block;
+  width: 100%;
+}
+
+.mobile-cards-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .desktop-table-wrap {
+    display: none !important;
+  }
+  .mobile-cards-wrap {
+    display: flex !important;
+  }
+}
+
+.lead-card-mobile {
+  background: rgba(18, 24, 38, 0.95);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.lead-card-mobile.card-New {
+  border-left: 4px solid #facc15;
+}
+.lead-card-mobile.card-Contacted {
+  border-left: 4px solid #60a5fa;
+}
+.lead-card-mobile.card-Confirmed {
+  border-left: 4px solid #34d399;
+}
+.lead-card-mobile.card-Rejected {
+  border-left: 4px solid #f87171;
+}
+
+.lcm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.5rem;
+}
+
+.lcm-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.lcm-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lcm-city {
+  font-size: 0.78rem;
+  color: var(--accent-cyan);
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+}
+
+.lcm-contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.lcm-btn-call {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.35));
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+  text-decoration: none;
+  padding: 0.65rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: var(--transition);
+}
+
+.lcm-btn-call:active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.lcm-btn-wa {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.35));
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+  text-decoration: none;
+  padding: 0.65rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: var(--transition);
+}
+
+.lcm-btn-wa:active {
+  background: #10b981;
+  color: #fff;
+}
+
+.lcm-details {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+}
+
+.lcm-category {
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 0.25rem;
+}
+
+.lcm-note {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.78rem;
+}
+
+.lcm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+

@@ -143,7 +143,10 @@ export default function ControlDesk() {
   // Fetch Inquiries
   const fetchInquiries = async () => {
     try {
-      const res = await fetch('/api/inquiries');
+      const res = await fetch(`/api/inquiries?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       if (res.ok) {
         const json = await res.json();
         const serverData = json.data || [];
@@ -565,102 +568,211 @@ export default function ControlDesk() {
           </div>
         </section>
 
-        {/* Inquiries Table */}
+        {/* Inquiries List (Desktop Table + Mobile Cards) */}
         <section className="table-card">
-          <div className="table-responsive">
-            <table className="leads-table">
-              <thead>
-                <tr>
-                  <th>Ref ID</th>
-                  <th>Customer Details</th>
-                  <th>Direct Call (Mobile)</th>
-                  <th>Direct WhatsApp</th>
-                  <th>Purpose & Notes</th>
-                  <th>Submitted Time</th>
-                  <th>Status Action</th>
-                  <th>Del</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredInquiries.map(item => {
-                  const cleanMobile = (item.mobile || '').replace(/\D/g, '');
-                  const cleanWa = (item.whatsapp || item.mobile || '').replace(/\D/g, '');
-                  const waNumber = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
-                  const waMessage = encodeURIComponent(
-                    `Namaste ${item.name}! Hum Notty Boyzz Udaipur Desk se baat kar rahe hain regarding your companion pass (${item.id}).`
-                  );
-                  const status = item.status || 'New';
+          
+          {/* Desktop Table View */}
+          <div className="desktop-table-wrap">
+            <div className="table-responsive">
+              <table className="leads-table">
+                <thead>
+                  <tr>
+                    <th>Ref ID</th>
+                    <th>Customer Name</th>
+                    <th style={{ textAlign: 'center', color: '#ff5da8' }}>Age (उम्र)</th>
+                    <th>Direct Call (Mobile)</th>
+                    <th>Direct WhatsApp</th>
+                    <th>Companionship & Notes</th>
+                    <th>Submitted Time</th>
+                    <th>Status Action</th>
+                    <th>Del</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredInquiries.map(item => {
+                    const cleanMobile = (item.mobile || '').replace(/\D/g, '');
+                    const cleanWa = (item.whatsapp || item.mobile || '').replace(/\D/g, '');
+                    const waNumber = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
+                    const waMessage = encodeURIComponent(
+                      `Namaste ${item.name}! Hum Notty Boyzz Udaipur Desk se baat kar rahe hain regarding your companion pass (${item.id}).`
+                    );
+                    const status = item.status || 'New';
 
-                  return (
-                    <tr key={item.id}>
-                      <td>
-                        <span className="lead-id">{item.id}</span>
-                      </td>
-                      <td>
-                        <div className="customer-name">{item.name}</div>
-                        <div className="customer-age">
-                          {item.age ? `${item.age} saal` : 'Age: N/A'} • <span style={{ color: 'var(--accent-cyan)' }}>Udaipur</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="contact-actions">
-                          <a href={`tel:${cleanMobile}`} className="btn-call" title="Call directly">
-                            📞 <span>{item.mobile}</span>
-                          </a>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="contact-actions">
-                          <a 
-                            href={`https://wa.me/${waNumber}?text=${waMessage}`} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="btn-wa-chat" 
-                            title="Send WhatsApp Message"
-                          >
-                            💬 <span>{item.whatsapp || item.mobile}</span>
-                          </a>
-                        </div>
-                      </td>
-                      <td>
-                        <span style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
-                          {item.category || 'Romantic Companion'}
-                        </span>
-                        {item.note && (
-                          <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>
-                            "{item.note}"
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <span className="lead-id">{item.id}</span>
+                        </td>
+                        <td>
+                          <div className="customer-name">
+                            <span>👩</span>
+                            <strong>{item.name}</strong>
                           </div>
-                        )}
-                      </td>
-                      <td>
-                        <span className="lead-time">{item.formattedDate || 'Today'}</span>
-                      </td>
-                      <td>
-                        <select 
-                          className={`status-select status-${status}`}
-                          value={status}
-                          onChange={e => updateStatus(item.id, e.target.value)}
-                        >
-                          <option value="New">🟡 New Lead</option>
-                          <option value="Contacted">🔵 Contacted</option>
-                          <option value="Confirmed">🟢 Confirmed VIP</option>
-                          <option value="Rejected">🔴 Rejected</option>
-                        </select>
-                      </td>
-                      <td>
-                        <button 
-                          className="btn-del-lead" 
-                          onClick={() => deleteInquiry(item.id)} 
-                          title="Delete Inquiry"
-                        >
-                          🗑️
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '2px', fontWeight: 600 }}>
+                            📍 Udaipur
+                          </div>
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <div className="age-badge-pill">
+                            <span className="age-val">{item.age ? item.age : '--'}</span>
+                            <span className="age-unit">Saal</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="contact-actions">
+                            <a href={`tel:${cleanMobile}`} className="btn-call" title="Call directly">
+                              📞 <span>{item.mobile}</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="contact-actions">
+                            <a 
+                              href={`https://wa.me/${waNumber}?text=${waMessage}`} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="btn-wa-chat" 
+                              title="Send WhatsApp Message"
+                            >
+                              💬 <span>{item.whatsapp || item.mobile}</span>
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <span style={{ fontSize: '0.82rem', color: '#cbd5e1', fontWeight: 700 }}>
+                            {item.category || 'Romantic Companion'}
+                          </span>
+                          {item.note && (
+                            <div style={{ fontSize: '0.74rem', color: '#94a3b8', marginTop: '3px' }}>
+                              "{item.note}"
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          <span className="lead-time">{item.formattedDate || 'Today'}</span>
+                        </td>
+                        <td>
+                          <select 
+                            className={`status-select status-${status}`}
+                            value={status}
+                            onChange={e => updateStatus(item.id, e.target.value)}
+                          >
+                            <option value="New">🟡 New Lead</option>
+                            <option value="Contacted">🔵 Contacted</option>
+                            <option value="Confirmed">🟢 Confirmed VIP</option>
+                            <option value="Rejected">🔴 Rejected</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button 
+                            className="btn-del-lead" 
+                            onClick={() => deleteInquiry(item.id)} 
+                            title="Delete Inquiry"
+                          >
+                            🗑️
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Cards Feed (For Smartphone Screens) */}
+          <div className="mobile-cards-wrap">
+            {filteredInquiries.map(item => {
+              const cleanMobile = (item.mobile || '').replace(/\D/g, '');
+              const cleanWa = (item.whatsapp || item.mobile || '').replace(/\D/g, '');
+              const waNumber = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
+              const waMessage = encodeURIComponent(
+                `Namaste ${item.name}! Hum Notty Boyzz Udaipur Desk se baat kar rahe hain regarding your companion pass (${item.id}).`
+              );
+              const status = item.status || 'New';
+
+              return (
+                <article key={`mobile-${item.id}`} className={`lead-card-mobile card-${status}`}>
+                  {/* Card Top: ID, Status, Delete */}
+                  <div className="lcm-header">
+                    <span className="lead-id">{item.id}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <select 
+                        className={`status-select status-${status}`}
+                        value={status}
+                        onChange={e => updateStatus(item.id, e.target.value)}
+                      >
+                        <option value="New">🟡 New</option>
+                        <option value="Contacted">🔵 Contacted</option>
+                        <option value="Confirmed">🟢 Confirmed</option>
+                        <option value="Rejected">🔴 Rejected</option>
+                      </select>
+                      <button 
+                        className="btn-del-lead" 
+                        onClick={() => deleteInquiry(item.id)} 
+                        title="Delete Inquiry"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Card Body: Name + Dedicated Age Pill */}
+                  <div className="lcm-body">
+                    <div>
+                      <div className="lcm-name">
+                        <span>👩</span>
+                        <span>{item.name}</span>
+                      </div>
+                      <div className="lcm-city">
+                        <span>📍</span>
+                        <span>Udaipur Exclusive Client</span>
+                      </div>
+                    </div>
+
+                    <div className="age-badge-pill">
+                      <span className="age-val">{item.age ? item.age : '--'}</span>
+                      <span className="age-unit">Saal</span>
+                    </div>
+                  </div>
+
+                  {/* Card Contacts: Big 1-tap Call & WhatsApp buttons */}
+                  <div className="lcm-contacts">
+                    <a href={`tel:${cleanMobile}`} className="lcm-btn-call">
+                      <span>📞</span>
+                      <span>Call {item.mobile}</span>
+                    </a>
+                    <a 
+                      href={`https://wa.me/${waNumber}?text=${waMessage}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="lcm-btn-wa"
+                    >
+                      <span>💬</span>
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+
+                  {/* Card Details: Category & Note */}
+                  <div className="lcm-details">
+                    <div className="lcm-category">
+                      💖 {item.category || 'Romantic Companion'}
+                    </div>
+                    {item.note && (
+                      <div className="lcm-note">
+                        "{item.note}"
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Card Footer: Submitted time */}
+                  <div className="lcm-footer">
+                    <span>🕒 Submitted: {item.formattedDate || 'Today'}</span>
+                    <span style={{ color: '#34d399', fontWeight: 700 }}>✓ Verified Female</span>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {filteredInquiries.length === 0 && (
