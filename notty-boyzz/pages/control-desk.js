@@ -6,6 +6,22 @@ export default function ControlDesk() {
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
 
+  // Password / PIN Management
+  const [storedPin, setStoredPin] = useState('1234');
+  const [showChangePinModal, setShowChangePinModal] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+
+  // Change PIN fields
+  const [oldPin, setOldPin] = useState('');
+  const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [changePinMsg, setChangePinMsg] = useState({ text: '', isError: false });
+
+  // Forgot PIN fields
+  const [recoveryCode, setRecoveryCode] = useState('');
+  const [resetNewPin, setResetNewPin] = useState('');
+  const [forgotMsg, setForgotMsg] = useState({ text: '', isError: false });
+
   const [inquiries, setInquiries] = useState([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -14,22 +30,27 @@ export default function ControlDesk() {
 
   const prevCountRef = useRef(0);
 
-  // 1. PIN Check
+  // Load saved custom PIN & Auth Session
   useEffect(() => {
-    const saved = sessionStorage.getItem('nbz_control_auth');
-    if (saved === 'true') {
+    const savedPin = localStorage.getItem('nbz_admin_pin');
+    if (savedPin) {
+      setStoredPin(savedPin);
+    }
+    const savedAuth = sessionStorage.getItem('nbz_control_auth');
+    if (savedAuth === 'true') {
       setIsAuthenticated(true);
     }
   }, []);
 
   const handleUnlock = (e) => {
     e?.preventDefault();
-    if (pin.trim() === '1234') {
+    const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
+    if (pin.trim() === currentPin) {
       sessionStorage.setItem('nbz_control_auth', 'true');
       setIsAuthenticated(true);
       setPinError('');
     } else {
-      setPinError('Galat PIN! Default Security PIN: 1234');
+      setPinError(`Galat Password / PIN! Please check karein.`);
       setPin('');
     }
   };
@@ -40,7 +61,62 @@ export default function ControlDesk() {
     setPin('');
   };
 
-  // 2. Audio Chime (Web Audio API)
+  // Change PIN logic
+  const handleChangePin = (e) => {
+    e.preventDefault();
+    const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
+    if (oldPin !== currentPin) {
+      setChangePinMsg({ text: 'Purana PIN galat hai!', isError: true });
+      return;
+    }
+    if (!newPin || newPin.length < 4) {
+      setChangePinMsg({ text: 'Naya PIN minimum 4 characters ka hona chahiye!', isError: true });
+      return;
+    }
+    if (newPin !== confirmPin) {
+      setChangePinMsg({ text: 'Naya PIN aur Confirm PIN match nahi ho rahe!', isError: true });
+      return;
+    }
+
+    localStorage.setItem('nbz_admin_pin', newPin);
+    setStoredPin(newPin);
+    setChangePinMsg({ text: '✅ PIN successfully change ho gaya!', isError: false });
+    setTimeout(() => {
+      setShowChangePinModal(false);
+      setOldPin('');
+      setNewPin('');
+      setConfirmPin('');
+      setChangePinMsg({ text: '', isError: false });
+    }, 1500);
+  };
+
+  // Forgot PIN logic (Master Recovery Key: 892006 or NOTTY-UDAIPUR)
+  const handleForgotReset = (e) => {
+    e.preventDefault();
+    const cleanKey = recoveryCode.trim();
+    if (cleanKey !== '892006' && cleanKey.toUpperCase() !== 'NOTTY-UDAIPUR') {
+      setForgotMsg({ text: 'Galat Recovery Code! Telegram receptionist number code (892006) use karein.', isError: true });
+      return;
+    }
+    if (!resetNewPin || resetNewPin.length < 4) {
+      setForgotMsg({ text: 'Naya PIN kam se kam 4 digits ka hona chahiye!', isError: true });
+      return;
+    }
+
+    localStorage.setItem('nbz_admin_pin', resetNewPin);
+    setStoredPin(resetNewPin);
+    sessionStorage.setItem('nbz_control_auth', 'true');
+    setForgotMsg({ text: '✅ PIN Reset Successful! Desk unlock ho rahi hai...', isError: false });
+    setTimeout(() => {
+      setShowForgotModal(false);
+      setIsAuthenticated(true);
+      setRecoveryCode('');
+      setResetNewPin('');
+      setForgotMsg({ text: '', isError: false });
+    }, 1500);
+  };
+
+  // Audio Chime
   const playSound = () => {
     if (!soundEnabled) return;
     try {
@@ -64,7 +140,7 @@ export default function ControlDesk() {
     } catch (e) {}
   };
 
-  // 3. Fetch Inquiries
+  // Fetch Inquiries
   const fetchInquiries = async () => {
     try {
       const res = await fetch('/api/inquiries');
@@ -72,7 +148,6 @@ export default function ControlDesk() {
         const json = await res.json();
         const serverData = json.data || [];
 
-        // Check if new inquiry arrived to trigger sound & toast
         if (prevCountRef.current > 0 && serverData.length > prevCountRef.current) {
           const newest = serverData[0];
           setNewToast(newest);
@@ -83,7 +158,6 @@ export default function ControlDesk() {
         setInquiries(serverData);
       }
     } catch (err) {
-      // LocalStorage fallback
       try {
         const local = JSON.parse(localStorage.getItem('notty_inquiries') || '[]');
         setInquiries(local);
@@ -94,9 +168,8 @@ export default function ControlDesk() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchInquiries();
-      const interval = setInterval(fetchInquiries, 4000); // Live polling for Vercel
+      const interval = setInterval(fetchInquiries, 4000);
 
-      // Cross-tab broadcast listener
       if (window.BroadcastChannel) {
         const channel = new BroadcastChannel('notty_boyzz_channel');
         channel.onmessage = (msg) => {
@@ -110,7 +183,7 @@ export default function ControlDesk() {
     }
   }, [isAuthenticated]);
 
-  // 4. Update Status
+  // Update Status
   const updateStatus = async (id, newStatus) => {
     try {
       await fetch(`/api/inquiries/${id}`, {
@@ -123,7 +196,7 @@ export default function ControlDesk() {
     setInquiries(prev => prev.map(item => item.id === id ? { ...item, status: newStatus } : item));
   };
 
-  // 5. Delete Inquiry
+  // Delete Inquiry
   const deleteInquiry = async (id) => {
     if (!confirm(`Kya aap enquiry "${id}" ko sach me delete karna chahte hain?`)) return;
     try {
@@ -133,7 +206,7 @@ export default function ControlDesk() {
     setInquiries(prev => prev.filter(item => item.id !== id));
   };
 
-  // 6. CSV Export
+  // CSV Export
   const exportToCSV = () => {
     if (inquiries.length === 0) {
       alert('Export karne ke liye koi inquiry record nahi hai.');
@@ -148,7 +221,7 @@ export default function ControlDesk() {
       `"${i.mobile || ''}"`,
       `"${i.whatsapp || ''}"`,
       `"${(i.category || '').replace(/"/g, '""')}"`,
-      `"${(i.city || '').replace(/"/g, '""')}"`,
+      `"${(i.city || 'Udaipur').replace(/"/g, '""')}"`,
       `"${(i.note || '').replace(/"/g, '""')}"`,
       `"${i.status || 'New'}"`,
       `"${i.formattedDate || i.createdAt || ''}"`
@@ -159,13 +232,13 @@ export default function ControlDesk() {
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     const dateStr = new Date().toISOString().split('T')[0];
-    link.setAttribute('download', `Notty_Boyzz_Leads_${dateStr}.csv`);
+    link.setAttribute('download', `Notty_Boyzz_Udaipur_Leads_${dateStr}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // 7. Filtering & Stats Calculations
+  // Filtering & Stats
   const filteredInquiries = inquiries.filter(item => {
     if (statusFilter !== 'ALL' && (item.status || 'New').toLowerCase() !== statusFilter.toLowerCase()) {
       return false;
@@ -176,8 +249,7 @@ export default function ControlDesk() {
       const matchMobile = (item.mobile || '').includes(q);
       const matchWa = (item.whatsapp || '').includes(q);
       const matchId = (item.id || '').toLowerCase().includes(q);
-      const matchCity = (item.city || '').toLowerCase().includes(q);
-      if (!matchName && !matchMobile && !matchWa && !matchId && !matchCity) return false;
+      if (!matchName && !matchMobile && !matchWa && !matchId) return false;
     }
     return true;
   });
@@ -191,7 +263,7 @@ export default function ControlDesk() {
   return (
     <>
       <Head>
-        <title>Notty Boyzz - Control Desk (Admin Portal)</title>
+        <title>Notty Boyzz - Udaipur Control Desk (Admin Portal)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
@@ -208,7 +280,7 @@ export default function ControlDesk() {
             <div className="pin-icon">🔒</div>
             <h2 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '0.3rem' }}>CONTROL DESK ACCESS</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              Security PIN enter karein dashboard open karne ke liye.
+              Udaipur Control Desk open karne ke liye Password / PIN enter karein.
             </p>
             
             <form onSubmit={handleUnlock}>
@@ -216,7 +288,7 @@ export default function ControlDesk() {
                 type="password" 
                 className="pin-input" 
                 placeholder="••••" 
-                maxLength={6}
+                maxLength={8}
                 value={pin}
                 onChange={e => setPin(e.target.value)}
                 autoFocus
@@ -229,9 +301,148 @@ export default function ControlDesk() {
               </button>
             </form>
 
-            <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-              Default Security PIN: <strong style={{ color: 'var(--accent-cyan)' }}>1234</strong>
+            <div style={{ marginTop: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+              <span style={{ color: 'var(--text-dim)' }}>Default: <strong style={{ color: 'var(--accent-cyan)' }}>1234</strong></span>
+              <button 
+                type="button" 
+                onClick={() => setShowForgotModal(true)}
+                style={{ background: 'transparent', border: 'none', color: '#ff5da8', cursor: 'pointer', textDecoration: 'underline', fontWeight: 600 }}
+              >
+                Forgot PIN?
+              </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Forgot PIN / Reset Modal */}
+      {showForgotModal && (
+        <div className="modal-backdrop active" onClick={() => setShowForgotModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔑</div>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.4rem' }}>Reset Admin PIN</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1.2rem' }}>
+              Recovery Key enter karein apna naya password/PIN set karne ke liye.
+            </p>
+
+            <form onSubmit={handleForgotReset}>
+              <div style={{ textAlign: 'left', marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
+                  Master Recovery Code:
+                </label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  placeholder="Recovery Code (892006)"
+                  value={recoveryCode}
+                  onChange={e => setRecoveryCode(e.target.value)}
+                  style={{ marginTop: '0.3rem' }}
+                  required
+                />
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
+                  Hint: Telegram username code <strong>892006</strong> ya <strong>NOTTY-UDAIPUR</strong>
+                </span>
+              </div>
+
+              <div style={{ textAlign: 'left', marginBottom: '1.2rem' }}>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
+                  Apna Naya Password / PIN Daalein:
+                </label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  placeholder="e.g. 5566 ya 9988"
+                  value={resetNewPin}
+                  onChange={e => setResetNewPin(e.target.value)}
+                  style={{ marginTop: '0.3rem' }}
+                  required
+                />
+              </div>
+
+              {forgotMsg.text && (
+                <div style={{ color: forgotMsg.isError ? 'var(--accent-red)' : 'var(--accent-green)', fontSize: '0.82rem', marginBottom: '1rem', fontWeight: 600 }}>
+                  {forgotMsg.text}
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button type="submit" className="btn-submit" style={{ marginTop: 0 }}>
+                  SAVE & UNLOCK 🚀
+                </button>
+                <button type="button" className="btn-modal-close" onClick={() => setShowForgotModal(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Change PIN Modal (Inside Dashboard) */}
+      {showChangePinModal && (
+        <div className="modal-backdrop active" onClick={() => setShowChangePinModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔐</div>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.4rem' }}>Change Control PIN</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1.2rem' }}>
+              Apna purana PIN daal kar naya PIN set karein.
+            </p>
+
+            <form onSubmit={handleChangePin}>
+              <div style={{ textAlign: 'left', marginBottom: '0.8rem' }}>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>Purana PIN:</label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  value={oldPin}
+                  onChange={e => setOldPin(e.target.value)}
+                  placeholder="Purana PIN"
+                  required
+                  style={{ marginTop: '0.3rem' }}
+                />
+              </div>
+
+              <div style={{ textAlign: 'left', marginBottom: '0.8rem' }}>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>Naya PIN (Kam se kam 4 digits):</label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  value={newPin}
+                  onChange={e => setNewPin(e.target.value)}
+                  placeholder="Naya PIN"
+                  required
+                  style={{ marginTop: '0.3rem' }}
+                />
+              </div>
+
+              <div style={{ textAlign: 'left', marginBottom: '1rem' }}>
+                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>Confirm Naya PIN:</label>
+                <input 
+                  type="password" 
+                  className="form-control" 
+                  value={confirmPin}
+                  onChange={e => setConfirmPin(e.target.value)}
+                  placeholder="Confirm Naya PIN"
+                  required
+                  style={{ marginTop: '0.3rem' }}
+                />
+              </div>
+
+              {changePinMsg.text && (
+                <div style={{ color: changePinMsg.isError ? 'var(--accent-red)' : 'var(--accent-green)', fontSize: '0.82rem', marginBottom: '1rem', fontWeight: 600 }}>
+                  {changePinMsg.text}
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button type="submit" className="btn-submit" style={{ marginTop: 0 }}>
+                  UPDATE PIN 💾
+                </button>
+                <button type="button" className="btn-modal-close" onClick={() => setShowChangePinModal(false)}>
+                  Close
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -244,7 +455,7 @@ export default function ControlDesk() {
               <div className="logo-badge" style={{ width: '38px', height: '38px', fontSize: '1.1rem' }}>NB</div>
               <div className="brand-name" style={{ fontSize: '1.3rem' }}>
                 NOTTY BOYZZ
-                <span className="brand-sub">CONTROL DESK</span>
+                <span className="brand-sub">UDAIPUR DESK</span>
               </div>
             </a>
             <span className="desk-tag">HQ ADMIN</span>
@@ -258,10 +469,19 @@ export default function ControlDesk() {
             <button 
               type="button" 
               className="btn-ctrl" 
+              onClick={() => setShowChangePinModal(true)}
+              title="Change your admin password/PIN"
+              style={{ color: '#ff5da8', borderColor: 'rgba(255,0,122,0.4)' }}
+            >
+              🔑 Change PIN
+            </button>
+            <button 
+              type="button" 
+              className="btn-ctrl" 
               onClick={() => setSoundEnabled(!soundEnabled)}
               style={{ color: soundEnabled ? '#00f2fe' : '#94a3b8' }}
             >
-              {soundEnabled ? '🔔 Alert Sound: ON' : '🔕 Alert Sound: OFF'}
+              {soundEnabled ? '🔔 Sound: ON' : '🔕 Sound: OFF'}
             </button>
             <button type="button" className="btn-ctrl" onClick={fetchInquiries}>
               🔄 Refresh
@@ -287,7 +507,7 @@ export default function ControlDesk() {
           <div className="stat-card card-cyan">
             <div>
               <div className="stat-val">{totalCount}</div>
-              <div className="stat-label">Total Inquiries</div>
+              <div className="stat-label">Total Udaipur Inquiries</div>
             </div>
             <div className="stat-icon-wrap">📋</div>
           </div>
@@ -370,7 +590,7 @@ export default function ControlDesk() {
                   const cleanWa = (item.whatsapp || item.mobile || '').replace(/\D/g, '');
                   const waNumber = cleanWa.length === 10 ? `91${cleanWa}` : cleanWa;
                   const waMessage = encodeURIComponent(
-                    `Namaste ${item.name}! Hum Notty Boyzz Control Desk se baat kar rahe hain regarding your companion enquiry (${item.id}).`
+                    `Namaste ${item.name}! Hum Notty Boyzz Udaipur Desk se baat kar rahe hain regarding your companion pass (${item.id}).`
                   );
                   const status = item.status || 'New';
 
@@ -382,7 +602,7 @@ export default function ControlDesk() {
                       <td>
                         <div className="customer-name">{item.name}</div>
                         <div className="customer-age">
-                          {item.age ? `${item.age} saal` : 'Age: N/A'} • {item.city || 'India'}
+                          {item.age ? `${item.age} saal` : 'Age: N/A'} • <span style={{ color: 'var(--accent-cyan)' }}>Udaipur</span>
                         </div>
                       </td>
                       <td>
@@ -450,7 +670,7 @@ export default function ControlDesk() {
             <div className="empty-leads">
               <div className="icon">📭</div>
               <h3 style={{ fontSize: '1.1rem', color: 'var(--text-main)', marginBottom: '0.3rem' }}>
-                Koi Enquiry Nahi Mili
+                Koi Udaipur Enquiry Nahi Mili
               </h3>
               <p style={{ fontSize: '0.85rem' }}>
                 Nayi inquiries aane par yahan automatically real-time update ho jayengi.
@@ -467,7 +687,7 @@ export default function ControlDesk() {
           <div className="toast-bell">🔔</div>
           <div className="toast-info">
             <h4>⚡ Nayi Enquiry Ayi: {newToast.name}</h4>
-            <p>Mobile: {newToast.mobile} • City: {newToast.city || 'India'}</p>
+            <p>Mobile: {newToast.mobile} • City: Udaipur</p>
           </div>
         </aside>
       )}

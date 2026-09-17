@@ -6,7 +6,7 @@ export default function Home() {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
-    city: '',
+    city: 'Udaipur',
     mobile: '',
     whatsapp: '',
     sameAsMobile: false,
@@ -61,6 +61,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          city: 'Udaipur',
           whatsapp: formData.sameAsMobile ? formData.mobile : (formData.whatsapp || formData.mobile)
         })
       });
@@ -84,7 +85,7 @@ export default function Home() {
         setFormData({
           name: '',
           age: '',
-          city: '',
+          city: 'Udaipur',
           mobile: '',
           whatsapp: '',
           sameAsMobile: false,
@@ -100,11 +101,11 @@ export default function Home() {
       }
     } catch (err) {
       console.warn('Network issue, saved locally:', err);
-      // Fallback
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       const fallbackEntry = {
         id: `NBZ-${randomNum}`,
         ...formData,
+        city: 'Udaipur',
         status: 'New',
         createdAt: new Date().toISOString(),
         formattedDate: 'Today, Just now'
@@ -118,9 +119,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Notty Boyzz - Luxury Companionship & Love for Women | 100% Satisfied</title>
+        <title>Notty Boyzz - Luxury Companionship & Love for Women (Udaipur Only)</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <meta name="description" content="India's most trusted luxury companionship service for women. Handsome athletic gentlemen offering true care, love & complete emotional satisfaction." />
+        <meta name="description" content="Udaipur's exclusive luxury companionship service for women. Handsome athletic gentlemen offering true care, love & complete emotional satisfaction." />
       </Head>
 
       {/* Ambient Cyber Lighting */}
@@ -137,13 +138,13 @@ export default function Home() {
             <div className="logo-badge">NB</div>
             <div className="brand-name">
               NOTTY BOYZZ
-              <span className="brand-sub">LUXURY COMPANIONS FOR WOMEN</span>
+              <span className="brand-sub">UDAIPUR EXCLUSIVE • FOR WOMEN</span>
             </div>
           </a>
 
           <div className="nav-actions">
             <span className="women-exclusive-badge">
-              👑 Women / Ladies Exclusive
+              👑 Women Exclusive • Udaipur
             </span>
           </div>
         </div>
@@ -156,7 +157,7 @@ export default function Home() {
         <section className="hero-section">
           <div className="hero-pill">
             <span className="pulse-dot"></span>
-            ❤️ 100% Love, Care & Complete Satisfaction Guaranteed
+            ❤️ 100% Love, Care & Complete Satisfaction in Udaipur
           </div>
           <h1 className="hero-title">
             EXPERIENCE TRUE LOVE & ATTENTION WITH <br />
@@ -164,7 +165,7 @@ export default function Home() {
           </h1>
           <p className="hero-tagline">
             Handsome, athletic bodybuilder gentlemen jo aapko denge sachha pyaar, respect, attention aur poori emotional satisfaction. 
-            India ki sabse trusted, safe aur 100% discreet luxury companionship service—exclusively for women.
+            Exclusively available in <strong>Udaipur</strong> (City of Lakes).
           </p>
 
           {/* Quick Action CTA for Mobile & Desktop */}
@@ -172,15 +173,23 @@ export default function Home() {
             <a href="#applySection" className="btn-hero-action">
               💖 Request Private Pass (Form Bharein) 👇
             </a>
+            <a 
+              href="https://t.me/Receptionist892006" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="telegram-quick-bar"
+            >
+              <span>✈️</span> Direct Telegram: <strong>@Receptionist892006</strong>
+            </a>
           </div>
 
           {/* Trust Bar */}
           <div className="trust-bar">
+            <div className="trust-item"><span>📍</span> Strictly Udaipur Only</div>
             <div className="trust-item"><span>👑</span> 100% Exclusively For Women</div>
             <div className="trust-item"><span>💪</span> Athletic & Bodybuilder Gentlemen</div>
             <div className="trust-item"><span>❤️</span> Pure Love & Care Focus</div>
             <div className="trust-item"><span>🔒</span> 100% Confidential & Safe</div>
-            <div className="trust-item"><span>⭐</span> 4.9/5 Rating (8,500+ Satisfied Women)</div>
           </div>
         </section>
 
@@ -190,7 +199,7 @@ export default function Home() {
           {/* Companion Card 1 */}
           <div className="companion-card">
             <div className="companion-img-wrap">
-              <img src="/images/companion1.jpg" alt="Aaryan - Handsome Athletic Companion" />
+              <img src="/images/companion1.jpg" alt="Aaryan - Handsome Athletic Companion in Udaipur" />
               <div className="companion-gradient-overlay"></div>
               <span className="companion-badge">🔥 Most Loved Companion</span>
             </div>
@@ -206,9 +215,9 @@ export default function Home() {
                 "Har aurat princess jaisi care aur respect deserve karti hai. Meri priority aapko khush, comfortable aur emotionally satisfied rakhna hai."
               </p>
               <div className="companion-tags">
+                <span className="tag-pill">📍 Udaipur Base</span>
                 <span className="tag-pill">❤️ Romantic & Caring</span>
-                <span className="tag-pill">🥂 Dinner Date</span>
-                <span className="tag-pill">⭐ 100% Satisfied Client Feedback</span>
+                <span className="tag-pill">🥂 Dinner Date by Lake Pichola</span>
               </div>
             </div>
           </div>
@@ -216,7 +225,7 @@ export default function Home() {
           {/* Companion Card 2 */}
           <div className="companion-card">
             <div className="companion-img-wrap">
-              <img src="/images/companion2.jpg" alt="Kabir - Muscular Fitness Model Companion" />
+              <img src="/images/companion2.jpg" alt="Kabir - Muscular Fitness Model Companion in Udaipur" />
               <div className="companion-gradient-overlay"></div>
               <span className="companion-badge" style={{ borderColor: '#00f2fe', color: '#00f2fe' }}>
                 👑 VIP Bodybuilder Gentleman
@@ -234,8 +243,8 @@ export default function Home() {
                 "Gentleman manners, deep meaningful baatein, luxury lifestyle aur full attention. Aapka har ek pal yaadgaar banana mera vaada hai."
               </p>
               <div className="companion-tags">
+                <span className="tag-pill">📍 Udaipur Base</span>
                 <span className="tag-pill">💖 Pure Love & Pampering</span>
-                <span className="tag-pill">✈️ Travel & Events</span>
                 <span className="tag-pill">🔒 Complete Discretion</span>
               </div>
             </div>
@@ -246,13 +255,21 @@ export default function Home() {
         {/* Content Grid: Form + Why Women Love Us */}
         <div className="content-grid">
           
-          {/* Customer Form (Women Only) */}
+          {/* Customer Form (Women Only & Udaipur Only) */}
           <section className="glass-card" id="applySection">
             <div className="form-header">
               <span className="form-badge-women">👑 Women Exclusive Registration</span>
               <h2 className="form-title">Private Companion Request</h2>
               <p className="form-subtitle">
-                Apni basic details fill karein. Hamari private relationship coordinator turant aapse WhatsApp ya call par connect karegi.
+                Apni basic details fill karein. Hamari private relationship coordinator (@Receptionist892006) aapse private Telegram par connect karegi.
+              </p>
+            </div>
+
+            {/* Udaipur Location Restriction Notice */}
+            <div className="location-notice-box">
+              <div className="location-badge">📍 Service Area: Strictly Udaipur Only (उदयपुर)</div>
+              <p>
+                ⚠️ <strong>Important Notice:</strong> Hamari luxury companion services <strong>sirf aur sirf Udaipur city</strong> ke andar available hain. Udaipur se bahar service completely unavailable (not available) hai.
               </p>
             </div>
 
@@ -280,49 +297,27 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Age & City Row */}
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="customerAge" className="form-label">
-                    Age (Umar)<span className="req">*</span>
-                  </label>
-                  <span className="input-hint">18 saal ya usse zyada</span>
-                  <div className="input-wrapper">
-                    <span className="input-icon">🎂</span>
-                    <input 
-                      type="number" 
-                      id="customerAge" 
-                      name="age" 
-                      className="form-control" 
-                      placeholder="e.g. 23" 
-                      required 
-                      min={18} 
-                      max={70}
-                      inputMode="numeric"
-                      value={formData.age}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="customerCity" className="form-label">
-                    Aapka Shehar (City)<span className="req">*</span>
-                  </label>
-                  <span className="input-hint">Kahan milna chahti hain</span>
-                  <div className="input-wrapper">
-                    <span className="input-icon">📍</span>
-                    <input 
-                      type="text" 
-                      id="customerCity" 
-                      name="city" 
-                      className="form-control" 
-                      placeholder="e.g. Delhi, Mumbai, Bangalore..." 
-                      required
-                      value={formData.city}
-                      onChange={handleChange}
-                    />
-                  </div>
+              {/* Age (Location removed from form, locked to Udaipur) */}
+              <div className="form-group">
+                <label htmlFor="customerAge" className="form-label">
+                  Age (Umar)<span className="req">*</span>
+                </label>
+                <span className="input-hint">18 saal ya usse zyada</span>
+                <div className="input-wrapper">
+                  <span className="input-icon">🎂</span>
+                  <input 
+                    type="number" 
+                    id="customerAge" 
+                    name="age" 
+                    className="form-control" 
+                    placeholder="e.g. 23" 
+                    required 
+                    min={18} 
+                    max={70}
+                    inputMode="numeric"
+                    value={formData.age}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
@@ -331,7 +326,7 @@ export default function Home() {
                 <label htmlFor="customerMobile" className="form-label">
                   Mobile Number<span className="req">*</span>
                 </label>
-                <span className="input-hint">10-digit number jahan hum aapko privately call ya text kar sakein</span>
+                <span className="input-hint">10-digit number jahan hum aapse privately contact kar sakein</span>
                 <div className="input-wrapper">
                   <span className="input-icon">📱</span>
                   <input 
@@ -401,9 +396,9 @@ export default function Home() {
                     onChange={handleChange}
                   >
                     <option value="Romantic & Loving Companion">❤️ Romantic & Loving Companion (Full Love, Care & Pampering)</option>
-                    <option value="Handsome Bodybuilder Date">💪 Athletic Bodybuilder Date (Nightout, Dinner & Party)</option>
+                    <option value="Handsome Bodybuilder Date">💪 Athletic Bodybuilder Date (Dinner, Cafe & Lake Date)</option>
                     <option value="Emotional Support & Heart-to-Heart">💬 Deep Emotional Connection (Listen to me & care for me)</option>
-                    <option value="Weekend Getaway & Travel Companion">✈️ Luxury Weekend & Travel Partner</option>
+                    <option value="Luxury Evening & Long Drive">🚗 Luxury Evening & Udaipur Sightseeing Partner</option>
                     <option value="VIP Elite Exclusive Pass">👑 VIP Complete Experience & 100% Satisfaction</option>
                   </select>
                 </div>
@@ -412,7 +407,7 @@ export default function Home() {
               {/* Note */}
               <div className="form-group">
                 <label htmlFor="customerNote" className="form-label">
-                  Aapki koi Khaas Wish ya Expectation (Optional)
+                  Aapki koi Khaas Wish ya Udaipur Location Preference (Optional)
                 </label>
                 <div className="input-wrapper">
                   <span className="input-icon">✍️</span>
@@ -421,7 +416,7 @@ export default function Home() {
                     id="customerNote" 
                     name="note" 
                     className="form-control" 
-                    placeholder="Kaisa boy pasand hai ya koi khaas baat..."
+                    placeholder="e.g. Fateh Sagar, City Palace area, ya koi khaas baat..."
                     value={formData.note}
                     onChange={handleChange}
                   />
@@ -436,7 +431,7 @@ export default function Home() {
               <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.78rem', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                 <span>🔒 100% Safe & Confidential</span>
                 <span>•</span>
-                <span>Zero spam</span>
+                <span>Udaipur Only</span>
                 <span>•</span>
                 <span>Strictly for Women</span>
               </div>
@@ -451,7 +446,7 @@ export default function Home() {
                 <span className="vip-badge">100% SATISFACTION</span>
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
-                Har aurat deserve karti hai respect, gentle touch, unconditional pyaar aur poori attention. Notty Boyzz par aapko milta hai:
+                Har aurat deserve karti hai respect, gentle touch, unconditional pyaar aur poori attention. Udaipur me Notty Boyzz par aapko milta hai:
               </p>
 
               <ul className="feature-list">
@@ -492,7 +487,7 @@ export default function Home() {
                 🛡️ 100% Satisfaction Guarantee
               </div>
               <p style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
-                Agar aapko companion ka behavior ya service 100% pasand nahi aati, toh bina kisi sawal ke instant solution diya jata hai. Hamara maksad sirf aapki khushi hai.
+                Hamari service sirf Udaipur city ke local clients ke liye hai. Agar aapko companion ka behavior ya service 100% pasand nahi aati, toh bina kisi sawal ke instant solution diya jata hai.
               </p>
             </div>
           </aside>
@@ -503,20 +498,20 @@ export default function Home() {
         <section className="testimonials-section">
           <div className="section-header">
             <h2 className="section-title">Hamari 100% Satisfied Women Clients</h2>
-            <p className="section-subtitle">Real feedback from verified women across Delhi, Mumbai, Bangalore & Punjab</p>
+            <p className="section-subtitle">Real feedback from verified women across Udaipur city</p>
           </div>
 
           <div className="reviews-grid">
             <div className="review-card">
               <div className="stars">★★★★★</div>
               <p className="review-text">
-                "Pehle bohot hesitate ho rahi thi, par Notty Boyzz ki service sach me unbelievable hai. Itna caring, handsome aur polite companion! Mujhe life me itna special, loved aur satisfied kabhi feel nahi hua. Best service ❤️"
+                "Udaipur me aisi classy aur respectful service milna unbelievable hai! Companion itna handsome aur gentle tha, Lake Pichola par dinner date memorable ban gaya. Best service ❤️"
               </p>
               <div className="reviewer-meta">
                 <div className="reviewer-avatar">PM</div>
                 <div>
                   <div className="reviewer-name">Pooja M.</div>
-                  <div className="reviewer-badge">✓ Verified Client • Delhi NCR</div>
+                  <div className="reviewer-badge">✓ Verified Client • Udaipur</div>
                 </div>
               </div>
             </div>
@@ -524,13 +519,13 @@ export default function Home() {
             <div className="review-card">
               <div className="stars">★★★★★</div>
               <p className="review-text">
-                "Best service hands down! Toned bodybuilder guy with such a sweet, respectful and gentle nature. Completely safe aur top quality luxury experience. Har ladki ko life me ye comfort zaroor try karna chahiye."
+                "Best service hands down! Toned bodybuilder guy with such a sweet, respectful and gentle nature. Completely safe aur top quality luxury experience. 100% Satisfied!"
               </p>
               <div className="reviewer-meta">
                 <div className="reviewer-avatar" style={{ background: 'linear-gradient(135deg, #00f2fe, #7928ca)' }}>SK</div>
                 <div>
                   <div className="reviewer-name">Simran K.</div>
-                  <div className="reviewer-badge">✓ Verified Client • Mumbai</div>
+                  <div className="reviewer-badge">✓ Verified Client • Udaipur</div>
                 </div>
               </div>
             </div>
@@ -538,13 +533,13 @@ export default function Home() {
             <div className="review-card">
               <div className="stars">★★★★★</div>
               <p className="review-text">
-                "I felt deeply heard, pampered and truly loved. The companion was so well-educated and fit, exactly like a Bollywood hero. Complete privacy maintained. 100% Satisfied and happy!"
+                "I felt deeply heard, pampered and truly loved. The companion was so well-educated and fit. Complete privacy maintained. Highly recommended for ladies in Udaipur!"
               </p>
               <div className="reviewer-meta">
                 <div className="reviewer-avatar" style={{ background: 'linear-gradient(135deg, #fbbf24, #ff007a)' }}>AR</div>
                 <div>
                   <div className="reviewer-name">Ananya R.</div>
-                  <div className="reviewer-badge">✓ Verified Client • Bangalore</div>
+                  <div className="reviewer-badge">✓ Verified Client • Udaipur</div>
                 </div>
               </div>
             </div>
@@ -553,32 +548,32 @@ export default function Home() {
 
       </main>
 
-      {/* Success Modal */}
+      {/* Success Modal - Connect Directly via Telegram (NO WHATSAPP REDIRECT) */}
       {successInquiry && (
         <div className="modal-backdrop active" onClick={() => setSuccessInquiry(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="success-icon-anim">💖</div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '0.4rem' }}>Pass Requested Successfully! 🎉</h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              Shukriya! Aapki private enquiry hamari desk tak securely pahunch chuki hai.
+              Shukriya! Aapki private enquiry Notty Boyzz Udaipur Desk tak pahunch chuki hai.
             </p>
 
             <div>
               <span className="modal-ref">{successInquiry.id}</span>
             </div>
 
-            <p style={{ fontSize: '0.82rem', color: '#cbd5e1', marginBottom: '1.25rem' }}>
-              Hamaari private relationship manager aapse discreetly contact karegi. Aap chahein toh turant WhatsApp par bhi message kar sakti hain:
+            <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+              Aap turant hamari private receptionist se <strong>Telegram</strong> par direct jud sakti hain:
             </p>
 
             <div className="modal-actions">
               <a 
-                href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hello Notty Boyzz! I just requested a private VIP pass (Ref: ${successInquiry.id}, Name: ${successInquiry.name}). Looking forward to meeting a handsome companion.`)}`}
+                href="https://t.me/Receptionist892006"
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="btn-wa-direct"
+                className="btn-telegram-direct"
               >
-                💬 Connect on WhatsApp Privately
+                ✈️ Connect on Telegram (@Receptionist892006)
               </a>
               <button type="button" className="btn-modal-close" onClick={() => setSuccessInquiry(null)}>
                 Close Window
@@ -620,12 +615,12 @@ export default function Home() {
       <footer className="site-footer">
         <div className="container">
           <div className="footer-links">
-            <a href="#applySection">Apply Now</a>
+            <a href="#applySection">Apply Now (Udaipur)</a>
+            <a href="https://t.me/Receptionist892006" target="_blank" rel="noopener noreferrer">Telegram Support</a>
             <a href="#">Privacy & Confidentiality</a>
             <a href="#">Terms of Service</a>
-            <a href="#">FAQ for Women</a>
           </div>
-          <p>© 2026 NOTTY BOYZZ. Luxury Companionship for Women. Built for love, happiness & satisfaction.</p>
+          <p>© 2026 NOTTY BOYZZ. Luxury Companionship for Women in Udaipur. Built for love, happiness & satisfaction.</p>
         </div>
       </footer>
     </>

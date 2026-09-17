@@ -945,7 +945,77 @@ footer.site-footer {
 .hero-cta-wrap {
   margin-top: 1rem;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.location-notice-box {
+  background: rgba(255, 0, 122, 0.08);
+  border: 1px solid rgba(255, 0, 122, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #fce7f3;
+}
+
+.location-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #ff007a, #7928ca);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.btn-telegram-direct {
+  background: linear-gradient(135deg, #0088cc 0%, #00aaff 100%);
+  color: #fff;
+  text-decoration: none;
+  padding: 0.95rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+  transition: var(--transition);
+}
+
+.btn-telegram-direct:hover {
+  background: linear-gradient(135deg, #0077b5 0%, #0088cc 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 136, 204, 0.6);
+}
+
+.telegram-quick-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0, 136, 204, 0.15);
+  border: 1px solid rgba(0, 136, 204, 0.4);
+  color: #38bdf8;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-top: 0.8rem;
+  transition: var(--transition);
+}
+
+.telegram-quick-bar:hover {
+  background: rgba(0, 136, 204, 0.25);
+  box-shadow: 0 0 15px rgba(0, 136, 204, 0.3);
 }
 
 .btn-hero-action {

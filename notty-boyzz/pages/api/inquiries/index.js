@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       mobile: mobile.trim(),
       whatsapp: (whatsapp && whatsapp.trim()) ? whatsapp.trim() : mobile.trim(),
       category: category || 'Romantic & Loving Companion',
-      city: (city && city.trim()) ? city.trim() : 'India',
+      city: 'Udaipur',
       note: (note && note.trim()) ? note.trim() : '',
       clientType: 'Female Client',
       status: 'New',
