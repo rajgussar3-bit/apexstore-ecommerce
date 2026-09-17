@@ -95,7 +95,7 @@ export default function ControlDesk() {
     e.preventDefault();
     const cleanKey = recoveryCode.trim();
     if (cleanKey !== '892006' && cleanKey.toUpperCase() !== 'NOTTY-UDAIPUR') {
-      setForgotMsg({ text: 'Galat Recovery Code! Telegram receptionist number code (892006) use karein.', isError: true });
+      setForgotMsg({ text: 'Galat Security Code! Please sahi code enter karein.', isError: true });
       return;
     }
     if (!resetNewPin || resetNewPin.length < 4) {
@@ -302,7 +302,7 @@ export default function ControlDesk() {
             </form>
 
             <div style={{ marginTop: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
-              <span style={{ color: 'var(--text-dim)' }}>Default: <strong style={{ color: 'var(--accent-cyan)' }}>1234</strong></span>
+              <span style={{ color: 'var(--text-dim)' }}>🔒 Secured Desk</span>
               <button 
                 type="button" 
                 onClick={() => setShowForgotModal(true)}
@@ -322,26 +322,23 @@ export default function ControlDesk() {
             <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔑</div>
             <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.4rem' }}>Reset Admin PIN</h3>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1.2rem' }}>
-              Recovery Key enter karein apna naya password/PIN set karne ke liye.
+              Security Code enter karein apna naya password/PIN set karne ke liye.
             </p>
 
             <form onSubmit={handleForgotReset}>
               <div style={{ textAlign: 'left', marginBottom: '1rem' }}>
                 <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
-                  Master Recovery Code:
+                  Master Security Code:
                 </label>
                 <input 
-                  type="text" 
+                  type="password" 
                   className="form-control" 
-                  placeholder="Recovery Code (892006)"
+                  placeholder="Enter Security Code"
                   value={recoveryCode}
                   onChange={e => setRecoveryCode(e.target.value)}
                   style={{ marginTop: '0.3rem' }}
                   required
                 />
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
-                  Hint: Telegram username code <strong>892006</strong> ya <strong>NOTTY-UDAIPUR</strong>
-                </span>
               </div>
 
               <div style={{ textAlign: 'left', marginBottom: '1.2rem' }}>
