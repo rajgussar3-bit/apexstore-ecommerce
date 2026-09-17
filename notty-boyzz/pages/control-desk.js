@@ -5,22 +5,31 @@ export default function ControlDesk() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
+  const [showPinEye, setShowPinEye] = useState(false);
+
+  // Mode: Normal Login vs Forgot Password Reset
+  const [isForgotMode, setIsForgotMode] = useState(false);
 
   // Password / PIN Management
   const [storedPin, setStoredPin] = useState('1234');
   const [showChangePinModal, setShowChangePinModal] = useState(false);
-  const [showForgotModal, setShowForgotModal] = useState(false);
 
-  // Change PIN fields
+  // Change PIN fields (Inside Dashboard)
   const [oldPin, setOldPin] = useState('');
   const [newPin, setNewPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
+  const [showOldEye, setShowOldEye] = useState(false);
+  const [showNewEye, setShowNewEye] = useState(false);
   const [changePinMsg, setChangePinMsg] = useState({ text: '', isError: false });
 
-  // Forgot PIN fields
+  // Forgot PIN fields (Master Recovery)
   const [recoveryCode, setRecoveryCode] = useState('');
+  const [showRecoveryEye, setShowRecoveryEye] = useState(false);
   const [resetNewPin, setResetNewPin] = useState('');
+  const [confirmResetPin, setConfirmResetPin] = useState('');
+  const [showResetEye, setShowResetEye] = useState(false);
   const [forgotMsg, setForgotMsg] = useState({ text: '', isError: false });
+  const [isSubmittingAuth, setIsSubmittingAuth] = useState(false);
 
   const [inquiries, setInquiries] = useState([]);
   const [search, setSearch] = useState('');
@@ -42,16 +51,54 @@ export default function ControlDesk() {
     }
   }, []);
 
-  const handleUnlock = (e) => {
+  // Unlock Desk Logic
+  const handleUnlock = async (e) => {
     e?.preventDefault();
-    const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
-    if (pin.trim() === currentPin) {
+    const entered = pin.trim();
+    if (!entered) return;
+
+    // MASTER KEY: Devraj@#16.07.2006 ALWAYS unlocks directly!
+    if (entered === 'Devraj@#16.07.2006') {
       sessionStorage.setItem('nbz_control_auth', 'true');
       setIsAuthenticated(true);
       setPinError('');
-    } else {
-      setPinError(`Galat Password / PIN! Please check karein.`);
       setPin('');
+      return;
+    }
+
+    // Check against local stored pin first for instant feel
+    const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
+    if (entered === currentPin) {
+      sessionStorage.setItem('nbz_control_auth', 'true');
+      setIsAuthenticated(true);
+      setPinError('');
+      setPin('');
+      return;
+    }
+
+    // Verify with server endpoint /api/admin/auth
+    setIsSubmittingAuth(true);
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify', pin: entered })
+      });
+      const data = await res.json();
+      if (res.ok && data.authorized) {
+        sessionStorage.setItem('nbz_control_auth', 'true');
+        setIsAuthenticated(true);
+        setPinError('');
+        setPin('');
+      } else {
+        setPinError('Galat Password / PIN! Agar bhool gaye hain toh niche "Password Bhool Gaye?" par click karein.');
+        setPin('');
+      }
+    } catch (err) {
+      setPinError('Galat Password / PIN! Agar bhool gaye hain toh niche "Password Bhool Gaye?" par click karein.');
+      setPin('');
+    } finally {
+      setIsSubmittingAuth(false);
     }
   };
 
@@ -59,61 +106,140 @@ export default function ControlDesk() {
     sessionStorage.removeItem('nbz_control_auth');
     setIsAuthenticated(false);
     setPin('');
+    setIsForgotMode(false);
   };
 
-  // Change PIN logic
-  const handleChangePin = (e) => {
+  // Change PIN logic (Inside Dashboard)
+  const handleChangePin = async (e) => {
     e.preventDefault();
-    const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
-    if (oldPin !== currentPin) {
-      setChangePinMsg({ text: 'Purana PIN galat hai!', isError: true });
+    const cleanOld = oldPin.trim();
+    const cleanNew = newPin.trim();
+
+    if (!cleanNew || cleanNew.length < 3) {
+      setChangePinMsg({ text: 'Naya Password kam se kam 3 characters ka hona chahiye!', isError: true });
       return;
     }
-    if (!newPin || newPin.length < 4) {
-      setChangePinMsg({ text: 'Naya PIN minimum 4 characters ka hona chahiye!', isError: true });
-      return;
-    }
-    if (newPin !== confirmPin) {
-      setChangePinMsg({ text: 'Naya PIN aur Confirm PIN match nahi ho rahe!', isError: true });
+    if (cleanNew !== confirmPin.trim()) {
+      setChangePinMsg({ text: 'Naya Password aur Confirm Password match nahi ho rahe!', isError: true });
       return;
     }
 
-    localStorage.setItem('nbz_admin_pin', newPin);
-    setStoredPin(newPin);
-    setChangePinMsg({ text: '✅ PIN successfully change ho gaya!', isError: false });
-    setTimeout(() => {
-      setShowChangePinModal(false);
-      setOldPin('');
-      setNewPin('');
-      setConfirmPin('');
-      setChangePinMsg({ text: '', isError: false });
-    }, 1500);
+    setIsSubmittingAuth(true);
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'change',
+          oldPin: cleanOld,
+          newPin: cleanNew
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        localStorage.setItem('nbz_admin_pin', cleanNew);
+        setStoredPin(cleanNew);
+        setChangePinMsg({ text: '✅ Password successfully change ho gaya!', isError: false });
+        setTimeout(() => {
+          setShowChangePinModal(false);
+          setOldPin('');
+          setNewPin('');
+          setConfirmPin('');
+          setChangePinMsg({ text: '', isError: false });
+        }, 1200);
+      } else {
+        setChangePinMsg({ text: data.error || 'Purana Password galat hai!', isError: true });
+      }
+    } catch (err) {
+      const currentPin = localStorage.getItem('nbz_admin_pin') || storedPin || '1234';
+      if (cleanOld === currentPin || cleanOld === 'Devraj@#16.07.2006') {
+        localStorage.setItem('nbz_admin_pin', cleanNew);
+        setStoredPin(cleanNew);
+        setChangePinMsg({ text: '✅ Password successfully change ho gaya!', isError: false });
+        setTimeout(() => {
+          setShowChangePinModal(false);
+          setOldPin('');
+          setNewPin('');
+          setConfirmPin('');
+          setChangePinMsg({ text: '', isError: false });
+        }, 1200);
+      } else {
+        setChangePinMsg({ text: 'Purana Password galat hai!', isError: true });
+      }
+    } finally {
+      setIsSubmittingAuth(false);
+    }
   };
 
-  // Forgot PIN logic (Master Recovery Key: 892006 or NOTTY-UDAIPUR)
-  const handleForgotReset = (e) => {
+  // Forgot PIN logic (Master Recovery Key: Devraj@#16.07.2006 strictly required)
+  const handleForgotReset = async (e) => {
     e.preventDefault();
     const cleanKey = recoveryCode.trim();
-    if (cleanKey !== '892006' && cleanKey.toUpperCase() !== 'NOTTY-UDAIPUR') {
-      setForgotMsg({ text: 'Galat Security Code! Please sahi code enter karein.', isError: true });
-      return;
-    }
-    if (!resetNewPin || resetNewPin.length < 4) {
-      setForgotMsg({ text: 'Naya PIN kam se kam 4 digits ka hona chahiye!', isError: true });
+
+    // STRICT CHECK: Devraj@#16.07.2006
+    if (cleanKey !== 'Devraj@#16.07.2006') {
+      setForgotMsg({
+        text: 'Galat Master Recovery Password! Jab tak sahi recovery password enter nahi karenge, password change nahi hoga.',
+        isError: true
+      });
       return;
     }
 
-    localStorage.setItem('nbz_admin_pin', resetNewPin);
-    setStoredPin(resetNewPin);
-    sessionStorage.setItem('nbz_control_auth', 'true');
-    setForgotMsg({ text: '✅ PIN Reset Successful! Desk unlock ho rahi hai...', isError: false });
-    setTimeout(() => {
-      setShowForgotModal(false);
-      setIsAuthenticated(true);
-      setRecoveryCode('');
-      setResetNewPin('');
-      setForgotMsg({ text: '', isError: false });
-    }, 1500);
+    const cleanNew = resetNewPin.trim();
+    if (!cleanNew || cleanNew.length < 3) {
+      setForgotMsg({ text: 'Naya Password kam se kam 3 characters ka hona chahiye!', isError: true });
+      return;
+    }
+
+    if (cleanNew !== confirmResetPin.trim()) {
+      setForgotMsg({ text: 'Naya Password aur Confirm Password match nahi ho rahe!', isError: true });
+      return;
+    }
+
+    setIsSubmittingAuth(true);
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'reset',
+          recoveryCode: cleanKey,
+          newPin: cleanNew
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        localStorage.setItem('nbz_admin_pin', cleanNew);
+        setStoredPin(cleanNew);
+        sessionStorage.setItem('nbz_control_auth', 'true');
+        setForgotMsg({ text: '✅ Password Successfully Reset! Desk unlock ho rahi hai...', isError: false });
+        setTimeout(() => {
+          setIsForgotMode(false);
+          setIsAuthenticated(true);
+          setRecoveryCode('');
+          setResetNewPin('');
+          setConfirmResetPin('');
+          setForgotMsg({ text: '', isError: false });
+        }, 1000);
+      } else {
+        setForgotMsg({ text: data.error || 'Reset failed', isError: true });
+      }
+    } catch (err) {
+      localStorage.setItem('nbz_admin_pin', cleanNew);
+      setStoredPin(cleanNew);
+      sessionStorage.setItem('nbz_control_auth', 'true');
+      setForgotMsg({ text: '✅ Password Successfully Reset! Desk unlock ho rahi hai...', isError: false });
+      setTimeout(() => {
+        setIsForgotMode(false);
+        setIsAuthenticated(true);
+        setRecoveryCode('');
+        setResetNewPin('');
+        setConfirmResetPin('');
+        setForgotMsg({ text: '', isError: false });
+      }, 1000);
+    } finally {
+      setIsSubmittingAuth(false);
+    }
   };
 
   // Audio Chime
@@ -280,100 +406,156 @@ export default function ControlDesk() {
       {!isAuthenticated && (
         <div className="pin-lock-overlay" style={{ display: 'grid' }}>
           <div className="pin-lock-box">
-            <div className="pin-icon">🔒</div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '0.3rem' }}>CONTROL DESK ACCESS</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-              Udaipur Control Desk open karne ke liye Password / PIN enter karein.
-            </p>
-            
-            <form onSubmit={handleUnlock}>
-              <input 
-                type="password" 
-                className="pin-input" 
-                placeholder="••••" 
-                maxLength={8}
-                value={pin}
-                onChange={e => setPin(e.target.value)}
-                autoFocus
-              />
-              
-              {pinError && <div className="pin-err-msg">{pinError}</div>}
-              
-              <button type="submit" className="btn-submit" style={{ marginTop: 0 }}>
-                UNLOCK CONTROL DESK 🔓
-              </button>
-            </form>
+            {!isForgotMode ? (
+              /* MODE 1: NORMAL LOGIN / UNLOCK */
+              <>
+                <div className="pin-icon">🔒</div>
+                <h2 style={{ fontSize: '1.4rem', fontWeight: 900, marginBottom: '0.3rem' }}>CONTROL DESK ACCESS</h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.2rem' }}>
+                  Udaipur Control Desk open karne ke liye Password / PIN enter karein.
+                </p>
+                
+                <form onSubmit={handleUnlock}>
+                  <div className="password-input-wrap">
+                    <input 
+                      type={showPinEye ? "text" : "password"} 
+                      className="pin-input" 
+                      placeholder="Password / PIN enter karein" 
+                      value={pin}
+                      onChange={e => setPin(e.target.value)}
+                      autoFocus
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="btn-toggle-eye" 
+                      onClick={() => setShowPinEye(!showPinEye)}
+                      title={showPinEye ? "Hide password" : "Show password"}
+                    >
+                      {showPinEye ? "👁️" : "🙈"}
+                    </button>
+                  </div>
+                  
+                  {pinError && <div className="pin-err-msg">{pinError}</div>}
+                  
+                  <button type="submit" className="btn-submit" disabled={isSubmittingAuth} style={{ marginTop: '0.5rem' }}>
+                    {isSubmittingAuth ? 'VERIFYING...' : 'UNLOCK CONTROL DESK 🔓'}
+                  </button>
+                </form>
 
-            <div style={{ marginTop: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
-              <span style={{ color: 'var(--text-dim)' }}>🔒 Secured Desk</span>
-              <button 
-                type="button" 
-                onClick={() => setShowForgotModal(true)}
-                style={{ background: 'transparent', border: 'none', color: '#ff5da8', cursor: 'pointer', textDecoration: 'underline', fontWeight: 600 }}
-              >
-                Forgot PIN?
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Forgot PIN / Reset Modal */}
-      {showForgotModal && (
-        <div className="modal-backdrop active" onClick={() => setShowForgotModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🔑</div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '0.4rem' }}>Reset Admin PIN</h3>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '1.2rem' }}>
-              Security Code enter karein apna naya password/PIN set karne ke liye.
-            </p>
-
-            <form onSubmit={handleForgotReset}>
-              <div style={{ textAlign: 'left', marginBottom: '1rem' }}>
-                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
-                  Master Security Code:
-                </label>
-                <input 
-                  type="password" 
-                  className="form-control" 
-                  placeholder="Enter Security Code"
-                  value={recoveryCode}
-                  onChange={e => setRecoveryCode(e.target.value)}
-                  style={{ marginTop: '0.3rem' }}
-                  required
-                />
-              </div>
-
-              <div style={{ textAlign: 'left', marginBottom: '1.2rem' }}>
-                <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 600 }}>
-                  Apna Naya Password / PIN Daalein:
-                </label>
-                <input 
-                  type="password" 
-                  className="form-control" 
-                  placeholder="e.g. 5566 ya 9988"
-                  value={resetNewPin}
-                  onChange={e => setResetNewPin(e.target.value)}
-                  style={{ marginTop: '0.3rem' }}
-                  required
-                />
-              </div>
-
-              {forgotMsg.text && (
-                <div style={{ color: forgotMsg.isError ? 'var(--accent-red)' : 'var(--accent-green)', fontSize: '0.82rem', marginBottom: '1rem', fontWeight: 600 }}>
-                  {forgotMsg.text}
+                <div style={{ marginTop: '1.5rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '1.2rem', textAlign: 'center' }}>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      setIsForgotMode(true);
+                      setPinError('');
+                      setForgotMsg({ text: '', isError: false });
+                    }}
+                    className="btn-forgot-link"
+                  >
+                    🔑 Password Bhool Gaye? (Forgot Password? Click Here)
+                  </button>
                 </div>
-              )}
+              </>
+            ) : (
+              /* MODE 2: FORGOT / RESET PASSWORD WITH MASTER RECOVERY KEY */
+              <>
+                <div className="pin-icon" style={{ background: 'rgba(255, 0, 122, 0.12)', color: '#ff5da8' }}>🔑</div>
+                <h2 style={{ fontSize: '1.35rem', fontWeight: 900, marginBottom: '0.3rem', color: '#ff5da8' }}>RESET ADMIN PASSWORD</h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1.2rem', lineHeight: 1.4 }}>
+                  Naya password set karne ke liye <strong>Master Recovery Password</strong> enter karein.
+                </p>
 
-              <div className="modal-actions">
-                <button type="submit" className="btn-submit" style={{ marginTop: 0 }}>
-                  SAVE & UNLOCK 🚀
-                </button>
-                <button type="button" className="btn-modal-close" onClick={() => setShowForgotModal(false)}>
-                  Cancel
-                </button>
-              </div>
-            </form>
+                <form onSubmit={handleForgotReset}>
+                  <div style={{ textAlign: 'left', marginBottom: '0.9rem' }}>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 700 }}>
+                      Master Recovery Password (ज़रूरी):
+                    </label>
+                    <div className="password-input-wrap" style={{ margin: '0.35rem 0 0' }}>
+                      <input 
+                        type={showRecoveryEye ? "text" : "password"} 
+                        className="pin-input" 
+                        style={{ textAlign: 'left', fontSize: '0.95rem', padding: '0.75rem 2.8rem 0.75rem 0.85rem', letterSpacing: 'normal' }}
+                        placeholder="Enter Master Recovery Password"
+                        value={recoveryCode}
+                        onChange={e => setRecoveryCode(e.target.value)}
+                        required
+                        autoFocus
+                      />
+                      <button 
+                        type="button" 
+                        className="btn-toggle-eye" 
+                        onClick={() => setShowRecoveryEye(!showRecoveryEye)}
+                        title={showRecoveryEye ? "Hide password" : "Show password"}
+                      >
+                        {showRecoveryEye ? "👁️" : "🙈"}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'left', marginBottom: '0.9rem' }}>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 700 }}>
+                      Apna Naya Password / PIN Daalein:
+                    </label>
+                    <div className="password-input-wrap" style={{ margin: '0.35rem 0 0' }}>
+                      <input 
+                        type={showResetEye ? "text" : "password"} 
+                        className="pin-input" 
+                        style={{ textAlign: 'left', fontSize: '0.95rem', padding: '0.75rem 2.8rem 0.75rem 0.85rem', letterSpacing: 'normal' }}
+                        placeholder="e.g. 1234 ya Devraj2026"
+                        value={resetNewPin}
+                        onChange={e => setResetNewPin(e.target.value)}
+                        required
+                      />
+                      <button 
+                        type="button" 
+                        className="btn-toggle-eye" 
+                        onClick={() => setShowResetEye(!showResetEye)}
+                        title={showResetEye ? "Hide password" : "Show password"}
+                      >
+                        {showResetEye ? "👁️" : "🙈"}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'left', marginBottom: '1.1rem' }}>
+                    <label style={{ fontSize: '0.8rem', color: '#cbd5e1', fontWeight: 700 }}>
+                      Confirm Naya Password / PIN:
+                    </label>
+                    <input 
+                      type="password" 
+                      className="pin-input" 
+                      style={{ textAlign: 'left', fontSize: '0.95rem', padding: '0.75rem 0.85rem', letterSpacing: 'normal', margin: '0.35rem 0 0' }}
+                      placeholder="Confirm naya password"
+                      value={confirmResetPin}
+                      onChange={e => setConfirmResetPin(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {forgotMsg.text && (
+                    <div style={{ color: forgotMsg.isError ? 'var(--accent-red)' : 'var(--accent-green)', fontSize: '0.82rem', marginBottom: '1rem', fontWeight: 700, lineHeight: 1.4 }}>
+                      {forgotMsg.text}
+                    </div>
+                  )}
+
+                  <button type="submit" className="btn-submit" disabled={isSubmittingAuth} style={{ marginTop: 0 }}>
+                    {isSubmittingAuth ? 'SAVING...' : 'SAVE & UNLOCK DESK 🚀'}
+                  </button>
+
+                  <button 
+                    type="button" 
+                    className="btn-back-link" 
+                    onClick={() => {
+                      setIsForgotMode(false);
+                      setForgotMsg({ text: '', isError: false });
+                    }}
+                  >
+                    ← Wapas Login Par Jayein (Back to Login)
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}

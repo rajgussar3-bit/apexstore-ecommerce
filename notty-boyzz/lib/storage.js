@@ -127,3 +127,39 @@ export async function saveInquiries(data) {
 
   return memoryStore;
 }
+
+let memoryPin = '1234';
+
+export async function getAdminPin() {
+  try {
+    const res = await fetch(`https://gx5ptjagypr8vhc1.public.blob.vercel-storage.com/admin_pin.json?download=1&nocache=${Date.now()}`, {
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.pin) {
+        memoryPin = String(data.pin);
+        return memoryPin;
+      }
+    }
+  } catch (e) {}
+
+  return memoryPin || '1234';
+}
+
+export async function saveAdminPin(newPin) {
+  memoryPin = String(newPin);
+  try {
+    const { put } = await import('@vercel/blob');
+    await put('admin_pin.json', JSON.stringify({ pin: memoryPin, updatedAt: new Date().toISOString() }), {
+      access: 'public',
+      storeId: STORE_ID,
+      addRandomSuffix: false,
+      allowOverwrite: true
+    });
+  } catch (e) {
+    console.warn('[STORAGE] Failed to persist admin pin to blob:', e);
+  }
+  return memoryPin;
+}
+

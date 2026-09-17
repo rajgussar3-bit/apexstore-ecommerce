@@ -519,37 +519,50 @@
   border: 1px solid var(--border-glow);
   box-shadow: 0 0 40px rgba(0, 242, 254, 0.2);
   border-radius: var(--radius-lg);
-  padding: 2.5rem;
+  padding: 2.2rem 1.8rem;
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   text-align: center;
+  position: relative;
+  animation: fadeInModal 0.25s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .pin-icon {
-  width: 60px;
-  height: 60px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   background: rgba(0, 242, 254, 0.1);
   color: var(--accent-cyan);
   display: grid;
   place-items: center;
-  font-size: 1.8rem;
-  margin: 0 auto 1.2rem;
+  font-size: 1.7rem;
+  margin: 0 auto 1rem;
+}
+
+.password-input-wrap {
+  position: relative;
+  width: 100%;
+  margin: 0.8rem 0;
 }
 
 .pin-input {
   width: 100%;
-  background: rgba(4, 7, 13, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(4, 7, 13, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--radius-sm);
-  padding: 0.85rem;
-  font-size: 1.4rem;
+  padding: 0.85rem 3rem 0.85rem 1rem;
+  font-size: 1.15rem;
   text-align: center;
-  letter-spacing: 6px;
+  letter-spacing: 1.5px;
   color: var(--accent-cyan);
-  font-weight: 800;
-  margin: 1.2rem 0;
+  font-weight: 700;
   outline: none;
+  transition: var(--transition);
 }
 
 .pin-input:focus {
@@ -557,11 +570,76 @@
   box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.25);
 }
 
+.btn-toggle-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: var(--transition);
+}
+
+.btn-toggle-eye:hover {
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.btn-forgot-link {
+  background: transparent;
+  border: none;
+  color: #ff5da8;
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: underline;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-forgot-link:hover {
+  color: #ffa1cc;
+  text-shadow: 0 0 8px rgba(255, 93, 168, 0.6);
+  background: rgba(255, 93, 168, 0.08);
+}
+
+.btn-back-link {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.6rem;
+  transition: var(--transition);
+}
+
+.btn-back-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
 .pin-err-msg {
   color: var(--accent-red);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   min-height: 1.2rem;
   margin-bottom: 0.8rem;
+  font-weight: 600;
 }
 
 /* ==========================================================================
