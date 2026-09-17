@@ -1,0 +1,17 @@
+{
+  "name": "notty-boyzz",
+  "version": "1.0.0",
+  "description": "Notty Boyzz - Official Website & Live Control Desk (Next.js for Vercel)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "next": "^16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

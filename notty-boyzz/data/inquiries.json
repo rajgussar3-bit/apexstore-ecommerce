@@ -1,0 +1,42 @@
+[
+  {
+    "id": "NBZ-8083",
+    "name": "Pooja Verma",
+    "age": 24,
+    "mobile": "9811223344",
+    "whatsapp": "9811223344",
+    "category": "Romantic & Loving Companion",
+    "city": "Delhi NCR",
+    "note": "Looking for a gentle bodybuilder date",
+    "clientType": "Female Client",
+    "status": "New",
+    "createdAt": "2026-09-17T07:01:47.794Z",
+    "formattedDate": "17 Sept 2026, 12:31 pm"
+  },
+  {
+    "id": "NBZ-2570",
+    "name": "Devraj Gusar",
+    "age": 19,
+    "mobile": "8824382600",
+    "whatsapp": "8824382600",
+    "category": "Merchandise & Drops",
+    "city": "Udaipur",
+    "note": "",
+    "status": "New",
+    "createdAt": "2026-09-17T06:54:43.374Z",
+    "formattedDate": "17 Sept 2026, 12:24 pm"
+  },
+  {
+    "id": "NBZ-1001",
+    "name": "Arjun Malhotra",
+    "age": 21,
+    "mobile": "9876543210",
+    "whatsapp": "9876543210",
+    "category": "VIP Clan Member",
+    "city": "Delhi NCR",
+    "note": "Excited to join Notty Boyzz clan!",
+    "status": "New",
+    "createdAt": "2026-09-17T11:00:00.000Z",
+    "formattedDate": "17 Sep 2026, 11:00 AM"
+  }
+]

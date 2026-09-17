@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notty Boyzz - Control Desk (Admin Portal)</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/control.css">
+</head>
+<body>
+
+  <!-- Ambient Glow -->
+  <div class="ambient-glow">
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+  </div>
+
+  <!-- PIN Lock Screen Overlay -->
+  <div class="pin-lock-overlay" id="pinOverlay">
+    <div class="pin-lock-box">
+      <div class="pin-icon">🔒</div>
+      <h2 style="font-size: 1.4rem; font-weight: 900; margin-bottom: 0.3rem;">CONTROL DESK ACCESS</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">
+        Security PIN enter karein dashboard open karne ke liye.
+      </p>
+      
+      <input 
+        type="password" 
+        id="pinInput" 
+        class="pin-input" 
+        placeholder="••••" 
+        maxlength="6"
+        autocomplete="off"
+      >
+      
+      <div class="pin-err-msg" id="pinErrMsg"></div>
+      
+      <button type="button" id="pinSubmitBtn" class="btn-submit" style="margin-top: 0;">
+        UNLOCK CONTROL DESK 🔓
+      </button>
+
+      <div style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-dim);">
+        Default PIN: <strong style="color: var(--accent-cyan);">1234</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control Desk Header -->
+  <header class="control-header">
+    <div class="container control-nav">
+      <div class="control-title-wrap">
+        <a href="index.html" class="brand-logo" title="View Public Website">
+          <div class="logo-badge" style="width: 38px; height: 38px; font-size: 1.1rem;">NB</div>
+          <div class="brand-name" style="font-size: 1.3rem;">
+            NOTTY BOYZZ
+            <span class="brand-sub">CONTROL DESK</span>
+          </div>
+        </a>
+        <span class="desk-tag">HQ ADMIN</span>
+        <div class="live-indicator" id="liveIndicator">
+          <span class="pulse"></span>
+          LIVE - Connected
+        </div>
+      </div>
+
+      <div class="control-actions">
+        <button type="button" class="btn-ctrl" id="btnSoundToggle" title="Audio Alert Toggle">
+          🔔 Alert Sound: ON
+        </button>
+        <button type="button" class="btn-ctrl" id="btnRefresh" title="Refresh Feed">
+          🔄 Refresh
+        </button>
+        <button type="button" class="btn-ctrl btn-ctrl-primary" id="btnExportCsv" title="Export Inquiries to Excel/CSV">
+          📥 Export CSV
+        </button>
+        <a href="index.html" target="_blank" class="btn-ctrl" title="Open Customer Website in New Tab">
+          🌐 Public Site
+        </a>
+        <button type="button" class="btn-ctrl btn-ctrl-danger" id="btnLogout" title="Lock Control Desk">
+          🔒 Lock
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Content -->
+  <main class="container">
+    
+    <!-- Stats Cards Summary -->
+    <section class="stats-grid">
+      <div class="stat-card card-cyan">
+        <div>
+          <div class="stat-val" id="statTotalLeads">0</div>
+          <div class="stat-label">Total Inquiries</div>
+        </div>
+        <div class="stat-icon-wrap">📋</div>
+      </div>
+
+      <div class="stat-card card-pink">
+        <div>
+          <div class="stat-val" id="statNewLeads" style="color: #ff007a;">0</div>
+          <div class="stat-label">New / Action Needed</div>
+        </div>
+        <div class="stat-icon-wrap">⚡</div>
+      </div>
+
+      <div class="stat-card card-purple">
+        <div>
+          <div class="stat-val" id="statContacted" style="color: #c084fc;">0</div>
+          <div class="stat-label">Contacted Customers</div>
+        </div>
+        <div class="stat-icon-wrap">📞</div>
+      </div>
+
+      <div class="stat-card card-green">
+        <div>
+          <div class="stat-val" id="statTodayLeads" style="color: #34d399;">0</div>
+          <div class="stat-label">Today's Fresh Leads</div>
+        </div>
+        <div class="stat-icon-wrap">🚀</div>
+      </div>
+    </section>
+
+    <!-- Filter & Search Toolbar -->
+    <section class="filter-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          id="leadSearch" 
+          placeholder="Search by customer name, mobile, whatsapp, ref ID..."
+        >
+      </div>
+
+      <div class="filter-actions">
+        <label for="statusFilter" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700;">
+          Status Filter:
+        </label>
+        <select id="statusFilter" class="filter-select">
+          <option value="ALL">All Statuses (Sabhi)</option>
+          <option value="New">🟡 New Leads Only</option>
+          <option value="Contacted">🔵 Contacted Only</option>
+          <option value="Confirmed">🟢 Confirmed VIP Only</option>
+          <option value="Rejected">🔴 Rejected Only</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Inquiries Live Data Table -->
+    <section class="table-card">
+      <div class="table-responsive">
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Ref ID</th>
+              <th>Customer Details</th>
+              <th>Direct Call (Mobile)</th>
+              <th>Direct WhatsApp</th>
+              <th>Purpose & Notes</th>
+              <th>Submitted Time</th>
+              <th>Status Action</th>
+              <th>Del</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-leads" id="emptyState" style="display: none;">
+        <div class="icon">📭</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.3rem;">Koi Enquiry Nahi Mili</h3>
+        <p style="font-size: 0.85rem;">Nayi inquiries aane par yahan automatically real-time me update ho jayengi.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Real-Time Incoming Inquiry Toast Notification -->
+  <aside class="live-toast" id="liveToast" aria-live="polite">
+    <div class="toast-bell">🔔</div>
+    <div class="toast-info">
+      <h4 id="toastTitle">⚡ Nayi Enquiry Ayi!</h4>
+      <p id="toastSubtitle">Customer ne form submit kiya hai.</p>
+    </div>
+  </aside>
+
+  <script src="js/control.js"></script>
+</body>
+</html>
