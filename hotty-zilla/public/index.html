@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOTTY ZILLA - VIP Friendship, Video Shorts &amp; SPA Course Club</title>
+  <meta name="description" content="Hotty Zilla - Watch exclusive video shorts, unlock full uncut HD videos with VIP memberships, download the professional SPA course PDF, and fix meetings with friends.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <aside class="announcement-bar" id="announcementBar">
+    👑 HOTTY ZILLA VIP LOUNGE: Unlimited Video Shorts Free! Watch Full HD Videos &amp; Fix Meetings with VIP Membership!
+  </aside>
+
+  <!-- Site Navigation Header (NO ADMIN LINK) -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="/" class="brand-logo">
+        <span class="brand-icon">🔥</span>
+        <span class="brand-text">HOTTY <span>ZILLA</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#shorts-section" class="nav-link">Video Shorts</a></li>
+        <li><a href="#memberships-section" class="nav-link">VIP Memberships</a></li>
+        <li><a href="#spa-section" class="nav-link">SPA Course PDF</a></li>
+        <li><a href="#friends-section" class="nav-link">Fix a Meeting</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div id="userHeaderAuth" style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn btn-outline btn-sm" id="headerLoginBtn" onclick="openCustomerLoginModal()">
+            👤 Log In
+          </button>
+          <button class="btn btn-outline btn-sm" id="headerProfileBtn" style="display: none; border-color: var(--cyan); color: #fff;" onclick="openCustomerProfileModal()">
+            👤 <span id="headerUserName">My Profile</span>
+          </button>
+        </div>
+        <a href="/my-library.html" class="btn btn-gold btn-sm">
+          <span>👑</span> My VIP Lounge
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="badge-tag">
+        <span>✨</span> EXCLUSIVE VIP FRIENDSHIP &amp; ENTERTAINMENT CLUB
+      </div>
+      <h1 class="hero-title">
+        Naye Doston se Baatein, Meeting Fix &amp;<br>
+        VIP Video Shorts — <span class="glow-fire">Hotty Zilla</span>
+      </h1>
+      <p class="hero-subtitle">
+        Short video teaser clips free me dekhein. Pura uncut HD video dekhne ke liye single video unlock karein ya VIP Membership lein, professional SPA course PDF paayein aur naye doston se meeting fix karein!
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#memberships-section" class="btn btn-primary btn-lg">
+          <span>👑</span> Join VIP Club (From ₹399/mo)
+        </a>
+        <a href="#shorts-section" class="btn btn-gold btn-lg">
+          <span>🎥</span> Watch Video Shorts Free
+        </a>
+        <a href="#friends-section" class="btn btn-outline btn-lg">
+          <span>🤝</span> Fix a Meeting
+        </a>
+      </div>
+
+      <!-- Trust Badges -->
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; color: var(--text-muted); font-size: 0.9rem;">
+        <div>🔥 100% Confidential &amp; Safe</div>
+        <div>⚡ Instant UPI &amp; Demo Activation</div>
+        <div>👑 All-Access VIP Memberships</div>
+        <div>💆 Certified SPA Guide</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOP DYNAMIC CATEGORIES SECTION -->
+  <section class="categories-bar-section" id="categories-section">
+    <div class="container">
+      <div class="categories-bar-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.1rem;">🏷️</span>
+          <span style="font-weight: 800; font-size: 1.05rem; color: #fff;">Trending Categories</span>
+        </div>
+        <span id="activeCategoryName" style="font-size: 0.85rem; color: var(--gold); font-weight: 600;">Showing All Videos</span>
+      </div>
+      <div class="categories-chips-scroll" id="categoriesContainer">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 1: VIDEO SHORTS & REELS FEED -->
+  <section class="section" id="shorts-section" style="background: rgba(15, 19, 29, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge-tag">🎥 VIDEO SHORTS &amp; REELS</div>
+        <h2 class="section-title">Exclusive Video Shorts (Free Teasers)</h2>
+        <p class="section-subtitle">
+          Choti clip (short teaser) sabhi ke liye free hai! Pura uncut HD video dekhne ke liye single video unlock karein ya VIP Membership lein.
+        </p>
+      </div>
+
+      <!-- Shorts Grid -->
+      <div class="shorts-grid" id="shortsContainer">
+        <!-- Rendered via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: VIP MEMBERSHIP PACKAGES -->
+  <section class="section" id="memberships-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge-tag">👑 VIP ALL-ACCESS PASS</div>
+        <h2 class="section-title">VIP Membership Plans</h2>
+        <p class="section-subtitle">
+          Har video ke alag paise dene ki zarurat nahi! Membership lein aur sabhi videos, SPA guide aur meeting priority ka unlimited access paayein.
+        </p>
+      </div>
+
+      <div class="memberships-grid" id="membershipContainer">
+        <!-- Rendered via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SPA COURSE & WELLNESS PDF -->
+  <section class="section" id="spa-section" style="background: rgba(15, 19, 29, 0.5);">
+    <div class="container">
+      <div class="spa-feature-card" id="spaCourseCard">
+        <div>
+          <div class="badge-tag" style="background: rgba(255, 183, 3, 0.15); color: var(--gold); border-color: rgba(255, 183, 3, 0.3);">
+            💆 EXCLUSIVE WELLNESS GUIDE
+          </div>
+          <h2 style="font-size: 2.1rem; font-weight: 800; line-height: 1.25; margin-bottom: 14px;" id="spaCardTitle">
+            HOTTY ZILLA - Complete SPA &amp; Wellness Practical Guide (PDF)
+          </h2>
+          <p style="color: #cbd5e1; font-size: 0.98rem; margin-bottom: 20px;" id="spaCardDesc">
+            Ye professional SPA aur body relaxation ka complete guide hai jisme aroma essential oils, pressure points, massage techniques, client comfort, aur private session etiquette step-by-step sikhaye gaye hain.
+          </p>
+
+          <div style="background: rgba(0, 0, 0, 0.35); border-left: 3px solid var(--gold); padding: 12px 16px; margin-bottom: 24px; font-size: 0.88rem; color: #e2e8f0;">
+            <strong>📄 Book Highlights:</strong> 120 Pages • Instant In-Browser Reader • High-Quality Printable PDF Download • Swedish &amp; Aroma Techniques.
+          </div>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <button class="btn btn-gold btn-lg" onclick="openCheckout('spa', 'spa-pro-handbook')">
+              <span>📥</span> Buy &amp; Download SPA PDF (₹299)
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="openSpaSampleModal()">
+              <span>👁️</span> Read Sample Excerpt
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: center; background: rgba(0, 0, 0, 0.4); padding: 30px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="font-size: 4rem; margin-bottom: 10px;">💆</div>
+          <div style="color: var(--text-muted); font-size: 0.85rem;">SPECIAL OFFER</div>
+          <div style="font-size: 2.8rem; font-weight: 900; color: var(--gold); margin: 6px 0;" id="spaCardPrice">₹299</div>
+          <div style="font-size: 1.1rem; color: var(--text-dim); text-decoration: line-through; margin-bottom: 16px;" id="spaCardOrigPrice">₹999</div>
+          <div style="font-size: 0.82rem; color: var(--emerald); font-weight: 700;">
+            ✓ Instant Download Link Unlocked in VIP Lounge
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: MEET NEW FRIENDS & FIX A MEETING -->
+  <section class="section" id="friends-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge-tag">🤝 MEET &amp; HANGOUT</div>
+        <h2 class="section-title">Naye Doston se Connect Karein &amp; Meeting Fix Karein</h2>
+        <p class="section-subtitle">
+          Coffee dates, dinner, long drives ya friendly conversations ke liye apne pasandeeda friend ke sath meeting request submit karein!
+        </p>
+      </div>
+
+      <div class="friends-grid" id="friendsContainer">
+        <!-- Rendered via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (NO ADMIN LINK) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 14px;">
+            <span class="brand-icon">🔥</span>
+            <span class="brand-text">HOTTY <span>ZILLA</span></span>
+          </div>
+          <p style="color: var(--text-dim); max-width: 380px; margin-bottom: 16px;">
+            Premium VIP friendship lounge, exclusive video shorts, full uncut episodes, professional SPA wellness guide and meeting coordination.
+          </p>
+          <a href="/my-library.html" class="btn btn-gold btn-sm">👑 VIP Member Lounge</a>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 14px; font-size: 1rem;">Club Sections</h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.9rem;">
+            <li><a href="#shorts-section" style="color: var(--text-dim); text-decoration: none;">Video Shorts Feed</a></li>
+            <li><a href="#memberships-section" style="color: var(--text-dim); text-decoration: none;">VIP Memberships (1M, 3M, 6M, 12M)</a></li>
+            <li><a href="#spa-section" style="color: var(--text-dim); text-decoration: none;">SPA Course PDF</a></li>
+            <li><a href="#friends-section" style="color: var(--text-dim); text-decoration: none;">Fix a Meeting</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 14px; font-size: 1rem;">Direct Assistance</h4>
+          <p style="color: var(--text-dim); font-size: 0.88rem; margin-bottom: 8px;">
+            📞 WhatsApp VIP Support: +91 98765 43210
+          </p>
+          <p style="color: var(--text-dim); font-size: 0.88rem; margin-bottom: 12px;">
+            📧 Email: vip@hottyzilla.com
+          </p>
+          <div style="font-size: 0.8rem; color: var(--gold);">
+            100% Private, Secure &amp; Confidential
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 HOTTY ZILLA VIP CLUB. All Rights Reserved. For mature audiences only.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp VIP Button -->
+  <a href="https://wa.me/919876543210?text=Hi%20Hotty%20Zilla,%20mujhe%20VIP%20membership%20aur%20meeting%20fix%20ke%20bare%20me%20janna%20hai" 
+     target="_blank" 
+     class="floating-wa-btn" 
+     title="VIP WhatsApp Support">
+    💬
+  </a>
+
+  <!-- ==============================================
+       MODALS
+       ============================================== -->
+
+  <!-- 1. VIDEO SHORTS TEASER PLAYER MODAL -->
+  <div class="modal-overlay" id="shortPlayerModal">
+    <div class="modal-dialog" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title" id="shortModalTitle">🎥 Video Short Teaser</div>
+        <button class="modal-close" onclick="closeShortPlayer()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 16px;">
+        <div class="video-player-wrapper">
+          <video id="shortVideoElement" controls playsinline preload="metadata">
+            <source src="" type="video/mp4">
+          </video>
+        </div>
+        <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Short clip khatam hone ke baad:</div>
+            <div style="font-weight: 700; color: #fff;">Pura Uncut Full HD Video Dekhein</div>
+          </div>
+          <button class="btn btn-gold" id="shortModalFullBtn">
+            🔓 Unlock Full HD Video
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PAYWALL MODAL (When clicking Full Video without Access) -->
+  <div class="modal-overlay" id="paywallModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <div class="modal-title" style="color: var(--gold);">🔒 Unlock Full Uncut HD Video</div>
+        <button class="modal-close" onclick="closeModal('paywallModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="font-size: 3rem; margin-bottom: 6px;">👑</div>
+          <h3 id="paywallVideoTitle" style="font-size: 1.3rem; margin-bottom: 6px;">Video Title</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Is video ka pura uncut version dekhne ke liye niche diye gaye options me se chunein:
+          </p>
+        </div>
+
+        <!-- Option A: Single Video -->
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 700; color: #fff;">Sirf Ye Ek Video Khareedein</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Lifetime Full HD access for this video</div>
+          </div>
+          <button class="btn btn-outline" id="paywallSingleBtn">
+            Pay <span id="paywallSinglePrice">₹99</span>
+          </button>
+        </div>
+
+        <!-- Option B: VIP Membership (Recommended) -->
+        <div style="background: linear-gradient(135deg, rgba(255, 65, 108, 0.12) 0%, rgba(251, 133, 0, 0.1) 100%); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 18px; text-align: center; margin-bottom: 20px;">
+          <span class="badge-pill badge-fire" style="margin-bottom: 8px; display: inline-block;">⭐ BEST VALUE RECOMMENDED</span>
+          <div style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 4px;">
+            VIP Club Membership (From ₹399/mo)
+          </div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 16px;">
+            Har video ke alag paise mat dijiye! VIP lekar <strong>SAARI FULL VIDEOS</strong> bina kisi rukawat ke dekhein.
+          </p>
+          <a href="#memberships-section" class="btn btn-gold" onclick="closeModal('paywallModal')">
+            👑 Explore All VIP Plans (1M, 3M, 6M, 12M)
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. FIX A MEETING REQUEST MODAL -->
+  <div class="modal-overlay" id="meetingModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">🤝 Fix a Meeting / Chat Request</div>
+        <button class="modal-close" onclick="closeModal('meetingModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="meetingRequestForm" onsubmit="handleMeetingSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Selected Friend / Host</label>
+            <input type="text" id="meetFriendName" class="form-input" readonly style="background: rgba(255,255,255,0.05); color: var(--gold); font-weight: 700;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Aapka Poora Naam (Full Name) *</label>
+            <input type="text" id="meetCustomerName" class="form-input" placeholder="e.g. Rahul Verma" required minlength="3">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Aapka Mobile Number (10 Digits) *</label>
+            <input type="tel" id="meetMobile" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Aapka Shehar (City) *</label>
+            <input type="text" id="meetCity" class="form-input" placeholder="e.g. Delhi, Mumbai, Bangalore" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred Day / Time</label>
+            <input type="text" id="meetTime" class="form-input" placeholder="e.g. This Weekend Evening, Saturday 6 PM">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Message / Meeting Purpose (Optional)</label>
+            <textarea id="meetMsg" class="form-textarea" rows="2" placeholder="Coffee date, dinner, friendly casual hangout..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="meetSubmitBtn">
+            <span>💬</span> Submit Meeting Request
+          </button>
+          <div style="font-size: 0.78rem; color: var(--text-dim); text-align: center; margin-top: 10px;">
+            * Humari team aapko WhatsApp par contact karke meeting coordinate karegi.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. GENERAL CHECKOUT & PAYMENT MODAL -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title" id="checkoutModalTitle">🛒 VIP Checkout</div>
+        <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: rgba(255, 65, 108, 0.08); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 700; color: #fff; font-size: 1.05rem;" id="checkoutItemTitle">Item Title</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);" id="checkoutItemType">VIP Access</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.6rem; font-weight: 900; color: var(--gold);" id="checkoutItemPrice">₹399</div>
+          </div>
+        </div>
+
+        <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Aapka Naam (Full Name) *</label>
+            <input type="text" id="buyerName" class="form-input" placeholder="e.g. Rahul Sharma" required minlength="3">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mobile Number (10 Digits) *</label>
+            <input type="tel" id="buyerMobile" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">WhatsApp Number *</label>
+            <input type="tel" id="buyerWhatsapp" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
+          </div>
+
+          <!-- Payment Mode Selection -->
+          <div style="margin: 20px 0 14px;">
+            <label class="form-label">Payment Mode Chunein:</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <button type="button" class="btn btn-outline" id="modeUpiBtn" style="border-color: var(--gold);" onclick="selectPayMode('upi_qr')">
+                📱 UPI QR Code
+              </button>
+              <button type="button" class="btn btn-primary" id="modeDemoBtn" onclick="selectPayMode('instant_demo')">
+                ⚡ Instant Test Pay
+              </button>
+            </div>
+          </div>
+
+          <!-- UPI QR Box -->
+          <div id="upiPayBox" style="display: none; background: rgba(10, 12, 18, 0.85); border: 1px dashed rgba(255, 183, 3, 0.4); border-radius: var(--radius-md); padding: 20px; text-align: center; margin: 18px 0;">
+            <div style="font-weight: 700; color: #fff; margin-bottom: 6px;">Scan &amp; Pay with Any UPI App</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">GPay, PhonePe, Paytm, BHIM or Cred</div>
+
+            <div style="background: #fff; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 12px;">
+              <img id="dynamicQrImage" src="" alt="UPI QR Code" style="width: 170px; height: 170px; display: block;">
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.08); padding: 6px 14px; border-radius: 20px; font-family: monospace; color: var(--gold); cursor: pointer;" onclick="copyUpiId()">
+                <span id="displayUpiId">hottyzilla@upi</span> 📋 Copy
+              </span>
+            </div>
+
+            <div class="form-group" style="text-align: left;">
+              <label class="form-label">Payment ke baad 12-digit UTR / Ref No. daalein *</label>
+              <input type="text" id="buyerUtr" class="form-input" placeholder="e.g. 428901849201" minlength="6">
+            </div>
+          </div>
+
+          <!-- Instant Demo Box -->
+          <div id="demoPayBox" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; font-size: 0.88rem; color: #a7f3d0;">
+            <strong>⚡ Instant Test Activation:</strong> Bina real transaction ke turant test karne aur VIP lounge me access unlock karne ke liye ye option use karein.
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button type="submit" class="btn btn-gold btn-lg" style="flex: 1;" id="checkoutSubmitBtn">
+              <span>🚀</span> Complete &amp; Unlock VIP
+            </button>
+            <button type="button" class="btn btn-outline" onclick="closeModal('checkoutModal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SPA SAMPLE MODAL -->
+  <div class="modal-overlay" id="spaSampleModal">
+    <div class="modal-dialog" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title">💆 SPA Practical Guide - Sample Excerpt</div>
+        <button class="modal-close" onclick="closeModal('spaSampleModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: rgba(255,255,255,0.04); padding: 18px; border-radius: 8px; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;" id="spaSampleText">
+          Loading sample...
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem; color: var(--text-dim);">Pura 120-page PDF unlock karein.</span>
+          <button class="btn btn-gold" onclick="closeModal('spaSampleModal'); openCheckout('spa', 'spa-pro-handbook')">
+            Buy SPA PDF (₹299)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. CUSTOMER EMAIL LOGIN MODAL -->
+  <div class="modal-overlay" id="customerLoginModal">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="modal-title">👤 Customer Email Login</div>
+        <button class="modal-close" onclick="closeModal('customerLoginModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <div style="font-size: 2.8rem; margin-bottom: 8px;">💌</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 6px;">Apne Email se Login Karein</h3>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
+            Bina kisi password ke instant login karein! Login karke aap apni profile (Name, Age) customize kar sakte hain aur membership le sakte hain.
+          </p>
+        </div>
+
+        <form id="customerLoginForm" onsubmit="handleCustomerLoginSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" id="custEmailInput" class="form-input" placeholder="e.g. rahul@gmail.com" required autofocus>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="loginSubmitBtn">
+            <span>⚡</span> Login / Create Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. CUSTOMER PROFILE MODAL -->
+  <div class="modal-overlay" id="customerProfileModal">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">👤 My Customer Profile</div>
+        <button class="modal-close" onclick="closeModal('customerProfileModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- User Identifier Badge -->
+        <div style="background: rgba(255, 65, 108, 0.08); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Logged In Account</div>
+            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="profEmailDisplay">user@example.com</div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="border-color: var(--rose); color: var(--rose);" onclick="customerLogout()">
+            🚪 Logout
+          </button>
+        </div>
+
+        <!-- Membership Status Box -->
+        <div id="profMembershipCard" style="background: rgba(255, 183, 3, 0.08); border: 1px solid rgba(255, 183, 3, 0.3); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 700; color: var(--gold); font-size: 0.92rem;">👑 VIP Membership Status</div>
+            <span id="profVipBadge" class="badge-pill badge-gold">Checking...</span>
+          </div>
+          <p id="profVipMessage" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
+            Membership lekar sabhi video shorts, full uncut HD videos aur SPA guide ka direct access paayein!
+          </p>
+          <a href="#memberships-section" class="btn btn-gold btn-sm" onclick="closeModal('customerProfileModal')">
+            <span>👑</span> Buy / Upgrade Membership
+          </a>
+        </div>
+
+        <!-- Creator Program Section -->
+        <div id="profCreatorCard" style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 700; color: var(--cyan); font-size: 0.95rem;">🌟 Creator Program &amp; Dollar Monetization</div>
+            <span id="profCreatorBadge" class="badge-pill" style="background: rgba(56, 189, 248, 0.2); color: var(--cyan);">Not Applied</span>
+          </div>
+          <p id="profCreatorMsg" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
+            Videos upload karein aur har 1,000 views par Dollars ($USD) me paise kamayein! Form submit karne ke 10-15 minute me verify karke approve kiya jayega.
+          </p>
+          <div id="profCreatorActionArea">
+            <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
+              <span>🌟</span> Join Creator Program &amp; Earn Dollars ($USD)
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Edit Form -->
+        <form id="customerProfileForm" onsubmit="handleProfileSave(event)">
+          <div class="form-group">
+            <label class="form-label">Aapka Naam (Customer Name) *</label>
+            <input type="text" id="profNameInput" class="form-input" placeholder="Enter your name" required minlength="2">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label">Aapki Age (Years) *</label>
+              <input type="number" id="profAgeInput" class="form-input" placeholder="21" min="18" max="99" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number (Optional)</label>
+              <input type="tel" id="profMobileInput" class="form-input" placeholder="10 Digits" maxlength="10">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;" id="saveProfileBtn">
+            <span>💾</span> Save Profile Changes
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. CREATOR PROGRAM APPLICATION MODAL (10-15 Min Verification & Identity Check) -->
+  <div class="modal-overlay" id="creatorApplyModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🌟 Join Creator Program (Earn in $USD)</div>
+          <div style="font-size: 0.8rem; color: var(--gold); font-weight: 600;">Identity &amp; Age Verification • 10-15 Min Approval</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('creatorApplyModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: rgba(255, 183, 3, 0.08); border-left: 3px solid var(--gold); border-radius: 4px; padding: 12px 14px; margin-bottom: 18px; font-size: 0.86rem; color: #f1f5f9;">
+          <strong>⏱️ 10-15 Minute Verification:</strong> Form submit karne ke baad Control Desk review team aapki identity aur 18+ age confirm karke approve karegi. Approval ke baad aapka Dollar ($USD) Creator Studio live ho jayega!
+        </div>
+
+        <form id="creatorApplyForm" onsubmit="handleCreatorApplySubmit(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label">Real Legal Name (Govt ID Name) *</label>
+              <input type="text" id="crLegalName" class="form-input" placeholder="e.g. Priya Sharma" required minlength="3">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Creator Public Handle (@name) *</label>
+              <input type="text" id="crHandle" class="form-input" placeholder="e.g. @priya_hotty" required minlength="3">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label">Age (Strictly 18+ Only) *</label>
+              <input type="number" id="crAge" class="form-input" placeholder="18+" min="18" max="99" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">City / State *</label>
+              <input type="text" id="crCity" class="form-input" placeholder="e.g. Mumbai, Maharashtra" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Full Residential Address (Identity Verification) *</label>
+            <textarea id="crAddress" class="form-textarea" rows="2" placeholder="Full house address with pincode for identity verification" required minlength="10"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Account Verification Email *</label>
+            <input type="email" id="crEmail" class="form-input" placeholder="e.g. priya@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Primary Video Category *</label>
+            <select id="crCategory" class="form-select" required>
+              <option value="Private Hangout">Private Hangout &amp; VIP Masti</option>
+              <option value="Exclusive Teasers">Exclusive Video Teasers</option>
+              <option value="SPA &amp; Wellness">SPA &amp; Wellness Lifestyle</option>
+              <option value="Glamour &amp; Dance">Glamour &amp; Dance Performance</option>
+              <option value="VIP Friendship">VIP Friendship &amp; Dating</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">About You / Video Content Experience (Optional)</label>
+            <textarea id="crBio" class="form-textarea" rows="2" placeholder="Describe your video style or experience..."></textarea>
+          </div>
+
+          <div style="margin: 16px 0 20px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px;">
+            <label style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 0.85rem; color: #cbd5e1;">
+              <input type="checkbox" id="crConsentCheck" required style="margin-top: 3px; accent-color: var(--gold);">
+              <span>Main confirm karta/karti hoon ki meri age 18+ saal hai aur identity verification documents pradan karne ke liye authorized hoon. Main Dollar ($USD) Monetization rules accept karta/karti hoon.</span>
+            </label>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button type="submit" class="btn btn-gold btn-lg" style="flex: 1;" id="crSubmitBtn">
+              <span>🚀</span> Submit Creator Application
+            </button>
+            <button type="button" class="btn btn-outline" onclick="closeModal('creatorApplyModal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. CREATOR STUDIO DASHBOARD MODAL ($USD Monetization, Views & Paid Traffic Boost) -->
+  <div class="modal-overlay" id="creatorStudioModal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="font-size: 2rem;">🌟</div>
+          <div>
+            <div class="modal-title" id="csCreatorName">Hotty Zilla Creator Studio</div>
+            <div style="font-size: 0.82rem; color: var(--emerald); font-weight: 700;">
+              ✓ Verified Creator • Monetization Active in $USD
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('creatorStudioModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Dollar Earnings & Stats Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 22px;">
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 14px; text-align: center;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Earnings</div>
+            <div style="font-size: 1.7rem; font-weight: 900; color: var(--emerald);" id="csEarningsVal">$0.00</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">USD Currency</div>
+          </div>
+
+          <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: var(--radius-md); padding: 14px; text-align: center;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Video Views</div>
+            <div style="font-size: 1.7rem; font-weight: 900; color: var(--cyan);" id="csViewsVal">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">All-Time Plays</div>
+          </div>
+
+          <div style="background: rgba(255, 183, 3, 0.1); border: 1px solid rgba(255, 183, 3, 0.35); border-radius: var(--radius-md); padding: 14px; text-align: center;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Monetization Rate</div>
+            <div style="font-size: 1.5rem; font-weight: 900; color: var(--gold);" id="csRpmVal">$1.50</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">Per 1,000 Views</div>
+          </div>
+
+          <div style="background: rgba(255, 65, 108, 0.1); border: 1px solid rgba(255, 65, 108, 0.35); border-radius: var(--radius-md); padding: 14px; text-align: center;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">My Videos</div>
+            <div style="font-size: 1.7rem; font-weight: 900; color: #ff6b8b;" id="csVideosVal">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">Uploaded</div>
+          </div>
+        </div>
+
+        <!-- Payout Request Bar -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #fff;">Payout Method: PayPal / Bank Wire / USDT</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Threshold: Minimum $50 to initiate automatic wire payout.</div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="border-color: var(--emerald); color: var(--emerald);" onclick="showToast('Payout threshold: $50 USD. Your balance will be credited to registered account once reached.', 'success')">
+            💵 Request $USD Cashout
+          </button>
+        </div>
+
+        <!-- SECTION: PAID TRAFFIC & VIDEO PROMOTION (BOOST CAMPAIGN) -->
+        <div style="background: rgba(255, 65, 108, 0.05); border: 1px solid rgba(255, 65, 108, 0.35); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span style="font-size: 1.5rem;">🚀</span>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #fff;">Paid Video Traffic &amp; Views Promotion</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">
+                Apni video par hazaron views aur fans lane ke liye traffic package chunein. Video platform feed ke top par "SPONSORED REEL" ke roop me dikhegi!
+              </p>
+            </div>
+          </div>
+
+          <form id="creatorBoostForm" onsubmit="handleBoostVideoSubmit(event)">
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">Promote Karne Ke Liye Video Chunein *</label>
+              <select id="boostVideoSelect" class="form-select" required>
+                <!-- Populated dynamically via app.js -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Traffic / Views Package Chunein *</label>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
+                <label style="background: rgba(0,0,0,0.4); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; text-align: center; display: block;" class="boost-pkg-label">
+                  <input type="radio" name="boostPkg" value="5000:500" required checked style="accent-color: var(--accent-fire-start);">
+                  <div style="font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">5,000 Views</div>
+                  <div style="color: var(--gold); font-weight: 900; font-size: 1.2rem;">₹500</div>
+                  <div style="font-size: 0.72rem; color: var(--emerald);">~$6 USD</div>
+                </label>
+
+                <label style="background: rgba(255, 65, 108, 0.1); border: 2px solid var(--accent-fire-start); border-radius: var(--radius-md); padding: 12px; cursor: pointer; text-align: center; display: block; position: relative;" class="boost-pkg-label">
+                  <span style="position: absolute; top: -10px; right: 8px; background: var(--gradient-fire); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px;">POPULAR 🔥</span>
+                  <input type="radio" name="boostPkg" value="25000:1200" style="accent-color: var(--accent-fire-start);">
+                  <div style="font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">25,000 Views</div>
+                  <div style="color: var(--gold); font-weight: 900; font-size: 1.2rem;">₹1,200</div>
+                  <div style="font-size: 0.72rem; color: var(--emerald);">~$15 USD</div>
+                </label>
+
+                <label style="background: rgba(0,0,0,0.4); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; cursor: pointer; text-align: center; display: block;" class="boost-pkg-label">
+                  <input type="radio" name="boostPkg" value="100000:2500" style="accent-color: var(--accent-fire-start);">
+                  <div style="font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">100,000 Views</div>
+                  <div style="color: var(--gold); font-weight: 900; font-size: 1.2rem;">₹2,500</div>
+                  <div style="font-size: 0.72rem; color: var(--emerald);">~$30 USD</div>
+                </label>
+
+                <label style="background: rgba(255, 183, 3, 0.1); border: 2px solid var(--gold); border-radius: var(--radius-md); padding: 12px; cursor: pointer; text-align: center; display: block; position: relative;" class="boost-pkg-label">
+                  <span style="position: absolute; top: -10px; right: 8px; background: var(--gradient-gold); color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px;">MEGA VIRAL 🚀</span>
+                  <input type="radio" name="boostPkg" value="2000000:5000" style="accent-color: var(--gold);">
+                  <div style="font-weight: 800; font-size: 1.1rem; color: #fff; margin-top: 4px;">2,000,000 Views</div>
+                  <div style="color: var(--gold); font-weight: 900; font-size: 1.2rem;">₹5,000</div>
+                  <div style="font-size: 0.72rem; color: var(--emerald);">~$60 USD</div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Payment Mode Selection for Boost -->
+            <div style="margin: 16px 0 12px;">
+              <label class="form-label">Payment Mode Chunein:</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button type="button" class="btn btn-outline" id="boostModeUpiBtn" onclick="selectBoostPayMode('upi_qr')">
+                  📱 UPI QR Code
+                </button>
+                <button type="button" class="btn btn-primary" id="boostModeDemoBtn" onclick="selectBoostPayMode('instant_demo')">
+                  ⚡ Instant Test Activation
+                </button>
+              </div>
+            </div>
+
+            <div id="boostUpiBox" style="display: none; background: rgba(0,0,0,0.5); border: 1px dashed var(--gold); border-radius: var(--radius-md); padding: 16px; text-align: center; margin-bottom: 14px;">
+              <div style="font-size: 0.85rem; color: #fff; font-weight: 700;">Scan with UPI App to Pay for Boost Campaign</div>
+              <div style="margin: 10px 0;">
+                <img id="boostQrImage" src="" alt="QR" style="width: 140px; height: 140px; background: #fff; padding: 6px; border-radius: 8px;">
+              </div>
+              <div class="form-group" style="text-align: left;">
+                <label class="form-label">12-Digit UTR / Transaction Ref No. *</label>
+                <input type="text" id="boostUtrInput" class="form-input" placeholder="e.g. 984029482910">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="boostSubmitBtn">
+              <span>🚀</span> Activate Video Boost Campaign
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
+  <nav class="mobile-bottom-nav">
+    <a href="#shorts-section" class="mobile-nav-item">
+      <span class="mobile-nav-icon">🎥</span>
+      <span class="mobile-nav-label">Videos</span>
+    </a>
+    <a href="#categories-section" class="mobile-nav-item">
+      <span class="mobile-nav-icon">🏷️</span>
+      <span class="mobile-nav-label">Categories</span>
+    </a>
+    <a href="#memberships-section" class="mobile-nav-item">
+      <span class="mobile-nav-icon">👑</span>
+      <span class="mobile-nav-label">VIP Club</span>
+    </a>
+    <a href="#spa-section" class="mobile-nav-item">
+      <span class="mobile-nav-icon">💆</span>
+      <span class="mobile-nav-label">SPA PDF</span>
+    </a>
+    <button type="button" class="mobile-nav-item" onclick="handleMobileNavProfileClick()" style="background: transparent; border: none; font: inherit; cursor: pointer;">
+      <span class="mobile-nav-icon">👤</span>
+      <span class="mobile-nav-label">Profile</span>
+    </button>
+  </nav>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Engine -->
+  <script src="/js/app.js"></script>
+</body>
+</html>

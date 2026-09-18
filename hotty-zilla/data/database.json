@@ -1,0 +1,433 @@
+{
+  "settings": {
+    "siteName": "HOTTY ZILLA",
+    "tagline": "VIP Friendship Club, Exclusive Video Shorts & SPA Guides",
+    "upiId": "hottyzilla@upi",
+    "merchantName": "HOTTY ZILLA VIP",
+    "whatsappNumber": "+919876543210",
+    "supportEmail": "vip@hottyzilla.com",
+    "adminPin": "1234",
+    "secretDeskPath": "/hz-secret-control-desk.html",
+    "announcement": "👑 HOTTY ZILLA VIP LOUNGE: Unlimited Video Shorts Free! Watch Full HD Videos & Fix Meetings with VIP Membership!",
+    "adFrequencyPerDay": 3,
+    "monetizationRatePer1kViewsUSD": 1.5
+  },
+  "categories": [
+    {
+      "id": "cat-all",
+      "name": "All Videos",
+      "icon": "🔥",
+      "description": "Sabhi trending video shorts aur episodes"
+    },
+    {
+      "id": "cat-late-night",
+      "name": "Late Night Fun",
+      "icon": "🌙",
+      "description": "Late night candid talks, masti aur private hangout videos"
+    },
+    {
+      "id": "cat-coffee-dates",
+      "name": "Coffee Dates",
+      "icon": "☕",
+      "description": "Romantic cafe dates aur casual friendship conversations"
+    },
+    {
+      "id": "cat-spa-wellness",
+      "name": "SPA & Wellness",
+      "icon": "💆",
+      "description": "Aroma therapy, body relaxation aur luxury wellness moments"
+    },
+    {
+      "id": "cat-long-drives",
+      "name": "Long Drives",
+      "icon": "🚗",
+      "description": "Highway trips, evening drives aur friendship stories"
+    }
+  ],
+  "memberships": [
+    {
+      "id": "plan-1m",
+      "title": "1 Month VIP Pass",
+      "durationMonths": 1,
+      "durationText": "30 Days Access",
+      "price": 399,
+      "originalPrice": 999,
+      "badge": "⭐ Starter VIP",
+      "perks": [
+        "All Full HD Videos Unlocked (Unlimited Streaming)",
+        "Daily New Video Shorts & Teasers",
+        "Direct Friendship WhatsApp Chat Support",
+        "High-Speed Bufferless HD Player"
+      ]
+    },
+    {
+      "id": "plan-3m",
+      "title": "3 Months VIP Club",
+      "durationMonths": 3,
+      "durationText": "90 Days Access",
+      "price": 899,
+      "originalPrice": 2499,
+      "badge": "🔥 Most Popular (80% Save)",
+      "perks": [
+        "All Full HD Videos & Shorts Unlocked",
+        "Priority Meeting Fix & Date Coordination",
+        "50% Discount on SPA Course PDF Guide",
+        "Direct Calling & Voice Notes Support",
+        "Mobile + Tablet + PC Access"
+      ]
+    },
+    {
+      "id": "plan-6m",
+      "title": "6 Months VIP Gold",
+      "durationMonths": 6,
+      "durationText": "180 Days Access",
+      "price": 1499,
+      "originalPrice": 4999,
+      "badge": "💎 Best Value",
+      "perks": [
+        "All Full HD Videos Unlocked (Zero Ads)",
+        "Complete SPA Course PDF Guide FREE (Worth ₹299)",
+        "Top Priority Friend Matching in Your City",
+        "Private Video Requests & Personal Shoutouts",
+        "VIP Priority Support 24/7"
+      ]
+    },
+    {
+      "id": "plan-12m",
+      "title": "12 Months VIP All-Access",
+      "durationMonths": 12,
+      "durationText": "365 Days All-Access",
+      "price": 2499,
+      "originalPrice": 8999,
+      "badge": "👑 Elite Royal Member",
+      "perks": [
+        "Full Unconditional Video Vault Access for 1 Year",
+        "All Upcoming Video Shorts & Master Releases",
+        "Free SPA Therapy & Wellness Course PDF Included",
+        "Guaranteed 1-on-1 Meeting Coordination Support",
+        "Exclusive Private Parties & Meetup Invites"
+      ]
+    }
+  ],
+  "videos": [
+    {
+      "id": "vid-mu6mnpd8",
+      "title": "My Laptop Uploaded Reel",
+      "modelName": "Simran VIP",
+      "category": "Private Hangout",
+      "shortDuration": "0:30s Teaser",
+      "fullDuration": "15 Mins Full HD",
+      "price": 199,
+      "originalPrice": 597,
+      "badge": "🔥 Laptop Upload",
+      "views": "1.1K",
+      "shortClipUrl": "/uploads/1789715934760-665849954-spa-therapy-guide.pdf",
+      "fullVideoUrl": "/uploads/1789715934761-218670744-spa-therapy-guide.pdf",
+      "description": "Exclusive video short teaser and full uncut HD video."
+    },
+    {
+      "id": "vid-reel-1",
+      "title": "Late Night Rooftop Hangout with Natasha",
+      "modelName": "Natasha Glam",
+      "category": "Private Hangout",
+      "shortDuration": "0:35s Clip",
+      "fullDuration": "18 Mins Full HD",
+      "price": 99,
+      "originalPrice": 499,
+      "badge": "🔥 Viral Reel",
+      "views": "68.4K",
+      "shortClipUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "fullVideoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "description": "Short clip me dekhiye Natasha ka fun night out. Pura uncut HD video dekhne ke liye single purchase karein ya VIP Membership lein."
+    },
+    {
+      "id": "vid-reel-2",
+      "title": "Romantic Coffee Date & Casual Chats with Simran",
+      "modelName": "Simran VIP",
+      "category": "Coffee Date",
+      "shortDuration": "0:40s Clip",
+      "fullDuration": "24 Mins Full HD",
+      "price": 129,
+      "originalPrice": 599,
+      "badge": "⭐ High Demand",
+      "views": "52.1K",
+      "shortClipUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "fullVideoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "description": "Simran ke sath romantic cafe conversation aur fun candid moments. Teaser free me dekhein, full version unlocked with VIP."
+    },
+    {
+      "id": "vid-reel-3",
+      "title": "Weekend Luxury SPA & Relaxation Vlog",
+      "modelName": "Riya & Friends",
+      "category": "SPA & Wellness",
+      "shortDuration": "0:30s Clip",
+      "fullDuration": "28 Mins Full HD",
+      "price": 149,
+      "originalPrice": 699,
+      "badge": "💆 Luxury SPA",
+      "views": "74.8K",
+      "shortClipUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      "fullVideoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "description": "Aroma therapy, soothing ambience aur relaxing SPA moments ka exclusive episode. Full uncut HD version available."
+    },
+    {
+      "id": "vid-reel-4",
+      "title": "Weekend Long Drive & Candid Talk with Ananya",
+      "modelName": "Ananya Star",
+      "category": "Friendship Trip",
+      "shortDuration": "0:45s Clip",
+      "fullDuration": "22 Mins Full HD",
+      "price": 99,
+      "originalPrice": 499,
+      "badge": "✨ Trending",
+      "views": "41.9K",
+      "shortClipUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
+      "fullVideoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      "description": "Ananya ke sath beautiful highway drive, music aur friendly talks. Short teaser sabhi ke liye free hai."
+    }
+  ],
+  "spaCourse": {
+    "id": "spa-pro-handbook",
+    "title": "HOTTY ZILLA - Complete SPA & Wellness Practical Guide (PDF)",
+    "subtitle": "Relaxation Therapy, Swedish Massage, Client Etiquette & Private SPA Management",
+    "price": 299,
+    "originalPrice": 999,
+    "pages": 120,
+    "fileSize": "6.8 MB",
+    "fileName": "spa-therapy-guide.pdf",
+    "badge": "💆 Must Have SPA Guide",
+    "description": "Ye professional SPA aur body wellness ka complete guide hai jisme aroma oils, pressure points, massage techniques, client comfort, aur private session etiquette step-by-step sikhaye gaye hain. Padhne aur download karne ke liye instantly available!",
+    "previewSample": "Introduction to Pressure Points, Aroma Oil selection (Lavender, Sandalwood), Swedish relaxation strokes, Client Privacy & VIP Session Protocols."
+  },
+  "friends": [
+    {
+      "id": "friend-1",
+      "name": "Natasha Glam",
+      "age": 23,
+      "cities": "Delhi NCR, Mumbai, Goa",
+      "interests": "Coffee, Long Drives, Partying, Deep Talks",
+      "avatar": "💃",
+      "badge": "🔥 Most Requested",
+      "rating": "4.9 ★",
+      "bio": "Fun-loving, outgoing and always ready for exciting conversations and memorable meetups."
+    },
+    {
+      "id": "friend-2",
+      "name": "Simran VIP",
+      "age": 22,
+      "cities": "Bangalore, Pune, Hyderabad",
+      "interests": "Fine Dining, Movies, Shopping, Weekend Trips",
+      "avatar": "✨",
+      "badge": "💖 Sweet & Charming",
+      "rating": "5.0 ★",
+      "bio": "Sweet personality, loves cafe hopping, good food, and sincere friendships."
+    },
+    {
+      "id": "friend-3",
+      "name": "Riya Star",
+      "age": 24,
+      "cities": "Chandigarh, Jaipur, Lucknow",
+      "interests": "Music, SPA Days, Gym, Casual Lounging",
+      "avatar": "🌹",
+      "badge": "🌟 VIP Verified",
+      "rating": "4.8 ★",
+      "bio": "Fitness and SPA enthusiast with high energy, ready to hang out and talk for hours."
+    }
+  ],
+  "meetings": [
+    {
+      "id": "meet-mu6lqac8",
+      "customerName": "Karan Oberoi",
+      "mobile": "9876500000",
+      "city": "Mumbai",
+      "preferredDate": "Sunday Evening",
+      "friendId": "friend-1",
+      "friendName": "Natasha Glam",
+      "message": "Looking forward to catch up for coffee in Bandra!",
+      "status": "new_request",
+      "createdAt": "2026-09-18T06:52:55.640Z"
+    },
+    {
+      "id": "meet-101",
+      "customerName": "Amit Roy",
+      "mobile": "9876543210",
+      "city": "Delhi NCR",
+      "preferredDate": "Weekend Evening",
+      "friendId": "friend-1",
+      "friendName": "Natasha Glam",
+      "message": "Looking forward for a coffee meetup in Connaught Place!",
+      "status": "contacted",
+      "createdAt": "2026-09-17T11:20:00.000Z"
+    }
+  ],
+  "orders": [
+    {
+      "orderId": "HZ-366602",
+      "customerName": "Priya Sharma (@priya_hotty)",
+      "mobile": "N/A",
+      "whatsapp": "N/A",
+      "email": "priya.creator@test.com",
+      "itemType": "video_boost",
+      "itemId": "boost-727336",
+      "itemTitle": "Traffic Boost: 25,000 Views for \"Late Night Rooftop Hangout with Natasha\"",
+      "amount": 1200,
+      "paymentMode": "instant_demo",
+      "utr": "PROMO-MU6SSHCZ",
+      "status": "approved",
+      "createdAt": "2026-09-18T10:10:35.440Z"
+    },
+    {
+      "orderId": "HZ-104628",
+      "customerName": "Sunny Deol",
+      "mobile": "9899001122",
+      "whatsapp": "9899001122",
+      "email": "",
+      "itemType": "membership",
+      "itemId": "plan-3m",
+      "itemTitle": "3 Months VIP Club",
+      "amount": 899,
+      "paymentMode": "instant_demo",
+      "utr": "DEMO-VIP-MU6LQEK8",
+      "status": "approved",
+      "createdAt": "2026-09-18T06:53:01.113Z"
+    },
+    {
+      "orderId": "HZ-99881",
+      "customerName": "Rahul Sharma",
+      "mobile": "9876543210",
+      "whatsapp": "9876543210",
+      "email": "rahul@example.com",
+      "itemType": "membership",
+      "itemId": "plan-3m",
+      "itemTitle": "3 Months VIP Club",
+      "amount": 899,
+      "paymentMode": "instant_demo",
+      "utr": "DEMO-VIP-99881",
+      "status": "approved",
+      "createdAt": "2026-09-17T10:15:30.000Z"
+    }
+  ],
+  "students": [
+    {
+      "mobile": "9876543210",
+      "name": "Rahul Sharma",
+      "email": "rahul@example.com",
+      "membership": {
+        "planId": "plan-3m",
+        "planTitle": "3 Months VIP Club",
+        "active": true,
+        "startedAt": "2026-09-17T10:15:30.000Z",
+        "expiresAt": "2026-12-16T10:15:30.000Z"
+      },
+      "videos": [
+        "vid-reel-1",
+        "vid-reel-2",
+        "vid-reel-3",
+        "vid-reel-4"
+      ],
+      "pdfs": [
+        "spa-pro-handbook"
+      ],
+      "enrolledAt": "2026-09-17T10:15:30.000Z"
+    },
+    {
+      "mobile": "9899001122",
+      "name": "Sunny Deol",
+      "email": "",
+      "membership": {
+        "planId": "plan-3m",
+        "planTitle": "3 Months VIP Club",
+        "active": true,
+        "startedAt": "2026-09-18T06:53:01.113Z",
+        "expiresAt": "2026-12-17T06:53:01.113Z"
+      },
+      "videos": [
+        "vid-reel-1",
+        "vid-reel-2",
+        "vid-reel-3",
+        "vid-reel-4"
+      ],
+      "pdfs": [],
+      "enrolledAt": "2026-09-18T06:53:01.113Z"
+    },
+    {
+      "id": "user-mu6o0ix0",
+      "email": "rohit@gmail.com",
+      "name": "Rohit Sharma",
+      "age": 26,
+      "mobile": "9876543210",
+      "membership": null,
+      "videos": [],
+      "pdfs": [],
+      "enrolledAt": "2026-09-18T07:56:52.548Z"
+    }
+  ],
+  "creators": [
+    {
+      "id": "creator-mu6ss73o",
+      "email": "priya.creator@test.com",
+      "realName": "Priya Sharma",
+      "handle": "@priya_hotty",
+      "age": 22,
+      "city": "Mumbai",
+      "address": "Bandra West Mumbai 400050",
+      "category": "Exclusive Teasers",
+      "bio": "Lifestyle creator",
+      "status": "approved",
+      "earningsUSD": 0,
+      "totalViews": 0,
+      "videosCount": 0,
+      "submittedAt": "2026-09-18T10:10:22.068Z",
+      "approvedAt": "2026-09-18T10:10:35.357Z"
+    },
+    {
+      "id": "creator-demo-1",
+      "email": "natasha.star@gmail.com",
+      "realName": "Natasha Sharma",
+      "handle": "@natashastar",
+      "age": 22,
+      "city": "Mumbai",
+      "address": "Bandra West, Mumbai, MH",
+      "category": "Private Hangout",
+      "bio": "VIP fashion model, private reels and hangout vlogger.",
+      "status": "approved",
+      "earningsUSD": 142.5,
+      "totalViews": 95000,
+      "videosCount": 4,
+      "submittedAt": "2026-09-18T05:30:00.000Z",
+      "approvedAt": "2026-09-18T05:45:00.000Z"
+    }
+  ],
+  "adCampaigns": [
+    {
+      "id": "boost-727336",
+      "creatorEmail": "priya.creator@test.com",
+      "creatorName": "Priya Sharma (@priya_hotty)",
+      "videoId": "vid-reel-1",
+      "videoTitle": "Late Night Rooftop Hangout with Natasha",
+      "targetViews": 25000,
+      "amountINR": 1200,
+      "amountUSD": 14.37,
+      "status": "active",
+      "impressionsDelivered": 0,
+      "clicks": 0,
+      "paymentMode": "instant_demo",
+      "utr": "PROMO-MU6SSHCZ",
+      "createdAt": "2026-09-18T10:10:35.363Z"
+    },
+    {
+      "id": "camp-boost-101",
+      "creatorEmail": "natasha.star@gmail.com",
+      "creatorName": "Natasha Sharma",
+      "videoId": "vid-reel-1",
+      "videoTitle": "Late Night Hangout with Natasha",
+      "targetViews": 25000,
+      "amountINR": 1200,
+      "amountUSD": 15,
+      "status": "active",
+      "impressionsDelivered": 14820,
+      "clicks": 3120,
+      "createdAt": "2026-09-18T06:00:00.000Z"
+    }
+  ]
+}
