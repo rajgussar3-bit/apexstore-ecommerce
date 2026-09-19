@@ -67,7 +67,7 @@ async function loadVipAccess(mobile) {
       const autoPlayId = urlParams.get('playVideo');
       if (autoPlayId) {
         const vid = (data.unlockedVideos || []).find(v => v.id === autoPlayId);
-        if (vid) playFullVideo(vid.title, vid.fullVideoUrl);
+        if (vid) playFullVideo(vid.title, vid.fullVideoUrl, vid.id);
       }
     } else {
       showToast(data.message || 'Account not found', 'error');
@@ -132,7 +132,7 @@ function renderVideos() {
           <span style="color: var(--emerald); font-weight: 700;">✓ Unlocked Full Video</span>
         </div>
 
-        <button class="btn btn-gold btn-sm" style="width: 100%;" onclick="playFullVideo('${v.title.replace(/'/g, "\\'")}', '${v.fullVideoUrl}')">
+        <button class="btn btn-gold btn-sm" style="width: 100%;" onclick="playFullVideo('${v.title.replace(/'/g, "\\'")}', '${v.fullVideoUrl}', '${v.id}')">
           ▶ Watch Full HD Video
         </button>
       </div>
@@ -141,18 +141,45 @@ function renderVideos() {
 
   // Default play first video if none playing
   if (videos.length > 0 && !document.getElementById('fullVideoPlayer').src) {
-    playFullVideo(videos[0].title, videos[0].fullVideoUrl);
+    playFullVideo(videos[0].title, videos[0].fullVideoUrl, videos[0].id);
   }
 }
 
-function playFullVideo(title, url) {
-  const player = document.getElementById('fullVideoPlayer');
+function playFullVideo(title, url, id) {
+  if (id) {
+    fetch(`/api/videos/${id}/view`, { method: 'POST' }).catch(() => {});
+  }
+  const videoPlayer = document.getElementById('fullVideoPlayer');
+  const iframePlayer = document.getElementById('fullVideoIframe');
   const titleEl = document.getElementById('currentPlayingTitle');
   if (titleEl) titleEl.textContent = `▶ Now Streaming: ${title}`;
-  if (player) {
-    player.src = url;
-    player.load();
-    player.play().catch(() => {});
+
+  let cleanUrl = (url || '').trim();
+  if (cleanUrl.includes('streamtape.com/v/')) cleanUrl = cleanUrl.replace('/v/', '/e/');
+  if (cleanUrl.includes('dood') && !cleanUrl.includes('/e/')) cleanUrl = cleanUrl.replace('/d/', '/e/');
+
+  const isEmbed = cleanUrl.includes('/e/') || cleanUrl.includes('streamtape') || cleanUrl.includes('dood') || cleanUrl.includes('mixdrop') || cleanUrl.includes('embed');
+
+  if (isEmbed) {
+    if (videoPlayer) {
+      videoPlayer.pause();
+      videoPlayer.style.display = 'none';
+    }
+    if (iframePlayer) {
+      iframePlayer.src = cleanUrl;
+      iframePlayer.style.display = 'block';
+    }
+  } else {
+    if (iframePlayer) {
+      iframePlayer.src = '';
+      iframePlayer.style.display = 'none';
+    }
+    if (videoPlayer) {
+      videoPlayer.style.display = 'block';
+      videoPlayer.src = cleanUrl;
+      videoPlayer.load();
+      videoPlayer.play().catch(() => {});
+    }
   }
 }
 

@@ -38,12 +38,23 @@ const upload = multer({
 });
 
 // Middlewares
+app.set('etag', false);
 app.use(cors());
 app.use((req, res, next) => {
   req.setTimeout(60 * 60 * 1000);
   res.setTimeout(60 * 60 * 1000);
   next();
 });
+
+// Enforce strictly NO caching on any API responses (Prevents Vercel & browser stale cache)
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Surrogate-Control', 'no-store');
+  next();
+});
+
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,12 +63,11 @@ if (fs.existsSync(path.join(__dirname, 'uploads'))) {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 }
 
-// In-memory DB cache for high-concurrency serverless performance
+// In-memory DB cache fallback
 let memoryDBCache = null;
 
-// Helper: Read Database
+// Helper: Read Database (Always reads fresh from disk so updates take effect immediately, merging in-memory state)
 function readDB() {
-  if (memoryDBCache) return JSON.parse(JSON.stringify(memoryDBCache));
   try {
     if (IS_VERCEL && !fs.existsSync(DB_FILE)) {
       try {
@@ -67,20 +77,37 @@ function readDB() {
       } catch(e) {}
     }
     const targetFile = fs.existsSync(DB_FILE) ? DB_FILE : SEED_DB_FILE;
-    const data = fs.readFileSync(targetFile, 'utf8');
-    memoryDBCache = JSON.parse(data);
-    return JSON.parse(JSON.stringify(memoryDBCache));
+    if (fs.existsSync(targetFile)) {
+      const data = fs.readFileSync(targetFile, 'utf8');
+      const parsed = JSON.parse(data);
+      if (memoryDBCache && memoryDBCache.creators) {
+        if (!parsed.creators) parsed.creators = [];
+        const existingEmails = new Set(parsed.creators.map(c => (c.email || '').toLowerCase()));
+        memoryDBCache.creators.forEach(c => {
+          if (c.email && !existingEmails.has(c.email.toLowerCase())) {
+            parsed.creators.unshift(c);
+            existingEmails.add(c.email.toLowerCase());
+          }
+        });
+      }
+      memoryDBCache = parsed;
+      return parsed;
+    }
   } catch (err) {
     console.error('Error reading database:', err);
-    return { settings: {}, memberships: [], videos: [], spaCourse: {}, friends: [], meetings: [], orders: [], students: [] };
   }
+  if (memoryDBCache) return JSON.parse(JSON.stringify(memoryDBCache));
+  return { settings: {}, memberships: [], videos: [], spaCourse: {}, friends: [], meetings: [], orders: [], students: [], creators: [], payoutRequests: [] };
 }
 
-// Helper: Write Database
+// Helper: Write Database (Syncs to DB file and updates memory)
 function writeDB(data) {
   try {
     memoryDBCache = JSON.parse(JSON.stringify(data));
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+    if (!IS_VERCEL && DB_FILE !== SEED_DB_FILE && fs.existsSync(path.dirname(SEED_DB_FILE))) {
+      try { fs.writeFileSync(SEED_DB_FILE, JSON.stringify(data, null, 2), 'utf8'); } catch(e){}
+    }
     return true;
   } catch (err) {
     console.error('Error writing database:', err);
@@ -800,6 +827,13 @@ app.post('/api/auth/customer-login', (req, res) => {
     writeDB(db);
   }
 
+  const creatorMatch = (db.creators || []).find(c => c.email && c.email.toLowerCase() === cleanEmail && c.status === 'approved');
+  if (creatorMatch) {
+    user.isCreator = true;
+    user.creatorId = creatorMatch.id;
+    user.creatorHandle = creatorMatch.handle;
+  }
+
   res.json({
     success: true,
     message: 'Welcome ' + user.name + '!',
@@ -837,6 +871,58 @@ app.put('/api/customer/profile', (req, res) => {
 // ==========================================
 // CREATOR PROGRAM & MONETIZATION (USD) APIs
 // ==========================================
+
+// 23.9 Sync / Restore Creator Profile (Persists creator across cold restarts / serverless lambdas)
+app.post('/api/creator/sync', (req, res) => {
+  const { creator } = req.body;
+  if (!creator || !creator.email) {
+    return res.status(400).json({ success: false, message: 'Valid creator data required' });
+  }
+
+  const cleanEmail = creator.email.trim().toLowerCase();
+  const db = readDB();
+  if (!db.creators) db.creators = [];
+
+  let existing = db.creators.find(c => c.email && c.email.toLowerCase() === cleanEmail);
+  if (!existing) {
+    existing = {
+      id: creator.id || ('creator-' + Date.now().toString(36)),
+      email: cleanEmail,
+      realName: (creator.realName || 'Hotty Creator').trim(),
+      handle: (creator.handle || '@creator').trim().startsWith('@') ? (creator.handle || '@creator').trim() : '@' + (creator.handle || '@creator').trim(),
+      age: Number(creator.age) || 21,
+      city: (creator.city || '').trim(),
+      address: (creator.address || '').trim(),
+      category: creator.category || 'Exclusive Teasers',
+      bio: (creator.bio || '').trim(),
+      status: creator.status || 'pending_verification',
+      earningsUSD: Number(creator.earningsUSD || 0),
+      totalViews: Number(creator.totalViews || 0),
+      videosCount: Number(creator.videosCount || 0),
+      submittedAt: creator.submittedAt || new Date().toISOString(),
+      approvedAt: creator.status === 'approved' ? (creator.approvedAt || new Date().toISOString()) : null
+    };
+    db.creators.unshift(existing);
+  } else {
+    // If client is approved, preserve approval
+    if (creator.status === 'approved') {
+      existing.status = 'approved';
+      if (!existing.approvedAt) existing.approvedAt = new Date().toISOString();
+    }
+  }
+
+  if (db.students) {
+    const student = db.students.find(s => s.email && s.email.toLowerCase() === cleanEmail);
+    if (student && existing.status === 'approved') {
+      student.isCreator = true;
+      student.creatorId = existing.id;
+      student.creatorHandle = existing.handle;
+    }
+  }
+
+  writeDB(db);
+  res.json({ success: true, creator: existing });
+});
 
 // 24. Apply for Creator Program
 app.post('/api/creator/apply', (req, res) => {
@@ -898,7 +984,33 @@ app.post('/api/creator/apply', (req, res) => {
   });
 });
 
-// 25. Check Creator Status & Studio Dashboard
+// 24.1 Record Video View (Real-Time Monetization for Creators)
+app.post('/api/videos/:id/view', (req, res) => {
+  const db = readDB();
+  const vid = (db.videos || []).find(v => v.id === req.params.id);
+  if (!vid) return res.status(404).json({ success: false, message: 'Video not found' });
+
+  // Parse current views
+  let rawViews = parseInt(String(vid.views).replace(/[^0-9]/g, '')) || 50;
+  rawViews += 1;
+  vid.views = rawViews >= 1000 ? (rawViews / 1000).toFixed(1) + 'K' : rawViews.toString();
+
+  // If creator video, credit to creator account
+  if (vid.creatorEmail && db.creators) {
+    const creator = db.creators.find(c => c.email && c.email.toLowerCase() === vid.creatorEmail.toLowerCase());
+    if (creator) {
+      creator.totalViews = (creator.totalViews || 0) + 1;
+      const rate = db.settings?.monetizationRatePer1kViewsUSD || 1.50;
+      const viewsEarn = (creator.totalViews / 1000) * rate;
+      creator.earningsUSD = Number((Math.max(creator.earningsUSD || 0, viewsEarn)).toFixed(2));
+    }
+  }
+
+  writeDB(db);
+  res.json({ success: true, views: vid.views });
+});
+
+// 25. Check Creator Status & Studio Dashboard Data
 app.get('/api/creator/status', (req, res) => {
   const email = (req.query.email || '').trim().toLowerCase();
   if (!email) {
@@ -906,20 +1018,270 @@ app.get('/api/creator/status', (req, res) => {
   }
 
   const db = readDB();
-  const creator = (db.creators || []).find(c => c.email === email);
+  let creator = (db.creators || []).find(c => c.email === email);
+  if (!creator && db.students) {
+    const student = db.students.find(s => s.email && s.email.toLowerCase() === email);
+    if (student && student.isCreator) {
+      creator = {
+        id: student.creatorId || ('creator-' + Date.now().toString(36)),
+        email: email,
+        realName: student.name || 'Creator',
+        handle: student.creatorHandle || ('@' + (student.name || 'creator').replace(/\s+/g, '').toLowerCase()),
+        status: 'approved',
+        earningsUSD: 0,
+        totalViews: 0,
+        videosCount: 0,
+        submittedAt: new Date().toISOString(),
+        approvedAt: new Date().toISOString()
+      };
+      if (!db.creators) db.creators = [];
+      db.creators.unshift(creator);
+      writeDB(db);
+    }
+  }
   if (!creator) {
     return res.json({ success: true, applied: false });
   }
 
-  const creatorVideos = (db.videos || []).filter(v => v.creatorEmail === email || v.modelName === creator.realName);
+  const creatorVideos = (db.videos || []).filter(v => 
+    (v.creatorEmail && v.creatorEmail.toLowerCase() === email) || 
+    (v.modelName && v.modelName.toLowerCase() === creator.realName.toLowerCase())
+  );
+
+  // Calculate live views & earnings
+  let totalVideoViews = 0;
+  creatorVideos.forEach(v => {
+    const vCount = parseInt(String(v.views).replace(/[^0-9]/g, '')) || 0;
+    totalVideoViews += vCount;
+  });
+  if (totalVideoViews > (creator.totalViews || 0)) {
+    creator.totalViews = totalVideoViews;
+  }
+
+  const rateUSD = db.settings?.monetizationRatePer1kViewsUSD || 1.50;
+  const viewEarnings = (creator.totalViews / 1000) * rateUSD;
+
+  // Calculate PPV Unlock Sales revenue (70% share in USD)
+  let ppvEarnings = 0;
+  let ppvSalesCount = 0;
+  (db.orders || []).forEach(o => {
+    if (o.status === 'approved' && o.itemType === 'video') {
+      const isCreatorVid = creatorVideos.some(cv => cv.id === o.itemId);
+      if (isCreatorVid) {
+        ppvSalesCount++;
+        ppvEarnings += (Number(o.amount || 99) * 0.70) / 83.5;
+      }
+    }
+  });
+
+  const totalCalculated = Number((viewEarnings + ppvEarnings).toFixed(2));
+  if (totalCalculated > (creator.earningsUSD || 0)) {
+    creator.earningsUSD = totalCalculated;
+  }
+  creator.videosCount = creatorVideos.length;
+
+  // Calculate paid out and available balance
+  const creatorPayouts = (db.payoutRequests || []).filter(p => p.creatorEmail === email);
+  const totalPaidOut = creatorPayouts
+    .filter(p => p.status === 'paid')
+    .reduce((sum, p) => sum + Number(p.amountUSD || 0), 0);
+  const pendingPayout = creatorPayouts
+    .filter(p => p.status === 'pending')
+    .reduce((sum, p) => sum + Number(p.amountUSD || 0), 0);
+
+  const availableBalanceUSD = Number(Math.max(0, (creator.earningsUSD || 0) - totalPaidOut - pendingPayout).toFixed(2));
+
+  writeDB(db);
 
   res.json({
     success: true,
     applied: true,
     creator,
     videos: creatorVideos,
-    rateUSD: db.settings?.monetizationRatePer1kViewsUSD || 1.50
+    rateUSD,
+    analytics: {
+      totalViews: creator.totalViews,
+      totalEarningsUSD: creator.earningsUSD,
+      availableBalanceUSD,
+      pendingPayoutUSD: pendingPayout,
+      totalPaidOutUSD: totalPaidOut,
+      ppvSalesCount,
+      ppvEarningsUSD: Number(ppvEarnings.toFixed(2)),
+      viewsEarningsUSD: Number(viewEarnings.toFixed(2))
+    }
   });
+});
+
+// 25.1 Creator Video Upload (Gofile / Catbox Link or Direct URL)
+app.post('/api/creator/upload-video', (req, res) => {
+  const { creatorEmail, email, title, category, price, originalPrice, shortClipUrl, fullVideoUrl, shortDuration, fullDuration, badge, description } = req.body;
+  const userEmail = creatorEmail || email;
+  if (!userEmail || !title) {
+    return res.status(400).json({ success: false, message: 'Creator email and title are required' });
+  }
+
+  const db = readDB();
+  const cleanEmail = userEmail.trim().toLowerCase();
+  const creator = (db.creators || []).find(c => c.email === cleanEmail && c.status === 'approved');
+
+  if (!creator) {
+    return res.status(403).json({ success: false, message: 'Sirf approved creators hi videos upload kar sakte hain!' });
+  }
+
+  const finalShort = (shortClipUrl || fullVideoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4').trim();
+  const finalFull = (fullVideoUrl || shortClipUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4').trim();
+  const videoPrice = Number(price) || 99;
+
+  const newVideo = {
+    id: 'vid-cr-' + Date.now().toString(36),
+    title: title.trim(),
+    modelName: creator.realName,
+    creatorEmail: creator.email,
+    creatorHandle: creator.handle,
+    category: category || creator.category || 'Exclusive Teasers',
+    shortDuration: shortDuration || '0:30s Teaser',
+    fullDuration: fullDuration || '15 Mins Full HD',
+    price: videoPrice,
+    originalPrice: Number(originalPrice) || videoPrice * 3,
+    badge: badge || '⭐ Creator Exclusive',
+    views: '150',
+    shortClipUrl: finalShort,
+    fullVideoUrl: finalFull,
+    description: description ? description.trim() : `Exclusive video upload by ${creator.handle}. Full HD uncut episode available with VIP.`,
+    createdAt: new Date().toISOString()
+  };
+
+  if (!db.videos) db.videos = [];
+  db.videos.unshift(newVideo);
+
+  creator.videosCount = (creator.videosCount || 0) + 1;
+  writeDB(db);
+
+  res.json({
+    success: true,
+    message: `Video "${newVideo.title}" successfully publish ho gayi hai aur Hotty Zilla par live hai! 🎥`,
+    video: newVideo
+  });
+});
+
+// 25.2 Creator My Videos List
+app.get('/api/creator/my-videos', (req, res) => {
+  const email = (req.query.email || '').trim().toLowerCase();
+  if (!email) return res.status(400).json({ success: false, message: 'Email required' });
+
+  const db = readDB();
+  const creator = (db.creators || []).find(c => c.email === email);
+  if (!creator) return res.status(404).json({ success: false, message: 'Creator not found' });
+
+  const rateUSD = db.settings?.monetizationRatePer1kViewsUSD || 1.50;
+  const myVideos = (db.videos || []).filter(v => 
+    (v.creatorEmail && v.creatorEmail.toLowerCase() === email) ||
+    (v.modelName && v.modelName.toLowerCase() === creator.realName.toLowerCase())
+  ).map(v => {
+    const rawViews = parseInt(String(v.views).replace(/[^0-9]/g, '')) || 0;
+    const estEarningsUSD = ((rawViews / 1000) * rateUSD).toFixed(2);
+    return {
+      ...v,
+      rawViews,
+      estEarningsUSD
+    };
+  });
+
+  res.json({ success: true, videos: myVideos });
+});
+
+// 25.3 Creator Delete Video
+app.delete('/api/creator/videos/:id', (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email required' });
+
+  const cleanEmail = email.trim().toLowerCase();
+  const db = readDB();
+  const creator = (db.creators || []).find(c => c.email === cleanEmail && c.status === 'approved');
+  if (!creator) return res.status(403).json({ success: false, message: 'Unauthorized' });
+
+  const vidIndex = (db.videos || []).findIndex(v => 
+    v.id === req.params.id && 
+    ((v.creatorEmail && v.creatorEmail.toLowerCase() === cleanEmail) || v.modelName === creator.realName)
+  );
+
+  if (vidIndex === -1) {
+    return res.status(404).json({ success: false, message: 'Video not found or permission denied' });
+  }
+
+  const deletedTitle = db.videos[vidIndex].title;
+  db.videos.splice(vidIndex, 1);
+  creator.videosCount = Math.max(0, (creator.videosCount || 1) - 1);
+  writeDB(db);
+
+  res.json({ success: true, message: `Video "${deletedTitle}" successfully delete ho gayi! 🗑️` });
+});
+
+// 25.4 Creator Payout Request (PayPal, Bank Wire, USDT Crypto)
+app.post('/api/creator/payout-request', (req, res) => {
+  const { email, creatorEmail, amountUSD, method, details, payoutDetails } = req.body;
+  const userEmail = email || creatorEmail;
+  const payoutInfo = details || payoutDetails;
+  if (!userEmail || !amountUSD || !method || !payoutInfo) {
+    return res.status(400).json({ success: false, message: 'All payout parameters (email, amount, method, details) are required' });
+  }
+
+  const cleanEmail = userEmail.trim().toLowerCase();
+  const db = readDB();
+  const creator = (db.creators || []).find(c => c.email === cleanEmail && c.status === 'approved');
+
+  if (!creator) {
+    return res.status(403).json({ success: false, message: 'Creator not found or not approved' });
+  }
+
+  const reqAmount = Number(amountUSD);
+  if (reqAmount < 50) {
+    return res.status(400).json({ success: false, message: 'Minimum payout threshold is $50.00 USD' });
+  }
+
+  if (!db.payoutRequests) db.payoutRequests = [];
+
+  const existingPending = db.payoutRequests.filter(p => p.creatorEmail === cleanEmail && p.status === 'pending');
+  const totalPending = existingPending.reduce((sum, p) => sum + Number(p.amountUSD), 0);
+  const totalPaid = db.payoutRequests.filter(p => p.creatorEmail === cleanEmail && p.status === 'paid').reduce((sum, p) => sum + Number(p.amountUSD), 0);
+
+  const available = (creator.earningsUSD || 0) - totalPaid - totalPending;
+  if (reqAmount > available) {
+    return res.status(400).json({ success: false, message: `Insufficient balance! Aapka available balance $${available.toFixed(2)} USD hai.` });
+  }
+
+  const newPayout = {
+    id: 'pay-' + Math.floor(100000 + Math.random() * 900000),
+    creatorEmail: cleanEmail,
+    creatorName: creator.realName,
+    creatorHandle: creator.handle,
+    amountUSD: reqAmount,
+    amountINR: Math.round(reqAmount * 83.5),
+    method: method.trim(), // 'paypal', 'bank_wire', 'usdt'
+    details: payoutInfo.trim(),
+    payoutDetails: payoutInfo.trim(),
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+
+  db.payoutRequests.unshift(newPayout);
+  writeDB(db);
+
+  res.json({
+    success: true,
+    message: `Payout request of $${reqAmount} USD (${newPayout.amountINR} INR) submitted successfully! 24-48 ghante me review karke send kiya jayega. 💵`,
+    payout: newPayout
+  });
+});
+
+// 25.5 Get Creator Payouts History
+app.get('/api/creator/payouts', (req, res) => {
+  const email = (req.query.email || '').trim().toLowerCase();
+  if (!email) return res.status(400).json({ success: false, message: 'Email required' });
+
+  const db = readDB();
+  const payouts = (db.payoutRequests || []).filter(p => p.creatorEmail === email);
+  res.json({ success: true, payouts });
 });
 
 // 26. Paid Video Promotion / Reach Boost
@@ -987,17 +1349,33 @@ app.get('/api/admin/creators', checkAdminAuth, (req, res) => {
   res.json({ success: true, creators: db.creators || [] });
 });
 
-// 28. Admin: Approve Creator
+// 28. Admin: Approve Creator (Activates Creator Studio & updates user account)
 app.post('/api/admin/creators/:id/approve', checkAdminAuth, (req, res) => {
   const db = readDB();
-  const creator = (db.creators || []).find(c => c.id === req.params.id);
+  const target = req.params.id.trim().toLowerCase();
+  const creator = (db.creators || []).find(c => c.id.toLowerCase() === target || (c.email && c.email.toLowerCase() === target));
   if (!creator) return res.status(404).json({ success: false, message: 'Creator application not found' });
 
   creator.status = 'approved';
   creator.approvedAt = new Date().toISOString();
+
+  // Also update user record in db.students if exists
+  if (db.students) {
+    const student = db.students.find(s => s.email && s.email.toLowerCase() === creator.email.toLowerCase());
+    if (student) {
+      student.isCreator = true;
+      student.creatorId = creator.id;
+      student.creatorHandle = creator.handle;
+    }
+  }
+
   writeDB(db);
 
-  res.json({ success: true, message: `Creator ${creator.realName} (${creator.handle}) approved successfully!`, creator });
+  res.json({
+    success: true,
+    message: `Creator ${creator.realName} (${creator.handle}) approved successfully! Unka Creator Studio unlock ho gaya hai. 🌟`,
+    creator
+  });
 });
 
 // 29. Admin: Reject Creator
@@ -1010,6 +1388,25 @@ app.post('/api/admin/creators/:id/reject', checkAdminAuth, (req, res) => {
   writeDB(db);
 
   res.json({ success: true, message: `Creator ${creator.realName} application rejected.`, creator });
+});
+
+// 29.1 Admin: Get All Payout Requests
+app.get('/api/admin/payouts', checkAdminAuth, (req, res) => {
+  const db = readDB();
+  res.json({ success: true, payouts: db.payoutRequests || [] });
+});
+
+// 29.2 Admin: Mark Payout as Paid
+app.post('/api/admin/payouts/:id/pay', checkAdminAuth, (req, res) => {
+  const db = readDB();
+  const payout = (db.payoutRequests || []).find(p => p.id === req.params.id);
+  if (!payout) return res.status(404).json({ success: false, message: 'Payout request not found' });
+
+  payout.status = 'paid';
+  payout.paidAt = new Date().toISOString();
+  writeDB(db);
+
+  res.json({ success: true, message: `Payout of $${payout.amountUSD} USD marked as PAID! 💵`, payout });
 });
 
 // 30. Admin: Get Ad Campaigns
@@ -1058,6 +1455,7 @@ if (require.main === module || !process.env.VERCEL) {
     console.log(`🔥 HOTTY ZILLA VIP LOUNGE SERVER STARTED!`);
     console.log(`🌐 Public Website:       http://localhost:${PORT}`);
     console.log(`👑 VIP Member Portal:    http://localhost:${PORT}/my-library.html`);
+    console.log(`🌟 Creator Studio:       http://localhost:${PORT}/creator-studio.html`);
     console.log(`🔒 Secret Control Desk:  http://localhost:${PORT}/hz-secret-control-desk.html`);
     console.log(`🔑 Secret PIN:           1234`);
     console.log(`====================================================`);

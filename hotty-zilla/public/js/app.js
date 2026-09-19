@@ -11,7 +11,41 @@ document.addEventListener('DOMContentLoaded', () => {
   initCustomerAuth();
   fetchSiteInfo();
   fetchCatalog();
+  setupAppCrossTabSync();
 });
+
+// Instant Cross-Tab Sync via BroadcastChannel & LocalStorage
+function setupAppCrossTabSync() {
+  try {
+    const syncChannel = new BroadcastChannel('hz_creator_sync');
+    syncChannel.onmessage = (event) => {
+      if (event.data && (event.data.action === 'APPROVED' || event.data.type === 'CREATOR_APPROVED')) {
+        const approvedEmail = (event.data.email || '').toLowerCase();
+        const myEmail = (currentCustomer?.email || '').toLowerCase();
+        if (!approvedEmail || !myEmail || approvedEmail === myEmail) {
+          if (currentCustomer) currentCustomer.isCreator = true;
+          updateAuthHeaderUI();
+          showToast('🎉 Aapka Creator Studio Control Desk dwara turant approve ho gaya! 🌟', 'success');
+          const profModal = document.getElementById('customerProfileModal');
+          if (profModal && profModal.classList.contains('active')) {
+            openCustomerProfileModal();
+          }
+        }
+      }
+    };
+  } catch(e) {}
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'hz_last_approval_event' || (e.key && e.key.startsWith('hz_creator_approved_'))) {
+      if (currentCustomer) currentCustomer.isCreator = true;
+      updateAuthHeaderUI();
+      const profModal = document.getElementById('customerProfileModal');
+      if (profModal && profModal.classList.contains('active')) {
+        openCustomerProfileModal();
+      }
+    }
+  });
+}
 
 function initCustomerAuth() {
   try {
@@ -27,14 +61,56 @@ function updateAuthHeaderUI() {
   const loginBtn = document.getElementById('headerLoginBtn');
   const profBtn = document.getElementById('headerProfileBtn');
   const nameSpan = document.getElementById('headerUserName');
+  const csBtn = document.getElementById('headerCreatorStudioBtn');
 
   if (currentCustomer && currentCustomer.email) {
     if (loginBtn) loginBtn.style.display = 'none';
     if (profBtn) profBtn.style.display = 'inline-flex';
     if (nameSpan) nameSpan.textContent = currentCustomer.name || currentCustomer.email.split('@')[0];
+    checkCreatorHeaderStatus();
   } else {
     if (loginBtn) loginBtn.style.display = 'inline-flex';
     if (profBtn) profBtn.style.display = 'none';
+    if (csBtn) csBtn.style.display = 'none';
+  }
+}
+
+async function checkCreatorHeaderStatus() {
+  const csBtn = document.getElementById('headerCreatorStudioBtn');
+  if (!csBtn) return;
+  const email = (currentCustomer?.email || localStorage.getItem('hz_creator_email') || '').toLowerCase().trim();
+  const isApproved = localStorage.getItem('hz_is_creator') === 'true' || 
+                     (email && localStorage.getItem('hz_creator_approved_' + email) === 'true') ||
+                     (currentCustomer && currentCustomer.isCreator);
+
+  if (isApproved) {
+    csBtn.style.display = 'inline-flex';
+    return;
+  }
+  if (!email) {
+    csBtn.style.display = 'none';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/creator/status?email=${encodeURIComponent(email)}&_t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+    });
+    const data = await res.json();
+    if (data.success && data.applied && data.creator && data.creator.status === 'approved') {
+      csBtn.style.display = 'inline-flex';
+      localStorage.setItem('hz_is_creator', 'true');
+      localStorage.setItem('hz_creator_approved_' + email, 'true');
+      if (currentCustomer) {
+        currentCustomer.isCreator = true;
+        localStorage.setItem('hz_customer_user', JSON.stringify(currentCustomer));
+      }
+    } else {
+      csBtn.style.display = 'none';
+    }
+  } catch(e) {
+    csBtn.style.display = isApproved ? 'inline-flex' : 'none';
   }
 }
 
@@ -70,9 +146,23 @@ async function fetchSiteInfo() {
 
 async function fetchCatalog() {
   try {
-    const res = await fetch('/api/catalog');
+    const res = await fetch('/api/catalog?_t=' + Date.now(), {
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+    });
     const data = await res.json();
     if (data.success) {
+      // Merge locally published videos if any to guarantee immediate visibility
+      try {
+        const localVideos = JSON.parse(localStorage.getItem('hz_admin_videos') || '[]');
+        if (localVideos.length > 0) {
+          const existingIds = new Set((data.videos || []).map(v => v.id));
+          const newVideos = localVideos.filter(v => !existingIds.has(v.id));
+          if (newVideos.length > 0) {
+            data.videos = [...newVideos, ...(data.videos || [])];
+          }
+        }
+      } catch(e) {}
+
       catalogData = data;
       renderCategories(data.categories || []);
       renderShorts(data.videos || []);
@@ -215,7 +305,7 @@ function renderShorts(videos) {
     return `
       <div class="reel-card">
         <div class="reel-thumb-box">
-          <video class="reel-thumb-video" preload="metadata" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()">
+          <video class="reel-thumb-video" ${v.poster ? `poster="${v.poster}"` : ''} preload="metadata" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()">
             <source src="${v.shortClipUrl}" type="video/mp4">
           </video>
           <div class="reel-overlay-play" onclick="playShortClip('${v.id}')">
@@ -251,6 +341,9 @@ function renderShorts(videos) {
 function playShortClip(videoId) {
   const video = (catalogData.videos || []).find(v => v.id === videoId);
   if (!video) return;
+
+  // Real-time View & Monetization Tracking (Credits Creator)
+  fetch(`/api/videos/${videoId}/view`, { method: 'POST' }).catch(() => {});
 
   const modal = document.getElementById('shortPlayerModal');
   const player = document.getElementById('shortVideoElement');
@@ -681,7 +774,10 @@ async function openCustomerProfileModal() {
   const crAction = document.getElementById('profCreatorActionArea');
 
   try {
-    const crRes = await fetch(`/api/creator/status?email=${encodeURIComponent(currentCustomer.email)}`);
+    const crRes = await fetch(`/api/creator/status?email=${encodeURIComponent(currentCustomer.email)}&_t=${Date.now()}`, {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+    });
     const crData = await crRes.json();
     if (crData.success && crData.applied && crData.creator) {
       const creator = crData.creator;
@@ -695,9 +791,14 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <button type="button" class="btn btn-gold btn-sm" onclick="closeModal('customerProfileModal'); openCreatorStudioModal();">
-              <span>🚀</span> Open Creator Studio ($USD Hub)
-            </button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="/creator-studio.html" class="btn btn-gold btn-sm" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800;">
+                <span>🌟</span> Open Full Creator Studio ($USD)
+              </a>
+              <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('customerProfileModal'); openCreatorStudioModal();">
+                ⚡ Quick Stats
+              </button>
+            </div>
           `;
         }
       } else if (creator.status === 'pending_verification') {
@@ -710,9 +811,14 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.8; border-color: var(--gold); color: var(--gold);">
-              ⏳ Review in Progress (10-15 Min)
-            </button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.8; border-color: var(--gold); color: var(--gold);">
+                ⏳ Review in Progress (10-15 Min)
+              </button>
+              <a href="/creator-studio.html" class="btn btn-outline btn-sm" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan);">
+                Check Studio Status
+              </a>
+            </div>
           `;
         }
       } else {
@@ -732,19 +838,63 @@ async function openCustomerProfileModal() {
         }
       }
     } else {
-      if (crBadge) {
-        crBadge.textContent = 'Not Applied';
-        crBadge.className = 'badge-pill';
-      }
-      if (crMsg) {
-        crMsg.textContent = 'Videos upload karein aur har 1,000 views par Dollars ($USD) me paise kamayein! Form submit karne ke 10-15 minute me verify karke approve kiya jayega.';
-      }
-      if (crAction) {
-        crAction.innerHTML = `
-          <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
-            <span>🌟</span> Join Creator Program &amp; Earn Dollars ($USD)
-          </button>
-        `;
+      const email = (currentCustomer?.email || '').toLowerCase().trim();
+      const isApprovedLocally = localStorage.getItem('hz_is_creator') === 'true' || 
+                               localStorage.getItem('hz_creator_approved_' + email) === 'true';
+      const isAppliedLocally = localStorage.getItem('hz_creator_applied') === 'true';
+
+      if (isApprovedLocally) {
+        if (crBadge) {
+          crBadge.textContent = '✅ Approved Creator ($USD)';
+          crBadge.className = 'badge-pill badge-fire';
+        }
+        if (crMsg) {
+          crMsg.innerHTML = `Verified Creator! Aapka Creator Studio active hai.`;
+        }
+        if (crAction) {
+          crAction.innerHTML = `
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="/creator-studio.html" class="btn btn-gold btn-sm" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800;">
+                <span>🌟</span> Open Full Creator Studio ($USD)
+              </a>
+            </div>
+          `;
+        }
+      } else if (isAppliedLocally) {
+        if (crBadge) {
+          crBadge.textContent = '⏳ Pending (10-15 Min)';
+          crBadge.className = 'badge-pill badge-gold';
+        }
+        if (crMsg) {
+          crMsg.innerHTML = `Aapki application review ho rahi hai. <strong>10-15 minute</strong> me control desk se verify hokar approve ho jayegi.`;
+        }
+        if (crAction) {
+          crAction.innerHTML = `
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.8; border-color: var(--gold); color: var(--gold);">
+                ⏳ Review in Progress (10-15 Min)
+              </button>
+              <a href="/creator-studio.html" class="btn btn-outline btn-sm" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan);">
+                Check Studio Status
+              </a>
+            </div>
+          `;
+        }
+      } else {
+        if (crBadge) {
+          crBadge.textContent = 'Not Applied';
+          crBadge.className = 'badge-pill';
+        }
+        if (crMsg) {
+          crMsg.textContent = 'Videos upload karein aur har 1,000 views par Dollars ($USD) me paise kamayein! Form submit karne ke 10-15 minute me verify karke approve kiya jayega.';
+        }
+        if (crAction) {
+          crAction.innerHTML = `
+            <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
+              <span>🌟</span> Join Creator Program &amp; Earn Dollars ($USD)
+            </button>
+          `;
+        }
       }
     }
   } catch(err) {
@@ -812,9 +962,28 @@ async function handleCreatorApplySubmit(e) {
     btn.innerHTML = '<span>🚀</span> Submit Creator Application';
 
     if (data.success) {
-      showToast(data.message || 'Application submitted! 10-15 minute me approval hoga. ✅');
+      const cleanEmail = email.toLowerCase().trim();
+      const creatorObj = {
+        realName,
+        handle: handle.startsWith('@') ? handle : '@' + handle,
+        age: Number(age) || 21,
+        city,
+        address,
+        email: cleanEmail,
+        category,
+        bio,
+        status: 'pending_verification',
+        submittedAt: new Date().toISOString()
+      };
+      localStorage.setItem('hz_creator_profile', JSON.stringify(creatorObj));
+      localStorage.setItem('hz_creator_email', cleanEmail);
+      localStorage.setItem('hz_creator_applied', 'true');
+      localStorage.setItem('hz_creator_status', 'pending_verification');
+
+      showToast(data.message || 'Application submitted! Control Desk me pending hai. ✅');
       closeModal('creatorApplyModal');
       openCustomerProfileModal();
+      startAppCreatorStatusPoll(cleanEmail);
     } else {
       showToast(data.message || 'Error submitting application', 'error');
     }
@@ -823,6 +992,40 @@ async function handleCreatorApplySubmit(e) {
     btn.innerHTML = '<span>🚀</span> Submit Creator Application';
     showToast('Failed to submit application to server', 'error');
   }
+}
+
+let appCreatorPollTimer = null;
+function startAppCreatorStatusPoll(email) {
+  if (appCreatorPollTimer) clearInterval(appCreatorPollTimer);
+  const cleanEmail = (email || '').toLowerCase().trim();
+  appCreatorPollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(`/api/creator/status?email=${encodeURIComponent(cleanEmail)}&_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+      });
+      const data = await res.json();
+      if (data.success && data.applied && data.creator && data.creator.status === 'approved') {
+        clearInterval(appCreatorPollTimer);
+        appCreatorPollTimer = null;
+        localStorage.setItem('hz_creator_approved_' + cleanEmail, 'true');
+        localStorage.setItem('hz_is_creator', 'true');
+        localStorage.setItem('hz_creator_status', 'approved');
+        try {
+          const prof = JSON.parse(localStorage.getItem('hz_creator_profile') || '{}');
+          prof.status = 'approved';
+          localStorage.setItem('hz_creator_profile', JSON.stringify(prof));
+        } catch(e) {}
+        if (currentCustomer) currentCustomer.isCreator = true;
+        updateAuthHeaderUI();
+        showToast('🎉 Mubarak ho! Creator Studio Control Desk se turant approve ho gaya! 🌟');
+        const profModal = document.getElementById('customerProfileModal');
+        if (profModal && profModal.classList.contains('active')) {
+          openCustomerProfileModal();
+        }
+      }
+    } catch(e) {}
+  }, 1200);
 }
 
 let currentBoostPayMode = 'instant_demo';

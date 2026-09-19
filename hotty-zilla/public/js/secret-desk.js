@@ -171,6 +171,17 @@ async function loadSecretData() {
       if (document.getElementById('adFrequencySelect')) document.getElementById('adFrequencySelect').value = campsData.adFrequencyPerDay || 3;
       renderSecCampaigns(campaigns);
     }
+
+    // 8. Creator Payouts
+    try {
+      const payoutsRes = await fetch('/api/admin/payouts', { headers: { 'x-admin-pin': secretPin } });
+      const payoutsData = await payoutsRes.json();
+      if (payoutsData.success) {
+        renderSecPayouts(payoutsData.payouts || []);
+      }
+    } catch (e) {
+      console.warn('Payouts load error:', e);
+    }
   } catch (err) {
     console.error('Error loading secret desk data:', err);
   }
@@ -348,9 +359,86 @@ function switchSecretTab(tabName, btnElement) {
   document.getElementById('tabSecSettings').style.display = tabName === 'settings' ? 'block' : 'none';
 }
 
-// 1. Simple Single Video Upload (Supports 10m, 15m, 30m+ HD videos from laptop)
-function handleSimpleVideoUpload(e) {
+let adminUploadMode = 'url';
+
+function setAdminUploadMode(mode) {
+  adminUploadMode = mode;
+  const urlBtn = document.getElementById('adminUploadModeUrlBtn');
+  const fileBtn = document.getElementById('adminUploadModeFileBtn');
+  const urlBox = document.getElementById('adminUrlInputBox');
+  const fileBox = document.getElementById('adminFileInputBox');
+  const submitBtn = document.getElementById('simpVideoSubmitBtn');
+
+  if (mode === 'url') {
+    if (urlBtn) urlBtn.className = 'btn btn-primary';
+    if (fileBtn) fileBtn.className = 'btn btn-outline';
+    if (urlBox) urlBox.style.display = 'block';
+    if (fileBox) fileBox.style.display = 'none';
+    if (submitBtn) submitBtn.innerHTML = '<span>🚀</span> Publish Video Stream to Website';
+  } else {
+    if (fileBtn) fileBtn.className = 'btn btn-primary';
+    if (urlBtn) urlBtn.className = 'btn btn-outline';
+    if (fileBox) fileBox.style.display = 'block';
+    if (urlBox) urlBox.style.display = 'none';
+    if (submitBtn) submitBtn.innerHTML = '<span>🚀</span> Laptop se Video Upload &amp; Live Karein';
+  }
+}
+
+// 1. Simple Video Upload (Supports Direct Video Link or Laptop File)
+async function handleSimpleVideoUpload(e) {
   e.preventDefault();
+  const submitBtn = document.getElementById('simpVideoSubmitBtn');
+  const title = document.getElementById('simpTitle').value.trim();
+  const category = document.getElementById('simpCategory').value;
+  const price = document.getElementById('simpPrice').value || '99';
+  const description = document.getElementById('simpDesc').value.trim();
+
+  if (adminUploadMode === 'url') {
+    const videoUrl = document.getElementById('simpVideoUrl').value.trim();
+    if (!videoUrl) {
+      showToast('Kripya video URL enter karein (Gofile / Catbox / MP4)', 'error');
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Publishing video...';
+
+    try {
+      const res = await fetch('/api/admin/upload-video-simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-pin': secretPin },
+        body: JSON.stringify({ videoUrl, title, category, price, description })
+      });
+      const data = await res.json();
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>🚀</span> Publish Video Stream to Website';
+
+      if (data.success) {
+        showToast('Video successfully live ho gayi! 🎥');
+        try {
+          if (data.video) {
+            let localVideos = JSON.parse(localStorage.getItem('hz_admin_videos') || '[]');
+            if (!localVideos.some(v => v.id === data.video.id)) {
+              localVideos.unshift(data.video);
+              localStorage.setItem('hz_admin_videos', JSON.stringify(localVideos));
+            }
+          }
+        } catch(e) {}
+        document.getElementById('simpleVideoUploadForm').reset();
+        loadSecretData();
+        const manageTabBtn = document.querySelectorAll('.filter-tab')[3];
+        switchSecretTab('manage-videos', manageTabBtn);
+      } else {
+        showToast(data.message || 'Error publishing video', 'error');
+      }
+    } catch(err) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>🚀</span> Publish Video Stream to Website';
+      showToast('Failed to connect to server', 'error');
+    }
+    return;
+  }
+
+  // Laptop File Mode
   const fileInput = document.getElementById('simpVideoFile');
   if (!fileInput.files || !fileInput.files[0]) {
     showToast('Kripya laptop se video file select karein!', 'error');
@@ -358,7 +446,6 @@ function handleSimpleVideoUpload(e) {
   }
 
   const file = fileInput.files[0];
-  const submitBtn = document.getElementById('simpVideoSubmitBtn');
   const progressBox = document.getElementById('simpUploadProgressBox');
   const percentText = document.getElementById('simpUploadPercentText');
   const statusText = document.getElementById('simpUploadStatusText');
@@ -374,10 +461,10 @@ function handleSimpleVideoUpload(e) {
 
   const formData = new FormData();
   formData.append('videoFile', file);
-  formData.append('title', document.getElementById('simpTitle').value.trim());
-  formData.append('category', document.getElementById('simpCategory').value);
-  formData.append('price', document.getElementById('simpPrice').value || '99');
-  formData.append('description', document.getElementById('simpDesc').value.trim());
+  formData.append('title', title);
+  formData.append('category', category);
+  formData.append('price', price);
+  formData.append('description', description);
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/api/admin/upload-video-simple', true);
@@ -482,6 +569,11 @@ async function deleteVideo(id, title) {
     const data = await res.json();
     if (data.success) {
       showToast(data.message || 'Video successfully deleted! 🗑️');
+      try {
+        let localVideos = JSON.parse(localStorage.getItem('hz_admin_videos') || '[]');
+        localVideos = localVideos.filter(v => v.id !== id);
+        localStorage.setItem('hz_admin_videos', JSON.stringify(localVideos));
+      } catch(e) {}
       loadSecretData();
     } else {
       showToast(data.message || 'Error deleting video', 'error');
@@ -748,16 +840,16 @@ function renderSecCreators(creators) {
         <td>
           <div style="display: flex; gap: 6px;">
             ${isPending ? `
-              <button class="btn btn-gold btn-sm" onclick="approveCreator('${c.id}', '${c.realName.replace(/'/g, "\\'")}')" title="Approve Creator for Monetization">
-                ✅ Approve
+              <button class="btn btn-gold btn-sm" onclick="approveCreator('${c.id}', '${c.realName.replace(/'/g, "\\'")}', '${(c.email || '').replace(/'/g, "\\'")}')" title="Approve Creator for Monetization">
+                ⚡ Instant Approve
               </button>
               <button class="btn btn-outline btn-sm" style="border-color: var(--rose); color: var(--rose);" onclick="rejectCreator('${c.id}', '${c.realName.replace(/'/g, "\\'")}')">
                 ✕ Reject
               </button>
             ` : (isApproved ? `
-              <span style="font-size: 0.8rem; color: var(--emerald); font-weight: 700;">✓ Monetized</span>
+              <span style="font-size: 0.8rem; color: var(--emerald); font-weight: 700;">✓ Monetized Active</span>
             ` : `
-              <button class="btn btn-outline btn-sm" onclick="approveCreator('${c.id}', '${c.realName.replace(/'/g, "\\'")}')">
+              <button class="btn btn-outline btn-sm" onclick="approveCreator('${c.id}', '${c.realName.replace(/'/g, "\\'")}', '${(c.email || '').replace(/'/g, "\\'")}')">
                 Re-Approve
               </button>
             `)}
@@ -768,17 +860,29 @@ function renderSecCreators(creators) {
   }).join('');
 }
 
-async function approveCreator(id, name) {
-  if (!confirm(`Creator "${name}" ko approve karein? Unka Creator Studio aur Dollar Monetization turant active ho jayega.`)) return;
-
+async function approveCreator(id, name, email) {
   try {
     const res = await fetch(`/api/admin/creators/${id}/approve`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-pin': secretPin }
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': secretPin, 'Cache-Control': 'no-cache' }
     });
     const data = await res.json();
     if (data.success) {
-      showToast(`Creator "${name}" successfully approved! 🌟`);
+      showToast(`⚡ Creator "${name}" instantly approved! Creator Studio live. 🌟`);
+      
+      // Instant Cross-Tab Sync via BroadcastChannel & LocalStorage
+      try {
+        const channel = new BroadcastChannel('hz_creator_sync');
+        channel.postMessage({ action: 'APPROVED', creatorId: id, email: email, timestamp: Date.now() });
+        channel.close();
+      } catch(e) {}
+      try {
+        if (email) {
+          localStorage.setItem('hz_creator_approved_' + email.toLowerCase(), 'true');
+        }
+        localStorage.setItem('hz_last_approval_event', JSON.stringify({ creatorId: id, email, time: Date.now() }));
+      } catch(e) {}
+
       loadSecretData();
     } else {
       showToast(data.message || 'Error approving creator', 'error');
@@ -882,5 +986,71 @@ async function handleSaveAdFrequency(e) {
     }
   } catch (err) {
     showToast('Failed to save ad frequency.', 'error');
+  }
+}
+
+// 9. Render Creator Cashout / Payout Requests
+function renderSecPayouts(payouts) {
+  const tbody = document.getElementById('secPayoutsTbody');
+  const badge = document.getElementById('payoutCountBadge');
+  if (badge) badge.textContent = `${payouts.length} Requests`;
+  if (!tbody) return;
+
+  if (payouts.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-dim); padding: 25px;">Koi cashout / payout request nahi aayi hai.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = payouts.map(p => {
+    const isPending = p.status === 'pending';
+    const statusBadge = isPending
+      ? `<span class="badge-status pending_verification">⏳ Pending Wire</span>`
+      : `<span class="badge-status approved">✅ Paid</span>`;
+
+    return `
+      <tr>
+        <td style="font-family: monospace; color: var(--gold); font-weight: 700;">${p.id}</td>
+        <td style="font-weight: 700; color: #fff;">${p.creatorHandle || p.creatorEmail}</td>
+        <td style="font-weight: 900; color: var(--emerald); font-size: 1.1rem;">$${Number(p.amountUSD).toFixed(2)}</td>
+        <td style="color: var(--cyan); font-weight: 700; text-transform: uppercase;">${p.method}</td>
+        <td>
+          <div style="font-size: 0.85rem; font-family: monospace; color: #f1f5f9; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px;">
+            ${p.payoutDetails}
+          </div>
+        </td>
+        <td style="font-size: 0.8rem; color: var(--text-muted);">${new Date(p.createdAt).toLocaleDateString('en-IN')}</td>
+        <td>${statusBadge}</td>
+        <td>
+          ${isPending ? `
+            <button class="btn btn-gold btn-sm" onclick="approvePayout('${p.id}', '${p.method}', '${p.amountUSD}')">
+              ✅ Mark Paid
+            </button>
+          ` : `
+            <span style="font-size: 0.8rem; color: var(--emerald); font-weight: 700;">✓ Completed</span>
+          `}
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function approvePayout(id, method, amountUSD) {
+  if (!confirm(`Payout request ${id} ($${amountUSD} USD via ${method}) ko mark paid karein?`)) return;
+
+  try {
+    const res = await fetch(`/api/admin/payouts/${id}/pay`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-pin': secretPin },
+      body: JSON.stringify({ transactionRef: 'TXN-' + Date.now().toString(36).toUpperCase() })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast('Payout successfully marked as paid! ✅');
+      loadSecretData();
+    } else {
+      showToast(data.message || 'Error marking payout', 'error');
+    }
+  } catch(err) {
+    showToast('Failed to mark payout as paid.', 'error');
   }
 }

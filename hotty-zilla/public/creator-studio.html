@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Creator Studio &amp; Monetization Hub - HOTTY ZILLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .studio-header {
+      background: rgba(8, 10, 15, 0.96);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 12px 0;
+    }
+    .studio-nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .creator-badge-verified {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--emerald);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.76rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .stat-metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+    .stat-metric-card:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+    }
+    .stat-metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .stat-metric-card.green::before { background: var(--emerald); }
+    .stat-metric-card.gold::before { background: var(--gold); }
+    .stat-metric-card.cyan::before { background: var(--cyan); }
+    .stat-metric-card.fire::before { background: var(--gradient-fire); }
+
+    .studio-tab-btn {
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .studio-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .studio-tab-btn.active {
+      background: var(--gradient-fire);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255, 65, 108, 0.4);
+    }
+    .creator-video-row {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      transition: var(--transition);
+    }
+    .creator-video-row:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 65, 108, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Header -->
+  <header class="studio-header">
+    <div class="studio-nav-container">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <a href="/" class="brand-logo" style="text-decoration: none;">
+          <span class="brand-icon">🔥</span>
+          <span class="brand-text">HOTTY<span>ZILLA</span></span>
+        </a>
+        <span style="background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 0.95rem; letter-spacing: 0.8px;">
+          CREATOR STUDIO
+        </span>
+      </div>
+
+      <!-- Identity & Balance Pill -->
+      <div id="creatorIdentityPill" style="display: none; align-items: center; gap: 14px;">
+        <div style="text-align: right;">
+          <div style="display: flex; align-items: center; gap: 8px; justify-content: flex-end;">
+            <span style="font-weight: 800; color: #fff; font-size: 0.95rem;" id="headCreatorHandle">@creator</span>
+            <span class="creator-badge-verified">✓ Verified</span>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-dim);">
+            Available: <strong style="color: var(--emerald);" id="headCreatorBalance">$0.00 USD</strong>
+          </div>
+        </div>
+        <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--gradient-fire); display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; font-size: 1.2rem;" id="headCreatorAvatar">
+          C
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="/" class="btn btn-outline btn-sm">
+            🌐 Live Website
+          </a>
+          <button class="btn btn-outline btn-sm" style="border-color: var(--rose); color: var(--rose);" onclick="creatorLogout()">
+            🚪 Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- AUTH / GATEKEEPER VIEW (Shown if not logged in or not verified) -->
+  <div id="gatekeeperContainer" class="container" style="max-width: 620px; padding: 40px 20px; text-align: center;">
+    
+    <!-- State 1: Need Login -->
+    <div id="gateNeedLogin" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px 28px;">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">🌟</div>
+      <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;">Hotty Zilla Creator Studio</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">
+        Apna Creator Email enter karein aur apne views, dollar ($USD) earnings aur video upload hub tak pahuchein.
+      </p>
+      <form onsubmit="handleStudioLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label">Creator Email Address *</label>
+          <input type="email" id="gateEmailInput" class="form-input" placeholder="e.g. priya@gmail.com" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="gateLoginBtn">
+          <span>⚡</span> Open Creator Studio
+        </button>
+      </form>
+      <div style="margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px;">
+        <span style="font-size: 0.88rem; color: var(--text-muted);">Naye creator hain?</span>
+        <button type="button" class="btn btn-outline btn-sm" style="margin-left: 8px; border-color: var(--gold); color: var(--gold);" onclick="showDirectApplyForm()">
+          🌟 Direct Creator Registration Form
+        </button>
+      </div>
+    </div>
+
+    <!-- State 2: Pending Approval Notice (Live Real-Time Sync) -->
+    <div id="gatePendingApproval" style="display: none; background: rgba(255, 183, 3, 0.08); border: 2px solid var(--gold); border-radius: var(--radius-lg); padding: 40px 30px;">
+      <div style="font-size: 3.5rem; margin-bottom: 12px; animation: pulseGlow 1.5s infinite;">⏳</div>
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 8px;">Waiting for Verification</h2>
+      <p style="color: #cbd5e1; font-size: 0.96rem; line-height: 1.6; margin-bottom: 18px;">
+        Aapki application Control Desk me verification ke liye pending hai. <br>
+        <strong>Control Desk se approve karte hi ye dashboard TURANT khul jayega (Zero wait time)!</strong>
+      </p>
+
+      <div style="background: rgba(0,0,0,0.4); padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.88rem; color: var(--text-muted); margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div>Account: <strong id="gatePendingEmail" style="color: #fff;"></strong></div>
+        <span class="badge-pill badge-gold" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulseDot 1s infinite;"></span>
+          Live Sync Active
+        </span>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-gold" onclick="checkCreatorAuth(null, true)">
+          ⚡ Instant Status Check
+        </button>
+        <button class="btn btn-outline" style="border-color: var(--cyan); color: var(--cyan);" onclick="instantDemoApprove()">
+          🚀 Quick Demo Approve
+        </button>
+        <a href="/" class="btn btn-outline">
+          Back to Website
+        </a>
+      </div>
+    </div>
+
+    <!-- State 3: Direct Creator Application Form -->
+    <div id="gateNotApplied" style="display: none; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px 28px; text-align: left;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 3rem; margin-bottom: 8px;">🚀</div>
+        <h2 style="font-size: 1.7rem; font-weight: 800; color: #fff;">Join Creator Program (Earn $USD)</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">
+          Videos upload karein aur har 1,000 views par <strong>$1.50 USD</strong> + 70% rev-share kamayein!
+        </p>
+      </div>
+
+      <form onsubmit="handleDirectStudioApply(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Real Name (Govt ID) *</label>
+            <input type="text" id="gCrRealName" class="form-input" placeholder="e.g. Priya Sharma" required minlength="2">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Creator Handle (@name) *</label>
+            <input type="text" id="gCrHandle" class="form-input" placeholder="e.g. @priya_hotty" required minlength="3">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input type="email" id="gCrEmail" class="form-input" placeholder="priya@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Age (Strictly 18+) *</label>
+            <input type="number" id="gCrAge" class="form-input" placeholder="21" min="18" max="99" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">City / State *</label>
+            <input type="text" id="gCrCity" class="form-input" placeholder="e.g. Mumbai, MH" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Primary Category *</label>
+            <select id="gCrCategory" class="form-select">
+              <option value="Exclusive Teasers">Exclusive Teasers</option>
+              <option value="Private Hangout">Private Hangout</option>
+              <option value="Glamour &amp; Dance">Glamour &amp; Dance</option>
+              <option value="SPA &amp; Wellness">SPA &amp; Wellness</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Full Residential Address (Identity Proof) *</label>
+          <input type="text" id="gCrAddress" class="form-input" placeholder="Full address with pincode" required minlength="6">
+        </div>
+
+        <div style="margin: 14px 0 18px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 10px 12px;">
+          <label style="display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 0.82rem; color: #cbd5e1;">
+            <input type="checkbox" id="gCrConsent" required checked style="margin-top: 3px; accent-color: var(--gold);">
+            <span>Main confirm karta/karti hoon ki main 18+ saal ka hoon aur Creator Dollar Monetization rules accept karta hoon.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-gold btn-lg" style="width: 100%;" id="gCrSubmitBtn">
+          <span>🚀</span> Submit Application &amp; Connect to Control Desk
+        </button>
+        <div style="text-align: center; margin-top: 14px;">
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Pehle se application submit ki hai?</span>
+          <button type="button" class="btn btn-outline btn-sm" style="margin-left: 8px; border-color: var(--cyan); color: var(--cyan);" onclick="showLoginForm()">
+            ⚡ Email se Check Karein
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- MAIN CREATOR STUDIO DASHBOARD (Unlocked for Approved Creators) -->
+  <main id="studioDashboardMain" class="container" style="display: none; padding: 40px 20px 80px;">
+    
+    <!-- Top Greeting Banner -->
+    <div style="background: linear-gradient(135deg, rgba(255, 65, 108, 0.12) 0%, rgba(15, 19, 29, 0.85) 100%); border: 1px solid var(--border-accent); border-radius: var(--radius-lg); padding: 26px 30px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <h1 style="font-size: 1.85rem; font-weight: 900; color: #fff;">Welcome, <span id="csWelcomeName">Priya Sharma</span>!</h1>
+          <span class="creator-badge-verified">✓ Official Monetized Creator</span>
+        </div>
+        <p style="color: #cbd5e1; font-size: 0.92rem;">
+          xHamster &amp; Faphouse style monetization active: Har 1,000 views par <strong>$<span id="csRatePer1k">1.50</span> USD</strong> milte hain + Video Unlocks ka 70% direct rev-share!
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-gold" onclick="switchStudioTab('upload')">
+          <span>📤</span> Upload New Video
+        </button>
+        <button class="btn btn-primary" onclick="switchStudioTab('payouts')">
+          <span>💵</span> Request Cashout
+        </button>
+      </div>
+    </div>
+
+    <!-- Analytics & Monetization Metric Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 36px;">
+      <div class="stat-metric-card green">
+        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Total Dollar Earnings</div>
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--emerald);" id="metTotalEarningsUSD">$0.00</div>
+        <div style="font-size: 0.76rem; color: var(--text-dim);">All-time accumulated ($USD)</div>
+      </div>
+
+      <div class="stat-metric-card gold">
+        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Available Balance</div>
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--gold);" id="metAvailableBalanceUSD">$0.00</div>
+        <div style="font-size: 0.76rem; color: var(--emerald); font-weight: 600;">Ready to withdraw (Min $50)</div>
+      </div>
+
+      <div class="stat-metric-card cyan">
+        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Total Video Plays</div>
+        <div style="font-size: 2.2rem; font-weight: 900; color: var(--cyan);" id="metTotalViews">0</div>
+        <div style="font-size: 0.76rem; color: var(--text-dim);">Across all published reels</div>
+      </div>
+
+      <div class="stat-metric-card fire">
+        <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">My Published Videos</div>
+        <div style="font-size: 2.2rem; font-weight: 900; color: #ff6b8b;" id="metVideosCount">0</div>
+        <div style="font-size: 0.76rem; color: var(--text-dim);">Live on Hotty Zilla</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div style="display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+      <button class="studio-tab-btn active" onclick="switchStudioTab('upload', this)">
+        <span>📤</span> Upload New Video
+      </button>
+      <button class="studio-tab-btn" onclick="switchStudioTab('my-videos', this)">
+        <span>🎬</span> My Videos (<span id="tabCountMyVideos">0</span>)
+      </button>
+      <button class="studio-tab-btn" onclick="switchStudioTab('payouts', this)">
+        <span>💵</span> Cashout &amp; Payouts
+      </button>
+      <button class="studio-tab-btn" onclick="switchStudioTab('boost', this)">
+        <span>🚀</span> Promote &amp; Boost Traffic
+      </button>
+    </div>
+
+    <!-- TAB 1: UPLOAD NEW VIDEO (Gofile, Catbox, Direct MP4) -->
+    <div id="tabStudioUpload" style="max-width: 720px; margin: 0 auto;">
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 30px; backdrop-filter: blur(14px);">
+        <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 6px;">📤 Publish New Video Short + Full HD Episode</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px;">
+          Apni video ko Hotty Zilla par live publish karein. Teaser clip sabhi users ke liye free rahegi, aur full uncut HD video dekhne ke liye customer aapka set kiya hua price pay karega!
+        </p>
+
+        <!-- Cloud Link Guide Box -->
+        <div style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--cyan); border-radius: 4px; padding: 14px 16px; margin-bottom: 24px; font-size: 0.86rem; color: #f1f5f9; line-height: 1.6;">
+          <strong>💡 100% Free Unlimited Video Hosting:</strong><br>
+          Badi 1GB ya 2GB videos ko <a href="https://gofile.io" target="_blank" style="color: var(--gold); font-weight: 700;">Gofile.io</a> ya <a href="https://catbox.moe" target="_blank" style="color: var(--gold); font-weight: 700;">Catbox.moe</a> par upload karein aur waha se mila direct link yaha paste karein. Video zero-buffering ke sath Hotty Zilla ke player me chalegi!
+        </div>
+
+        <form id="creatorUploadForm" onsubmit="handleCreatorVideoUpload(event)">
+          <div class="form-group">
+            <label class="form-label">Video Title *</label>
+            <input type="text" id="cuTitle" class="form-input" placeholder="e.g. Late Night Candid Masti Episode 1" required minlength="4">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="cuCategory" class="form-select" required>
+                <option value="Private Hangout">Private Hangout &amp; VIP Masti</option>
+                <option value="Late Night Fun">Late Night Fun</option>
+                <option value="Coffee Dates">Coffee Dates</option>
+                <option value="SPA &amp; Wellness">SPA &amp; Wellness</option>
+                <option value="Long Drives">Long Drives</option>
+                <option value="Exclusive Teasers">Exclusive Teasers</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Video Unlock Price (₹) *</label>
+              <input type="number" id="cuPrice" class="form-input" placeholder="99" value="99" min="29" max="9999" required>
+              <span style="font-size: 0.74rem; color: var(--emerald);">Aapko har sale ka 70% direct rev-share milega</span>
+            </div>
+          </div>
+
+          <!-- Video URLs -->
+          <div class="form-group">
+            <label class="form-label">Free Teaser Clip URL (Short Video Link) *</label>
+            <input type="url" id="cuShortUrl" class="form-input" placeholder="https://files.catbox.moe/xxxxxx.mp4 ya Gofile link" required>
+            <div style="font-size: 0.76rem; color: var(--text-dim); margin-top: 4px;">* 30-40 second ki teaser clip jo visitor ko free me dikhegi.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Full Uncut HD Video URL (Complete Episode) *</label>
+            <input type="url" id="cuFullUrl" class="form-input" placeholder="https://files.catbox.moe/xxxxxx.mp4 ya Gofile direct link" required>
+            <div style="font-size: 0.76rem; color: var(--text-dim); margin-top: 4px;">* Pura 10m/20m/30m+ HD video jo customer paise dekar unlock karega.</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Teaser Duration</label>
+              <input type="text" id="cuShortDuration" class="form-input" placeholder="0:30s Teaser" value="0:30s Teaser">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Video Duration</label>
+              <input type="text" id="cuFullDuration" class="form-input" placeholder="20 Mins Full HD" value="20 Mins Full HD">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Video Description (Optional)</label>
+            <textarea id="cuDesc" class="form-textarea" rows="2" placeholder="Describe your video episode..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gold btn-lg" style="width: 100%;" id="cuSubmitBtn">
+            <span>🚀</span> Publish Video to Hotty Zilla
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 2: MY VIDEOS (Content Manager) -->
+    <div id="tabStudioMyVideos" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.4rem; font-weight: 800;">🎬 My Uploaded Content</h2>
+          <p style="color: var(--text-muted); font-size: 0.86rem;">Aapki uploads par kitne views aur dollars kamaye gaye hain:</p>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="loadMyVideos()">
+          🔄 Refresh Videos
+        </button>
+      </div>
+
+      <div id="myVideosListContainer" style="display: flex; flex-direction: column; gap: 14px;">
+        <!-- Injected dynamically via creator-studio.js -->
+      </div>
+    </div>
+
+    <!-- TAB 3: CASHOUT & PAYOUTS (Monetization Hub) -->
+    <div id="tabStudioPayouts" style="display: none; max-width: 800px; margin: 0 auto;">
+      
+      <!-- Payout Balance Banner -->
+      <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 19, 29, 0.9) 100%); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-lg); padding: 26px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Withdrawable Balance</div>
+          <div style="font-size: 2.8rem; font-weight: 900; color: var(--emerald);" id="payoutAvailableBalance">$0.00 USD</div>
+          <div style="font-size: 0.82rem; color: #cbd5e1;">Minimum Cashout Threshold: <strong>$50.00 USD</strong> • 24-48 Hours Processing</div>
+        </div>
+        <button class="btn btn-gold btn-lg" onclick="document.getElementById('payoutReqBox').scrollIntoView({ behavior: 'smooth' })">
+          💵 Request Withdrawal
+        </button>
+      </div>
+
+      <!-- Request Withdrawal Form Card -->
+      <div id="payoutReqBox" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 26px; margin-bottom: 30px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">💸 Submit Cashout Request</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
+          Apni kamai ko PayPal, Crypto USDT ya Direct Bank Account me withdraw karein:
+        </p>
+
+        <form id="payoutSubmitForm" onsubmit="handlePayoutSubmit(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Withdrawal Amount ($USD) *</label>
+              <input type="number" id="poAmount" class="form-input" placeholder="Min 50" min="50" step="1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Method *</label>
+              <select id="poMethod" class="form-select" required onchange="handlePayoutMethodChange()">
+                <option value="usdt">Crypto USDT (TRC-20) - Instant &amp; Global</option>
+                <option value="bank_wire">Direct Indian Bank Transfer (NEFT / IMPS)</option>
+                <option value="paypal">PayPal ($USD)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="poDetailsLabel">USDT (TRC-20) Wallet Address *</label>
+            <input type="text" id="poDetails" class="form-input" placeholder="e.g. TXyZ123456789... TRC20 Address" required minlength="10">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="poSubmitBtn">
+            <span>💵</span> Submit Withdrawal Request
+          </button>
+        </form>
+      </div>
+
+      <!-- Payouts History -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 14px;">📋 Cashout History</h3>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Request ID</th>
+                <th>Amount ($USD)</th>
+                <th>Amount (₹ INR)</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="payoutHistoryTbody">
+              <tr><td colspan="6" style="text-align: center; color: var(--text-dim); padding: 20px;">No withdrawal requests yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 4: PROMOTE & BOOST TRAFFIC -->
+    <div id="tabStudioBoost" style="max-width: 760px; margin: 0 auto;">
+      <div style="background: rgba(255, 65, 108, 0.06); border: 1px solid rgba(255, 65, 108, 0.35); border-radius: var(--radius-lg); padding: 28px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-size: 2rem;">🚀</span>
+          <div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">Paid Traffic &amp; Video Boost Campaign</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">Apni video ko feed ke top par "SPONSORED REEL" banakar lakho fans tak pahunchayein!</p>
+          </div>
+        </div>
+
+        <form id="creatorBoostFormStudio" onsubmit="handleBoostSubmitStudio(event)">
+          <div class="form-group" style="margin-top: 18px;">
+            <label class="form-label">Promote Karne Ke Liye Video Chunein *</label>
+            <select id="boostVidSelectStudio" class="form-select" required>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Traffic Package Chunein *</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+              <label style="background: rgba(0,0,0,0.5); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; cursor: pointer; text-align: center; display: block;" class="boost-pkg-label">
+                <input type="radio" name="boostPkgStudio" value="5000:500" checked style="accent-color: var(--accent-fire-start);">
+                <div style="font-weight: 800; font-size: 1.15rem; color: #fff; margin-top: 4px;">5,000 Views</div>
+                <div style="color: var(--gold); font-weight: 900; font-size: 1.25rem;">₹500</div>
+                <div style="font-size: 0.72rem; color: var(--emerald);">~$6 USD</div>
+              </label>
+
+              <label style="background: rgba(255, 65, 108, 0.1); border: 2px solid var(--accent-fire-start); border-radius: var(--radius-md); padding: 14px; cursor: pointer; text-align: center; display: block; position: relative;" class="boost-pkg-label">
+                <span style="position: absolute; top: -10px; right: 8px; background: var(--gradient-fire); color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 10px;">POPULAR 🔥</span>
+                <input type="radio" name="boostPkgStudio" value="25000:1200" style="accent-color: var(--accent-fire-start);">
+                <div style="font-weight: 800; font-size: 1.15rem; color: #fff; margin-top: 4px;">25,000 Views</div>
+                <div style="color: var(--gold); font-weight: 900; font-size: 1.25rem;">₹1,200</div>
+                <div style="font-size: 0.72rem; color: var(--emerald);">~$15 USD</div>
+              </label>
+
+              <label style="background: rgba(0,0,0,0.5); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; cursor: pointer; text-align: center; display: block;" class="boost-pkg-label">
+                <input type="radio" name="boostPkgStudio" value="100000:2500" style="accent-color: var(--accent-fire-start);">
+                <div style="font-weight: 800; font-size: 1.15rem; color: #fff; margin-top: 4px;">100,000 Views</div>
+                <div style="color: var(--gold); font-weight: 900; font-size: 1.25rem;">₹2,500</div>
+                <div style="font-size: 0.72rem; color: var(--emerald);">~$30 USD</div>
+              </label>
+
+              <label style="background: rgba(255, 183, 3, 0.1); border: 2px solid var(--gold); border-radius: var(--radius-md); padding: 14px; cursor: pointer; text-align: center; display: block; position: relative;" class="boost-pkg-label">
+                <span style="position: absolute; top: -10px; right: 8px; background: var(--gradient-gold); color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px;">VIRAL 🚀</span>
+                <input type="radio" name="boostPkgStudio" value="2000000:5000" style="accent-color: var(--gold);">
+                <div style="font-weight: 800; font-size: 1.15rem; color: #fff; margin-top: 4px;">2,000,000 Views</div>
+                <div style="color: var(--gold); font-weight: 900; font-size: 1.25rem;">₹5,000</div>
+                <div style="font-size: 0.72rem; color: var(--emerald);">~$60 USD</div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="boostBtnStudio">
+            <span>🚀</span> Activate Traffic Boost Campaign
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/js/creator-studio.js"></script>
+</body>
+</html>
