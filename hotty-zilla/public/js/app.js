@@ -919,29 +919,73 @@ function renderMemberships(plans) {
   if (!container) return;
 
   container.innerHTML = plans.map((p, idx) => {
-    const isFeatured = p.id === 'plan-3m';
-    return `
-      <div class="member-plan-card ${isFeatured ? 'featured' : ''}">
-        <span class="plan-badge-top">${p.badge}</span>
-        <h3 class="plan-title">${p.title}</h3>
-        <div class="plan-duration">${p.durationText}</div>
+    let tierClass = 'tier-starter';
+    let tierIcon = '⭐';
+    let btnClass = 'btn-tier-starter';
+    let btnText = 'Get 1 Month Pass ⚡';
+    let isFeatured = false;
 
-        <div class="plan-price-row">
-          <span class="plan-price-val">₹${p.price}</span>
-          ${p.originalPrice ? `<span class="plan-price-strike">₹${p.originalPrice}</span>` : ''}
+    if (p.id === 'plan-3m') {
+      tierClass = 'tier-popular';
+      tierIcon = '🔥';
+      btnClass = 'btn-tier-popular';
+      btnText = 'Unlock VIP Club 🚀';
+      isFeatured = true;
+    } else if (p.id === 'plan-6m') {
+      tierClass = 'tier-gold';
+      tierIcon = '💎';
+      btnClass = 'btn-tier-gold';
+      btnText = 'Claim VIP Gold 💎';
+    } else if (p.id === 'plan-12m') {
+      tierClass = 'tier-royal';
+      tierIcon = '👑';
+      btnClass = 'btn-tier-royal';
+      btnText = 'Join Royal All-Access 👑';
+    }
+
+    const durationMonths = p.durationMonths || (p.id === 'plan-1m' ? 1 : (p.id === 'plan-3m' ? 3 : (p.id === 'plan-6m' ? 6 : 12)));
+    const monthlyRate = Math.round(p.price / durationMonths);
+    const discountPct = p.originalPrice ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : 0;
+
+    return `
+      <div class="member-plan-card ${tierClass} ${isFeatured ? 'featured' : ''}">
+        <span class="plan-badge-top">${p.badge}</span>
+        
+        <div class="plan-header">
+          <div class="plan-tier-icon-wrap">${tierIcon}</div>
+          <h3 class="plan-title">${p.title}</h3>
+          <div class="plan-duration-badge">
+            <span>⏱️</span>
+            <span>${p.durationText}</span>
+          </div>
+        </div>
+
+        <div class="plan-pricing-box">
+          <div class="plan-price-row">
+            <span class="plan-price-currency">₹</span>
+            <span class="plan-price-val">${p.price.toLocaleString('en-IN')}</span>
+            ${p.originalPrice ? `<span class="plan-price-strike">₹${p.originalPrice.toLocaleString('en-IN')}</span>` : ''}
+            ${discountPct > 0 ? `<span class="plan-discount-pill">${discountPct}% OFF</span>` : ''}
+          </div>
+          <div class="plan-monthly-breakdown">
+            Equivalent to <strong>₹${monthlyRate}/mo</strong>
+          </div>
         </div>
 
         <ul class="plan-perks-list">
-          ${(p.perks || []).map(perk => `
-            <li class="plan-perk-item">
-              <span style="color: var(--emerald); font-weight: 800;">✓</span>
-              <span>${perk}</span>
-            </li>
-          `).join('')}
+          ${(p.perks || []).map(perk => {
+            const isHighlighted = perk.toLowerCase().includes('free') || perk.toLowerCase().includes('priority') || perk.toLowerCase().includes('guaranteed') || perk.toLowerCase().includes('1 year');
+            return `
+              <li class="plan-perk-item ${isHighlighted ? 'plan-perk-highlight' : ''}">
+                <span class="plan-perk-check">✓</span>
+                <span>${isHighlighted ? '<span class="perk-sparkle">✨ </span>' : ''}${perk}</span>
+              </li>
+            `;
+          }).join('')}
         </ul>
 
-        <button class="btn ${isFeatured ? 'btn-primary' : 'btn-gold'} btn-lg" style="width: 100%;" onclick="openCheckout('membership', '${p.id}')">
-          <span>👑</span> Join ${p.title}
+        <button class="btn-plan-action ${btnClass}" onclick="openCheckout('membership', '${p.id}')">
+          <span>${btnText}</span>
         </button>
       </div>
     `;

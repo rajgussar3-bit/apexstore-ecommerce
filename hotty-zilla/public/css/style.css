@@ -757,98 +757,473 @@ body {
 }
 
 /* ===================================================
-   VIP MEMBERSHIP PLANS GRID
+   ULTRA-PREMIUM VIP MEMBERSHIP PLANS GRID & CARDS
    =================================================== */
 .memberships-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  align-items: stretch;
+  position: relative;
+  margin-top: 24px;
 }
 
+@media (max-width: 1200px) {
+  .memberships-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 680px) {
+  .memberships-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Base Card - Deep Obsidian Luxury Glass */
 .member-plan-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 30px 24px;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(30, 36, 52, 0.7) 0%, rgba(11, 14, 22, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 32px 22px 24px;
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: var(--transition);
-  backdrop-filter: blur(12px);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
 }
-.member-plan-card.featured {
-  border-color: var(--border-accent);
-  background: linear-gradient(180deg, rgba(255, 65, 108, 0.08) 0%, rgba(18, 23, 35, 0.9) 100%);
-  box-shadow: var(--shadow-glow);
+
+/* Top Subtle Radial Light Beam */
+.member-plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.08), transparent 70%);
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
 .member-plan-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px -10px rgba(0, 0, 0, 0.85);
 }
 
+.member-plan-card:hover::before {
+  opacity: 1;
+}
+
+/* 1. TIER: STARTER (Silver / Platinum Sleek) */
+.member-plan-card.tier-starter {
+  border-color: rgba(148, 163, 184, 0.25);
+}
+.member-plan-card.tier-starter:hover {
+  border-color: rgba(148, 163, 184, 0.6);
+  box-shadow: 0 20px 40px -10px rgba(148, 163, 184, 0.15), 0 0 20px rgba(148, 163, 184, 0.08);
+}
+.member-plan-card.tier-starter .plan-badge-top {
+  background: linear-gradient(135deg, #475569, #334155);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* 2. TIER: MOST POPULAR (Ruby Fire Flame / Glow Neon) */
+.member-plan-card.tier-popular,
+.member-plan-card.featured {
+  border-color: rgba(255, 65, 108, 0.65);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255, 65, 108, 0.15) 0%, rgba(15, 13, 24, 0.98) 100%);
+  box-shadow: 0 0 35px rgba(255, 65, 108, 0.22), 0 20px 40px -10px rgba(0, 0, 0, 0.8);
+}
+.member-plan-card.tier-popular::before,
+.member-plan-card.featured::before {
+  background: radial-gradient(circle at 50% -20%, rgba(255, 65, 108, 0.28), transparent 75%);
+}
+.member-plan-card.tier-popular:hover,
+.member-plan-card.featured:hover {
+  border-color: #ff416c;
+  transform: translateY(-10px);
+  box-shadow: 0 0 45px rgba(255, 65, 108, 0.38), 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+}
+.member-plan-card.tier-popular .plan-badge-top,
+.member-plan-card.featured .plan-badge-top {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(255, 65, 108, 0.6);
+  animation: popularPulse 3s infinite alternate ease-in-out;
+}
+@keyframes popularPulse {
+  0% { box-shadow: 0 4px 14px rgba(255, 65, 108, 0.5); }
+  100% { box-shadow: 0 6px 22px rgba(255, 65, 108, 0.85); }
+}
+
+/* 3. TIER: GOLD / SAPPHIRE (Best Value) */
+.member-plan-card.tier-gold {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(56, 189, 248, 0.12) 0%, rgba(10, 16, 26, 0.98) 100%);
+}
+.member-plan-card.tier-gold::before {
+  background: radial-gradient(circle at 50% -20%, rgba(56, 189, 248, 0.22), transparent 75%);
+}
+.member-plan-card.tier-gold:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  transform: translateY(-8px);
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.28), 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+}
+.member-plan-card.tier-gold .plan-badge-top {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.45);
+}
+
+/* 4. TIER: ROYAL 24K GOLD (Elite Crown VIP) */
+.member-plan-card.tier-royal {
+  border-color: rgba(255, 183, 3, 0.65);
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255, 183, 3, 0.16) 0%, rgba(18, 14, 10, 0.98) 100%);
+  box-shadow: 0 0 35px rgba(255, 183, 3, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.85);
+}
+.member-plan-card.tier-royal::before {
+  background: radial-gradient(circle at 50% -20%, rgba(255, 183, 3, 0.28), transparent 75%);
+}
+.member-plan-card.tier-royal:hover {
+  border-color: #ffb703;
+  transform: translateY(-10px);
+  box-shadow: 0 0 50px rgba(255, 183, 3, 0.4), 0 30px 60px -15px rgba(0, 0, 0, 0.95);
+}
+.member-plan-card.tier-royal .plan-badge-top {
+  background: linear-gradient(135deg, #f59e0b, #ffd700, #d97706);
+  color: #0b0d14;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 18px rgba(255, 183, 3, 0.6);
+}
+
+/* Plan Badges */
 .plan-badge-top {
   position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--gradient-fire);
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 4px 14px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4);
+  top: 14px;
+  right: 16px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Card Header & Tier Icon */
+.plan-header {
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.plan-tier-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.tier-starter .plan-tier-icon-wrap {
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+.tier-popular .plan-tier-icon-wrap,
+.featured .plan-tier-icon-wrap {
+  background: rgba(255, 65, 108, 0.15);
+  border-color: rgba(255, 65, 108, 0.4);
+}
+.tier-gold .plan-tier-icon-wrap {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+.tier-royal .plan-tier-icon-wrap {
+  background: rgba(255, 183, 3, 0.15);
+  border-color: rgba(255, 183, 3, 0.4);
 }
 
 .plan-title {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  text-align: center;
-  margin-top: 10px;
+  color: #fff;
+  letter-spacing: -0.3px;
+  line-height: 1.25;
   margin-bottom: 6px;
 }
+.tier-royal .plan-title {
+  color: #fff;
+  background: linear-gradient(135deg, #ffffff 40%, #fef08a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-.plan-duration {
-  text-align: center;
-  font-size: 0.85rem;
+.plan-duration-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
   color: var(--text-muted);
-  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+/* Pricing Area */
+.plan-pricing-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 14px 0 18px;
+  position: relative;
+  z-index: 1;
 }
 
 .plan-price-row {
-  text-align: center;
-  margin-bottom: 22px;
   display: flex;
   align-items: baseline;
-  justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-.plan-price-val {
-  font-size: 2.4rem;
-  font-weight: 900;
+
+.plan-price-currency {
+  font-size: 1.3rem;
+  font-weight: 700;
   color: var(--gold);
 }
+
+.plan-price-val {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.tier-popular .plan-price-val {
+  color: #ffb703;
+}
+.tier-royal .plan-price-val {
+  color: #ffd700;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
 .plan-price-strike {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
   text-decoration: line-through;
 }
 
+.plan-discount-pill {
+  background: rgba(16, 185, 129, 0.16);
+  color: var(--emerald);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.4px;
+}
+
+.plan-monthly-breakdown {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+.plan-monthly-breakdown strong {
+  color: #f1f5f9;
+  font-weight: 800;
+}
+
+/* Perks List */
 .plan-perks-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 26px;
+  gap: 12px;
+  margin-bottom: 24px;
   flex-grow: 1;
+  position: relative;
+  z-index: 1;
+  padding: 0;
 }
 
 .plan-perk-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.plan-perk-check {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: var(--emerald);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 900;
+  margin-top: 2px;
+}
+.tier-royal .plan-perk-check {
+  background: rgba(255, 183, 3, 0.2);
+  border-color: rgba(255, 183, 3, 0.5);
+  color: #ffd700;
+}
+
+.plan-perk-highlight {
+  color: #fff;
+  font-weight: 700;
+}
+.plan-perk-highlight .perk-sparkle {
+  color: var(--gold);
+}
+
+/* Action Buttons with Shimmer */
+.btn-plan-action {
+  position: relative;
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 0.94rem;
+  font-weight: 800;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Shimmer animation sweep */
+.btn-plan-action::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: btnShimmerSweep 4.5s infinite ease-in-out;
+}
+
+@keyframes btnShimmerSweep {
+  0%, 65% { left: -70%; }
+  100% { left: 160%; }
+}
+
+/* Starter Button */
+.btn-tier-starter {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.btn-tier-starter:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Popular Button */
+.btn-tier-popular {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(255, 65, 108, 0.45);
+}
+.btn-tier-popular:hover {
+  box-shadow: 0 12px 30px rgba(255, 65, 108, 0.65);
+  transform: translateY(-2px);
+}
+
+/* Gold Button */
+.btn-tier-gold {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #0b0d14;
+  font-weight: 900;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+}
+.btn-tier-gold:hover {
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.55);
+  transform: translateY(-2px);
+}
+
+/* Royal Button */
+.btn-tier-royal {
+  background: linear-gradient(135deg, #ffd700 0%, #ffb703 50%, #f59e0b 100%);
+  color: #0b0d14;
+  font-weight: 900;
+  box-shadow: 0 8px 26px rgba(255, 183, 3, 0.5);
+}
+.btn-tier-royal:hover {
+  box-shadow: 0 12px 34px rgba(255, 183, 3, 0.75);
+  transform: translateY(-2px);
+}
+
+.btn-plan-action:active {
+  transform: scale(0.97) !important;
+}
+
+/* Luxury Trust / Guarantee Strip below cards */
+.memberships-trust-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 36px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+.trust-item span:first-child {
+  font-size: 1.15rem;
 }
 
 /* ===================================================
@@ -1652,13 +2027,17 @@ body {
   /* Memberships & Friends Grids: Clean 1-column layout on mobile */
   .memberships-grid, .friends-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
   }
   .member-plan-card {
-    padding: 22px 18px;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: #0f131f;
+    padding: 26px 18px 22px;
+    border-radius: 18px;
+  }
+  .memberships-trust-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px 16px;
   }
 
   /* Mobile Modals - Scroll smoothly and fit small screens with zero blur lag */
