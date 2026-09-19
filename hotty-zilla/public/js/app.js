@@ -407,20 +407,41 @@ function renderShorts(videos) {
 
       sponsoredHtml = `
         <div class="reel-card sponsored-card">
-          <div class="reel-thumb-box" onclick="playShortClip('${targetVid.id}')">
-            <img class="reel-thumb-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75" alt="${targetVid.title}" loading="lazy" decoding="async">
+          <div class="reel-thumb-box" id="thumb-box-${targetVid.id}" data-vid-id="${targetVid.id}" onclick="handleCardVideoClick(event, '${targetVid.id}')">
+            <img class="reel-thumb-img" id="thumb-img-${targetVid.id}" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75" alt="${targetVid.title}" loading="lazy" decoding="async">
             
-            <div class="reel-top-bar">
+            <video 
+              class="reel-inline-video" 
+              id="inline-vid-${targetVid.id}" 
+              data-src="${targetVid.shortClipUrl}" 
+              playsinline 
+              webkit-playsinline 
+              preload="metadata" 
+              loop
+              onended="handleInlineVideoEnded('${targetVid.id}')"
+              onpause="handleInlineVideoPaused('${targetVid.id}')"
+              onplay="handleInlineVideoPlaying('${targetVid.id}')"
+            ></video>
+
+            <div class="reel-top-bar" id="top-bar-${targetVid.id}">
               <span class="badge-pill badge-gold">🔥 SPONSORED PROMOTED</span>
               <span class="badge-quality">4K Ultra HD</span>
             </div>
 
-            <div class="reel-overlay-play">
+            <div class="reel-playing-badge" id="playing-badge-${targetVid.id}" style="display: none;">
+              <span class="pulse-dot"></span> LIVE PREVIEW
+            </div>
+
+            <div class="reel-overlay-play" id="overlay-${targetVid.id}">
               <div class="play-circle-btn">▶</div>
               <div class="play-label">Play 16:9 Preview</div>
             </div>
 
-            <div class="reel-bottom-bar">
+            <button class="reel-inline-audio-pill" id="audio-pill-${targetVid.id}" style="display: none;" onclick="toggleInlineAudio(event, '${targetVid.id}')" title="Toggle Sound">
+              <span id="audio-pill-text-${targetVid.id}">🔇 Tap for Sound</span>
+            </button>
+
+            <div class="reel-bottom-bar" id="bottom-bar-${targetVid.id}">
               <span class="reel-duration-tag">⏱️ ${targetVid.shortDuration || '0:30s Clip'}</span>
               <span class="reel-audio-tag">🔊 Dolby Stereo</span>
             </div>
@@ -469,7 +490,7 @@ function renderShorts(videos) {
     console.warn('Sponsored ad render error:', err);
   }
 
-  container.innerHTML = sponsoredHtml + videos.map(v => {
+  const videoCardsHtml = videos.map(v => {
     const posterImg = v.poster || (
       (v.title || '').toLowerCase().includes('ellie')
         ? 'https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg'
@@ -494,20 +515,42 @@ function renderShorts(videos) {
 
     return `
       <div class="reel-card">
-        <div class="reel-thumb-box" onclick="playShortClip('${v.id}')">
-          <img class="reel-thumb-img" src="${posterImg}" alt="${v.title}" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75'">
+        <div class="reel-thumb-box" id="thumb-box-${v.id}" data-vid-id="${v.id}" onclick="handleCardVideoClick(event, '${v.id}')">
+          <img class="reel-thumb-img" id="thumb-img-${v.id}" src="${posterImg}" alt="${v.title}" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75'">
           
-          <div class="reel-top-bar">
+          <video 
+            class="reel-inline-video" 
+            id="inline-vid-${v.id}" 
+            data-src="${v.shortClipUrl}" 
+            poster="${posterImg}"
+            playsinline 
+            webkit-playsinline 
+            preload="metadata" 
+            loop
+            onended="handleInlineVideoEnded('${v.id}')"
+            onpause="handleInlineVideoPaused('${v.id}')"
+            onplay="handleInlineVideoPlaying('${v.id}')"
+          ></video>
+
+          <div class="reel-top-bar" id="top-bar-${v.id}">
             <span class="badge-pill badge-fire">${v.badge || '🔥 Trending'}</span>
             <span class="badge-quality">4K Ultra HD</span>
           </div>
 
-          <div class="reel-overlay-play">
+          <div class="reel-playing-badge" id="playing-badge-${v.id}" style="display: none;">
+            <span class="pulse-dot"></span> LIVE PREVIEW
+          </div>
+
+          <div class="reel-overlay-play" id="overlay-${v.id}">
             <div class="play-circle-btn">▶</div>
             <div class="play-label">Play 16:9 Preview</div>
           </div>
 
-          <div class="reel-bottom-bar">
+          <button class="reel-inline-audio-pill" id="audio-pill-${v.id}" style="display: none;" onclick="toggleInlineAudio(event, '${v.id}')" title="Toggle Sound">
+            <span id="audio-pill-text-${v.id}">🔇 Tap for Sound</span>
+          </button>
+
+          <div class="reel-bottom-bar" id="bottom-bar-${v.id}">
             <span class="reel-duration-tag">⏱️ ${v.shortDuration || '0:45s Clip'}</span>
             <span class="reel-audio-tag">🔊 Stereo HD</span>
           </div>
@@ -555,45 +598,231 @@ function renderShorts(videos) {
       </div>
     `;
   }).join('');
+
+  container.innerHTML = sponsoredHtml + videoCardsHtml;
+
+  // Initialize In-Feed Auto-Preview Observer
+  setTimeout(initInlineVideoObserver, 300);
 }
 
-// Play Short Teaser Clip Modal - 60 FPS Mobile Non-blocking
-function playShortClip(videoId) {
-  const video = (catalogData.videos || []).find(v => v.id === videoId);
-  if (!video) return;
+// ==============================================
+// INLINE 16:9 IN-CARD VIDEO PLAYBACK SYSTEM
+// (Zero-Modal / Direct Feed Playback)
+// ==============================================
+let activeInlineVideoId = null;
+let inlineIntersectionObserver = null;
 
-  // Real-time View & Monetization Tracking (Credits Creator)
-  fetch(`/api/videos/${videoId}/view`, { method: 'POST' }).catch(() => {});
-
-  const modal = document.getElementById('shortPlayerModal');
-  const player = document.getElementById('shortVideoElement');
-  const title = document.getElementById('shortModalTitle');
-  const fullBtn = document.getElementById('shortModalFullBtn');
-
-  if (title) title.textContent = `🎥 Preview: ${video.title}`;
-  if (fullBtn) {
-    fullBtn.onclick = () => {
-      closeShortPlayer();
-      triggerFullVideo(video.id);
-    };
+function handleCardVideoClick(event, videoId) {
+  if (event) {
+    if (event.target.closest('.reel-inline-audio-pill') || event.target.closest('.reel-like-btn') || event.target.closest('.btn-unlock-full')) {
+      return;
+    }
   }
 
-  // Open modal FIRST so UI responds immediately with 0ms delay
-  openModal('shortPlayerModal');
+  const vid = document.getElementById('inline-vid-' + videoId);
+  if (!vid) return;
 
-  // Defer media loading to next frame to prevent mobile main thread stutter
-  requestAnimationFrame(() => {
-    if (player) {
-      if (player.src !== video.shortClipUrl) {
-        player.src = video.shortClipUrl;
-        player.load();
-      }
-      player.play().catch(() => {});
+  // If this video is already active and playing
+  if (activeInlineVideoId === videoId && !vid.paused) {
+    // If it was muted, unmute on tap
+    if (vid.muted) {
+      vid.muted = false;
+      vid.controls = true;
+      const audioPill = document.getElementById('audio-pill-' + videoId);
+      const audioText = document.getElementById('audio-pill-text-' + videoId);
+      if (audioPill) audioPill.classList.add('unmuted');
+      if (audioText) audioText.textContent = '🔊 Sound ON';
+    } else {
+      // Toggle pause/play
+      vid.pause();
     }
+    return;
+  }
+
+  // Play this video directly inline with sound & controls
+  playInlineVideo(videoId, true);
+}
+
+function playInlineVideo(videoId, withSound = true) {
+  const vid = document.getElementById('inline-vid-' + videoId);
+  if (!vid) return;
+
+  // Pause previous video if different
+  if (activeInlineVideoId && activeInlineVideoId !== videoId) {
+    pauseInlineVideo(activeInlineVideoId);
+  }
+
+  // Ensure src is attached from data-src
+  const src = vid.getAttribute('data-src');
+  if (src && (!vid.src || vid.src === '' || vid.src === window.location.href)) {
+    vid.src = src;
+    vid.load();
+  }
+
+  const overlay = document.getElementById('overlay-' + videoId);
+  const bottomBar = document.getElementById('bottom-bar-' + videoId);
+  const audioPill = document.getElementById('audio-pill-' + videoId);
+  const audioText = document.getElementById('audio-pill-text-' + videoId);
+  const playingBadge = document.getElementById('playing-badge-' + videoId);
+
+  vid.classList.add('active');
+  vid.style.display = 'block';
+
+  if (withSound) {
+    vid.muted = false;
+    vid.controls = true;
+    if (audioPill) {
+      audioPill.style.display = 'inline-flex';
+      audioPill.classList.add('unmuted');
+    }
+    if (audioText) audioText.textContent = '🔊 Sound ON';
+  } else {
+    vid.muted = true;
+    vid.controls = false;
+    if (audioPill) {
+      audioPill.style.display = 'inline-flex';
+      audioPill.classList.remove('unmuted');
+    }
+    if (audioText) audioText.textContent = '🔇 Tap for Sound';
+  }
+
+  if (overlay) overlay.style.display = 'none';
+  if (bottomBar) bottomBar.style.display = 'none';
+  if (playingBadge) playingBadge.style.display = 'inline-flex';
+
+  activeInlineVideoId = videoId;
+
+  vid.play().catch(() => {
+    // If browser blocks unmuted play, fallback to muted play
+    if (withSound) {
+      vid.muted = true;
+      if (audioPill) {
+        audioPill.classList.remove('unmuted');
+        if (audioText) audioText.textContent = '🔇 Tap for Sound';
+      }
+      vid.play().catch(() => {});
+    }
+  });
+
+  // Background track view
+  fetch(`/api/videos/${videoId}/view`, { method: 'POST' }).catch(() => {});
+}
+
+function pauseInlineVideo(videoId) {
+  const vid = document.getElementById('inline-vid-' + videoId);
+  if (!vid) return;
+
+  vid.pause();
+  const overlay = document.getElementById('overlay-' + videoId);
+  const audioPill = document.getElementById('audio-pill-' + videoId);
+  const playingBadge = document.getElementById('playing-badge-' + videoId);
+  const bottomBar = document.getElementById('bottom-bar-' + videoId);
+
+  if (overlay) overlay.style.display = 'flex';
+  if (audioPill) audioPill.style.display = 'none';
+  if (playingBadge) playingBadge.style.display = 'none';
+  if (bottomBar) bottomBar.style.display = 'flex';
+
+  if (activeInlineVideoId === videoId) {
+    activeInlineVideoId = null;
+  }
+}
+
+function toggleInlineAudio(e, videoId) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  const vid = document.getElementById('inline-vid-' + videoId);
+  if (!vid) return;
+
+  const audioPill = document.getElementById('audio-pill-' + videoId);
+  const audioText = document.getElementById('audio-pill-text-' + videoId);
+
+  if (vid.muted) {
+    vid.muted = false;
+    vid.controls = true;
+    if (audioPill) audioPill.classList.add('unmuted');
+    if (audioText) audioText.textContent = '🔊 Sound ON';
+  } else {
+    vid.muted = true;
+    if (audioPill) audioPill.classList.remove('unmuted');
+    if (audioText) audioText.textContent = '🔇 Tap for Sound';
+  }
+}
+
+function handleInlineVideoPlaying(videoId) {
+  const overlay = document.getElementById('overlay-' + videoId);
+  const playingBadge = document.getElementById('playing-badge-' + videoId);
+  const bottomBar = document.getElementById('bottom-bar-' + videoId);
+  if (overlay) overlay.style.display = 'none';
+  if (bottomBar) bottomBar.style.display = 'none';
+  if (playingBadge) playingBadge.style.display = 'inline-flex';
+}
+
+function handleInlineVideoPaused(videoId) {
+  const overlay = document.getElementById('overlay-' + videoId);
+  const playingBadge = document.getElementById('playing-badge-' + videoId);
+  const bottomBar = document.getElementById('bottom-bar-' + videoId);
+  if (overlay) overlay.style.display = 'flex';
+  if (playingBadge) playingBadge.style.display = 'none';
+  if (bottomBar) bottomBar.style.display = 'flex';
+}
+
+function handleInlineVideoEnded(videoId) {
+  const vid = document.getElementById('inline-vid-' + videoId);
+  if (vid) {
+    vid.currentTime = 0;
+    vid.play().catch(() => {});
+  }
+}
+
+// In-Feed Smart Auto-Preview Observer
+function initInlineVideoObserver() {
+  if (typeof IntersectionObserver === 'undefined') return;
+
+  if (inlineIntersectionObserver) {
+    inlineIntersectionObserver.disconnect();
+  }
+
+  inlineIntersectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const videoId = entry.target.getAttribute('data-vid-id');
+      if (!videoId) return;
+
+      if (entry.isIntersecting) {
+        // Auto-preview muted when scrolled into viewport
+        const currentActiveVid = activeInlineVideoId ? document.getElementById('inline-vid-' + activeInlineVideoId) : null;
+        const isUserListening = currentActiveVid && !currentActiveVid.muted && !currentActiveVid.paused;
+
+        if (!isUserListening && activeInlineVideoId !== videoId) {
+          playInlineVideo(videoId, false); // Muted in-card preview
+        }
+      } else {
+        // Scrolled away - pause to save battery
+        if (activeInlineVideoId === videoId) {
+          pauseInlineVideo(videoId);
+        }
+      }
+    });
+  }, {
+    threshold: 0.65
+  });
+
+  document.querySelectorAll('.reel-thumb-box[data-vid-id]').forEach(el => {
+    inlineIntersectionObserver.observe(el);
   });
 }
 
+// Legacy fallback (ensures nothing ever opens modal)
+function playShortClip(videoId) {
+  playInlineVideo(videoId, true);
+}
+
 function closeShortPlayer() {
+  if (activeInlineVideoId) {
+    pauseInlineVideo(activeInlineVideoId);
+  }
   const player = document.getElementById('shortVideoElement');
   if (player) {
     player.pause();
