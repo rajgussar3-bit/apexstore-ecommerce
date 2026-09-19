@@ -144,6 +144,27 @@ async function fetchSiteInfo() {
   }
 }
 
+// Canonical Video Master Releases (Always guaranteed on every device & session)
+const CANONICAL_VIDEOS = [
+  {
+    id: "vid-ellie-jmac-1",
+    title: "Ellie Bellas & J Mac - Exclusive Romance Episode",
+    modelName: "Ellie Bellas & J Mac",
+    category: "Private Hangout",
+    shortDuration: "0:30s Teaser",
+    fullDuration: "21 Mins Full HD",
+    price: 99,
+    originalPrice: 297,
+    badge: "🔥 Trending Master Release",
+    views: "24.5K",
+    shortClipUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+    fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+    poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
+    description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
+    createdAt: "2026-09-19T04:50:00.000Z"
+  }
+];
+
 async function fetchCatalog() {
   try {
     const res = await fetch('/api/catalog?_t=' + Date.now(), {
@@ -151,16 +172,29 @@ async function fetchCatalog() {
     });
     const data = await res.json();
     if (data.success) {
+      if (!data.videos) data.videos = [];
+
       // Merge locally published videos if any to guarantee immediate visibility
       try {
         const localVideos = JSON.parse(localStorage.getItem('hz_admin_videos') || '[]');
         if (localVideos.length > 0) {
-          const existingIds = new Set((data.videos || []).map(v => v.id));
+          const existingIds = new Set(data.videos.map(v => v.id));
           const newVideos = localVideos.filter(v => !existingIds.has(v.id));
           if (newVideos.length > 0) {
-            data.videos = [...newVideos, ...(data.videos || [])];
+            data.videos = [...newVideos, ...data.videos];
           }
         }
+      } catch(e) {}
+
+      // Always guarantee Canonical Releases (like Ellie Bellas) are front and center on mobile & desktop
+      try {
+        const existingIds = new Set(data.videos.map(v => v.id));
+        CANONICAL_VIDEOS.forEach(cv => {
+          if (!existingIds.has(cv.id)) {
+            data.videos.unshift(cv);
+            existingIds.add(cv.id);
+          }
+        });
       } catch(e) {}
 
       catalogData = data;
@@ -261,12 +295,10 @@ function renderShorts(videos) {
       sponsoredHtml = `
         <div class="reel-card sponsored-card">
           <div class="reel-thumb-box">
-            <video class="reel-thumb-video" preload="metadata" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()">
-              <source src="${targetVid.shortClipUrl}" type="video/mp4">
-            </video>
+            <img class="reel-thumb-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75" alt="${targetVid.title}" loading="lazy" decoding="async">
             <div class="reel-overlay-play" onclick="playShortClip('${targetVid.id}')">
               <div class="play-circle-btn">▶</div>
-              <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-top: 8px;">Watch Promoted Teaser</div>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 8px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Watch Promoted Teaser</div>
             </div>
             <div class="reel-badge-top">
               <span class="sponsored-badge-glow">🔥 SPONSORED REEL</span>
@@ -302,15 +334,27 @@ function renderShorts(videos) {
   }
 
   container.innerHTML = sponsoredHtml + videos.map(v => {
+    const posterImg = v.poster || (
+      (v.title || '').toLowerCase().includes('ellie')
+        ? 'https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg'
+        : (v.title || '').toLowerCase().includes('natasha')
+          ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75'
+          : (v.title || '').toLowerCase().includes('simran')
+            ? 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=720&q=75'
+            : (v.title || '').toLowerCase().includes('riya')
+              ? 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=720&q=75'
+              : (v.title || '').toLowerCase().includes('aanya')
+                ? 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=720&q=75'
+                : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=720&q=75'
+    );
+
     return `
       <div class="reel-card">
         <div class="reel-thumb-box">
-          <video class="reel-thumb-video" ${v.poster ? `poster="${v.poster}"` : ''} preload="metadata" muted playsinline loop onmouseover="this.play()" onmouseout="this.pause()">
-            <source src="${v.shortClipUrl}" type="video/mp4">
-          </video>
+          <img class="reel-thumb-img" src="${posterImg}" alt="${v.title}" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75'">
           <div class="reel-overlay-play" onclick="playShortClip('${v.id}')">
             <div class="play-circle-btn">▶</div>
-            <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-top: 8px;">Watch Teaser Free</div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 8px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Watch Teaser Free</div>
           </div>
           <div class="reel-badge-top">
             <span class="badge-pill badge-fire">${v.badge || '🔥 Viral Reel'}</span>

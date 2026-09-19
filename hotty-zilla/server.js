@@ -90,6 +90,26 @@ function readDB() {
           }
         });
       }
+      if (!parsed.videos) parsed.videos = [];
+      if (!parsed.videos.some(v => v.id === 'vid-ellie-jmac-1')) {
+        parsed.videos.unshift({
+          id: "vid-ellie-jmac-1",
+          title: "Ellie Bellas & J Mac - Exclusive Romance Episode",
+          modelName: "Ellie Bellas & J Mac",
+          category: "Private Hangout",
+          shortDuration: "0:30s Teaser",
+          fullDuration: "21 Mins Full HD",
+          price: 99,
+          originalPrice: 297,
+          badge: "🔥 Trending Master Release",
+          views: "24.5K",
+          shortClipUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+          fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+          poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
+          description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
+          createdAt: "2026-09-19T04:50:00.000Z"
+        });
+      }
       memoryDBCache = parsed;
       return parsed;
     }

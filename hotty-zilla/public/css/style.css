@@ -79,6 +79,39 @@ body::after {
   z-index: 0;
 }
 
+/* Ambient Luxury VIP Background with Subtle Transparent Model Visuals */
+.luxury-ambient-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-model-layer {
+  position: absolute;
+  inset: -20px;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(255, 65, 108, 0.25) 0%, transparent 45%),
+    radial-gradient(circle at 85% 70%, rgba(255, 183, 3, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 40%),
+    url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1600&q=80');
+  background-size: cover;
+  background-position: center 25%;
+  background-attachment: fixed;
+  opacity: 0.14; /* Faint, soft, transparent glamour model silhouette */
+  filter: saturate(1.25) contrast(1.1);
+  transform: scale(1.02);
+}
+
+.bg-gradient-scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center top, rgba(8, 10, 15, 0.5) 0%, rgba(8, 10, 15, 0.94) 80%, #080a0f 100%);
+}
+
 /* Announcement Bar */
 .announcement-bar {
   background: var(--gradient-fire);
@@ -346,19 +379,26 @@ body::after {
 
 .reel-thumb-box {
   position: relative;
-  aspect-ratio: 4/5;
-  background: #111420;
+  aspect-ratio: 16 / 9;
+  background: #0d1019;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.reel-thumb-img,
 .reel-thumb-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reel-card:hover .reel-thumb-img,
+.reel-card:hover .reel-thumb-video {
+  transform: scale(1.05);
 }
 
 .reel-overlay-play {
@@ -1050,21 +1090,27 @@ body::after {
     line-height: 1.4;
   }
 
-  /* Shorts Grid on Mobile: Vertical full-width reel feed */
+  /* Shorts Grid on Mobile: Vertical 1-by-1 feed with 16:9 ratio & zero-lag performance */
   .shorts-grid {
     grid-template-columns: 1fr;
-    max-width: 420px;
+    max-width: 520px;
     margin: 0 auto;
     gap: 22px;
+    padding: 0 4px;
   }
 
   .reel-card {
     border-radius: var(--radius-lg);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
+    content-visibility: auto;
+    contain-intrinsic-size: 0 390px;
+    background: rgba(18, 23, 35, 0.88);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .reel-thumb-box {
-    aspect-ratio: 4/5;
+    aspect-ratio: 16 / 9;
   }
 
   /* Touch-friendly buttons (min 48px height, instant touch feedback) */
