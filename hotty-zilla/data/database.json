@@ -10,7 +10,14 @@
     "secretDeskPath": "/hz-secret-control-desk.html",
     "announcement": "👑 HOTTY ZILLA VIP LOUNGE: Unlimited Video Shorts Free! Watch Full HD Videos & Fix Meetings with VIP Membership!",
     "adFrequencyPerDay": 3,
-    "monetizationRatePer1kViewsUSD": 1.5
+    "monetizationRatePer1kViewsUSD": 1.5,
+    "razorpay": {
+      "keyId": "rzp_live_T2fa96O02ytH4a",
+      "keySecret": "524oIGNyFP15pPEif9V5jkio",
+      "businessName": "Speed Accounting",
+      "approvedWebsite": "https://speedaccountingdevraj.pythonanywhere.com/",
+      "enabled": true
+    }
   },
   "categories": [
     {
@@ -121,7 +128,7 @@
       "originalPrice": 297,
       "badge": "🔥 Trending Master Release",
       "views": "24.5K",
-      "likes": "19",
+      "likes": "1.8K",
       "shortClipUrl": "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
       "fullVideoUrl": "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
       "poster": "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
@@ -385,17 +392,22 @@
       "name": "Rahul Sharma",
       "email": "rahul@example.com",
       "membership": {
-        "planId": "plan-3m",
-        "planTitle": "3 Months VIP Club",
+        "planId": "plan-1m",
+        "planTitle": "1 Month VIP Pass",
         "active": true,
-        "startedAt": "2026-09-17T10:15:30.000Z",
-        "expiresAt": "2026-12-16T10:15:30.000Z"
+        "startedAt": "2026-09-19T13:46:24.391Z",
+        "expiresAt": "2026-10-19T13:46:24.391Z"
       },
       "videos": [
         "vid-reel-1",
         "vid-reel-2",
         "vid-reel-3",
-        "vid-reel-4"
+        "vid-reel-4",
+        "vid-ellie-jmac-1",
+        "vid-cr-mu74tt5j",
+        "vid-cr-mu74bbp2",
+        "vid-cr-mu73nzwr",
+        "vid-mu6mnpd8"
       ],
       "pdfs": [
         "spa-pro-handbook"

@@ -220,7 +220,9 @@ function renderSecOrders(orders) {
         </td>
         <td style="font-weight: 800; font-size: 1.05rem;">₹${o.amount}</td>
         <td>
-          <div style="font-size: 0.8rem; text-transform: uppercase;">${o.paymentMode}</div>
+          <div style="font-size: 0.8rem; text-transform: uppercase;">
+            ${o.paymentMode === 'razorpay_live' ? '<span style="color: var(--emerald); font-weight: 800;">⚡ Razorpay Live</span>' : o.paymentMode}
+          </div>
           <div style="font-family: monospace; font-size: 0.78rem; color: var(--gold);">${o.utr || 'N/A'}</div>
         </td>
         <td>${statusHtml}</td>

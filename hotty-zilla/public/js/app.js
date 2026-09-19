@@ -1071,7 +1071,7 @@ function openCheckout(itemType, itemId) {
 
   // Dynamic QR code
   updateDynamicQr(item.price);
-  selectPayMode('instant_demo');
+  selectPayMode('razorpay');
   openModal('checkoutModal');
 }
 
@@ -1086,28 +1086,58 @@ function updateDynamicQr(amount) {
 
 function selectPayMode(mode) {
   currentPayMode = mode;
+  const rzpBtn = document.getElementById('modeRazorpayBtn');
   const upiBtn = document.getElementById('modeUpiBtn');
   const demoBtn = document.getElementById('modeDemoBtn');
+  const rzpBox = document.getElementById('razorpayPayBox');
   const upiBox = document.getElementById('upiPayBox');
   const demoBox = document.getElementById('demoPayBox');
   const utrInput = document.getElementById('buyerUtr');
+  const submitBtn = document.getElementById('checkoutSubmitBtn');
 
-  if (mode === 'upi_qr') {
-    upiBtn.classList.add('btn-gold');
-    upiBtn.classList.remove('btn-outline');
-    demoBtn.classList.remove('btn-primary');
-    demoBtn.classList.add('btn-outline');
-    upiBox.style.display = 'block';
-    demoBox.style.display = 'none';
-    if (utrInput) utrInput.required = true;
-  } else {
-    demoBtn.classList.add('btn-primary');
-    demoBtn.classList.remove('btn-outline');
-    upiBtn.classList.remove('btn-gold');
-    upiBtn.classList.add('btn-outline');
-    upiBox.style.display = 'none';
-    demoBox.style.display = 'block';
-    if (utrInput) utrInput.required = false;
+  if (rzpBtn) {
+    if (mode === 'razorpay') {
+      rzpBtn.className = 'btn btn-gold btn-block';
+      rzpBtn.style.border = '2px solid var(--gold)';
+    } else {
+      rzpBtn.className = 'btn btn-outline btn-block';
+      rzpBtn.style.border = '1px solid rgba(255,255,255,0.18)';
+    }
+  }
+
+  if (upiBtn) {
+    if (mode === 'upi_qr') {
+      upiBtn.className = 'btn btn-gold';
+      upiBtn.style.borderColor = 'var(--gold)';
+    } else {
+      upiBtn.className = 'btn btn-outline';
+      upiBtn.style.borderColor = '';
+    }
+  }
+
+  if (demoBtn) {
+    demoBtn.className = 'btn ' + (mode === 'instant_demo' ? 'btn-primary' : 'btn-outline');
+  }
+
+  if (rzpBox) rzpBox.style.display = mode === 'razorpay' ? 'block' : 'none';
+  if (upiBox) upiBox.style.display = mode === 'upi_qr' ? 'block' : 'none';
+  if (demoBox) demoBox.style.display = mode === 'instant_demo' ? 'block' : 'none';
+
+  if (utrInput) {
+    utrInput.required = (mode === 'upi_qr');
+  }
+
+  if (submitBtn && currentCheckoutItem) {
+    if (mode === 'razorpay') {
+      submitBtn.className = 'btn btn-gold btn-lg btn-block';
+      submitBtn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+    } else if (mode === 'upi_qr') {
+      submitBtn.className = 'btn btn-primary btn-lg btn-block';
+      submitBtn.innerHTML = `<span>📤</span> Submit ₹${currentCheckoutItem.price} Order with UTR`;
+    } else {
+      submitBtn.className = 'btn btn-primary btn-lg btn-block';
+      submitBtn.innerHTML = `<span>⚡</span> Instant Test Demo Pay (₹${currentCheckoutItem.price})`;
+    }
   }
 }
 
@@ -1123,13 +1153,127 @@ async function handleCheckoutSubmit(e) {
   if (!currentCheckoutItem) return;
 
   const btn = document.getElementById('checkoutSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Activating VIP...';
-
   const customerName = document.getElementById('buyerName').value.trim();
   const mobile = document.getElementById('buyerMobile').value.trim();
   const whatsapp = document.getElementById('buyerWhatsapp').value.trim();
   const utr = document.getElementById('buyerUtr')?.value.trim() || '';
+
+  // 1. RAZORPAY GATEWAY CHECKOUT (Direct UPI, Cards, NetBanking with HMAC Verification)
+  if (currentPayMode === 'razorpay') {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> Initializing Razorpay...';
+
+    try {
+      const orderRes = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemType: currentCheckoutItem.itemType,
+          itemId: currentCheckoutItem.id,
+          customerName,
+          mobile,
+          whatsapp,
+          email: ''
+        })
+      });
+      const orderData = await orderRes.json();
+
+      if (!orderData.success || !orderData.orderId) {
+        btn.disabled = false;
+        btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+        showToast(orderData.message || 'Razorpay order start nahi ho saka.', 'error');
+        return;
+      }
+
+      if (typeof window.Razorpay === 'undefined') {
+        btn.disabled = false;
+        btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+        showToast('Razorpay script load ho raha hai, kripya 2 second baad click karein.', 'warning');
+        return;
+      }
+
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: orderData.businessName || 'Speed Accounting',
+        description: orderData.description || 'Digital Learning & VIP Membership Access',
+        order_id: orderData.orderId,
+        prefill: orderData.prefill || {
+          name: customerName,
+          contact: mobile
+        },
+        notes: {
+          approved_website: orderData.approvedWebsite || 'https://speedaccountingdevraj.pythonanywhere.com/',
+          customer_mobile: mobile
+        },
+        theme: {
+          color: '#ff416c'
+        },
+        modal: {
+          ondismiss: function() {
+            btn.disabled = false;
+            btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+            showToast('Payment window band hui. Aap dubara koshish kar sakte hain.', 'warning');
+          }
+        },
+        handler: async function (response) {
+          btn.innerHTML = '<span>🔓</span> Verifying & Unlocking VIP Lounge...';
+          try {
+            const verifyRes = await fetch('/api/razorpay/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                itemType: currentCheckoutItem.itemType,
+                itemId: currentCheckoutItem.id,
+                customerName,
+                mobile,
+                whatsapp
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              localStorage.setItem('hz_vip_mobile', mobile);
+              closeModal('checkoutModal');
+              showToast('Payment Verified! VIP Access Unlocked! 🎉', 'success');
+              setTimeout(() => {
+                window.location.href = `/my-library.html?mobile=${mobile}`;
+              }, 1200);
+            } else {
+              btn.disabled = false;
+              btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+              showToast(verifyData.message || 'Payment verification failed.', 'error');
+            }
+          } catch (verErr) {
+            btn.disabled = false;
+            btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+            showToast('Verification request failed. Please check connection.', 'error');
+          }
+        }
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.on('payment.failed', function (resp) {
+        btn.disabled = false;
+        btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+        showToast(resp.error?.description || 'Payment cancel ya fail ho gaya.', 'error');
+      });
+      rzpInstance.open();
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = `<span>⚡</span> Pay ₹${currentCheckoutItem.price} via Razorpay (Instant Unlock)`;
+      showToast('Network error while launching Razorpay.', 'error');
+    }
+    return;
+  }
+
+  // 2. MANUAL UPI QR / DEMO CHECKOUT
+  btn.disabled = true;
+  btn.textContent = 'Activating VIP...';
 
   try {
     const res = await fetch('/api/orders', {
@@ -1570,7 +1714,7 @@ async function openCreatorStudioModal() {
     }
 
     // Default payment mode for boost
-    selectBoostPayMode('instant_demo');
+    selectBoostPayMode('razorpay');
 
     openModal('creatorStudioModal');
   } catch (err) {
@@ -1580,19 +1724,34 @@ async function openCreatorStudioModal() {
 
 function selectBoostPayMode(mode) {
   currentBoostPayMode = mode;
+  const rzpBtn = document.getElementById('boostModeRazorpayBtn');
   const upiBtn = document.getElementById('boostModeUpiBtn');
   const demoBtn = document.getElementById('boostModeDemoBtn');
+  const rzpBox = document.getElementById('boostRazorpayBox');
   const upiBox = document.getElementById('boostUpiBox');
   const qrImg = document.getElementById('boostQrImage');
+  const utrInput = document.getElementById('boostUtrInput');
+
+  if (rzpBtn) {
+    rzpBtn.className = 'btn ' + (mode === 'razorpay' ? 'btn-gold' : 'btn-outline') + ' btn-block';
+    rzpBtn.style.border = mode === 'razorpay' ? '2px solid var(--gold)' : '1px solid rgba(255,255,255,0.18)';
+  }
+  if (upiBtn) {
+    upiBtn.className = 'btn ' + (mode === 'upi_qr' ? 'btn-gold' : 'btn-outline');
+    upiBtn.style.borderColor = mode === 'upi_qr' ? 'var(--gold)' : '';
+  }
+  if (demoBtn) {
+    demoBtn.className = 'btn ' + (mode === 'instant_demo' ? 'btn-primary' : 'btn-outline');
+  }
+
+  if (rzpBox) rzpBox.style.display = mode === 'razorpay' ? 'block' : 'none';
+  if (upiBox) upiBox.style.display = mode === 'upi_qr' ? 'block' : 'none';
+
+  if (utrInput) {
+    utrInput.required = (mode === 'upi_qr');
+  }
 
   if (mode === 'upi_qr') {
-    if (upiBtn) {
-      upiBtn.className = 'btn btn-primary';
-      upiBtn.style.borderColor = 'var(--gold)';
-    }
-    if (demoBtn) demoBtn.className = 'btn btn-outline';
-    if (upiBox) upiBox.style.display = 'block';
-
     const selectedPkg = document.querySelector('input[name="boostPkg"]:checked');
     const amountINR = selectedPkg ? selectedPkg.value.split(':')[1] : '500';
     const upiId = siteSettings.upiId || 'hottyzilla@upi';
@@ -1600,13 +1759,6 @@ function selectBoostPayMode(mode) {
     if (qrImg) {
       qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiString)}`;
     }
-  } else {
-    if (demoBtn) demoBtn.className = 'btn btn-primary';
-    if (upiBtn) {
-      upiBtn.className = 'btn btn-outline';
-      upiBtn.style.borderColor = '';
-    }
-    if (upiBox) upiBox.style.display = 'none';
   }
 }
 
@@ -1615,14 +1767,9 @@ async function handleBoostVideoSubmit(e) {
   if (!currentCustomer) return;
 
   const btn = document.getElementById('boostSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Activating Traffic Campaign...';
-
   const pkgRadio = document.querySelector('input[name="boostPkg"]:checked');
   if (!pkgRadio) {
     showToast('Traffic package select karein', 'error');
-    btn.disabled = false;
-    btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
     return;
   }
 
@@ -1631,8 +1778,120 @@ async function handleBoostVideoSubmit(e) {
   const videoId = boostSelect.value;
   const selectedOpt = boostSelect.options[boostSelect.selectedIndex];
   const videoTitle = selectedOpt ? selectedOpt.getAttribute('data-title') || selectedOpt.text : 'Promoted Video';
-
   const utr = (document.getElementById('boostUtrInput')?.value || '').trim();
+
+  // 1. RAZORPAY GATEWAY FOR BOOST
+  if (currentBoostPayMode === 'razorpay') {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> Initializing Razorpay...';
+
+    try {
+      const orderRes = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemType: 'boost',
+          itemId: videoId,
+          amount: Number(amountINR),
+          views: Number(targetViews),
+          customerName: currentCustomer.name || currentCustomer.email.split('@')[0],
+          email: currentCustomer.email,
+          mobile: currentCustomer.mobile || ''
+        })
+      });
+      const orderData = await orderRes.json();
+
+      if (!orderData.success || !orderData.orderId) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+        showToast(orderData.message || 'Razorpay order creation failed.', 'error');
+        return;
+      }
+
+      if (typeof window.Razorpay === 'undefined') {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+        showToast('Razorpay loading, please retry in 2 seconds.', 'warning');
+        return;
+      }
+
+      const options = {
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: orderData.businessName || 'Speed Accounting',
+        description: `Video Traffic Campaign (${Number(targetViews).toLocaleString()} Views)`,
+        order_id: orderData.orderId,
+        prefill: {
+          name: currentCustomer.name || '',
+          email: currentCustomer.email || ''
+        },
+        notes: {
+          approved_website: orderData.approvedWebsite || 'https://speedaccountingdevraj.pythonanywhere.com/',
+          videoId: videoId
+        },
+        theme: {
+          color: '#ff416c'
+        },
+        modal: {
+          ondismiss: function() {
+            btn.disabled = false;
+            btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+            showToast('Boost payment window closed.', 'warning');
+          }
+        },
+        handler: async function (response) {
+          btn.innerHTML = '<span>🔓</span> Activating Promotion...';
+          try {
+            const verifyRes = await fetch('/api/razorpay/verify-boost', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                videoId,
+                views: Number(targetViews),
+                amount: Number(amountINR),
+                creatorHandle: currentCustomer.handle || '',
+                creatorEmail: currentCustomer.email
+              })
+            });
+            const verifyData = await verifyRes.json();
+            btn.disabled = false;
+            btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+
+            if (verifyData.success) {
+              showToast(`🔥 Boost Activated! ${Number(targetViews).toLocaleString()} views promotion live!`, 'success');
+              closeModal('creatorStudioModal');
+              const today = new Date().toISOString().slice(0, 10);
+              localStorage.removeItem('hz_ad_views_' + today);
+              fetchCatalog();
+            } else {
+              showToast(verifyData.message || 'Boost activation failed.', 'error');
+            }
+          } catch(vErr) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+            showToast('Boost verification network error.', 'error');
+          }
+        }
+      };
+
+      const rzpInst = new window.Razorpay(options);
+      rzpInst.open();
+
+    } catch(err) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🚀</span> Activate Video Boost Campaign';
+      showToast('Connection error starting Razorpay boost.', 'error');
+    }
+    return;
+  }
+
+  // 2. DEMO OR UPI QR BOOST
+  btn.disabled = true;
+  btn.textContent = 'Activating Traffic Campaign...';
 
   try {
     const res = await fetch('/api/creator/promote', {
@@ -1656,7 +1915,6 @@ async function handleBoostVideoSubmit(e) {
     if (data.success) {
       showToast(`🔥 Boost Activated! ${Number(targetViews).toLocaleString()} views campaign is now running!`);
       closeModal('creatorStudioModal');
-      // Reset ad views so user sees it right away
       const today = new Date().toISOString().slice(0, 10);
       localStorage.removeItem('hz_ad_views_' + today);
       fetchCatalog();

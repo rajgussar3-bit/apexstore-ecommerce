@@ -768,46 +768,116 @@ async function handleBoostSubmitStudio(e) {
   if (!currentCreatorData || !currentCreatorData.creator) return;
 
   const btn = document.getElementById('boostBtnStudio');
-  btn.disabled = true;
-  btn.textContent = 'Activating Traffic Campaign...';
-
   const pkgRadio = document.querySelector('input[name="boostPkgStudio"]:checked');
   if (!pkgRadio) return;
 
   const [targetViews, amountINR] = pkgRadio.value.split(':');
   const select = document.getElementById('boostVidSelectStudio');
   const videoId = select.value;
+  if (!videoId) {
+    showToast('Pehle promote karne ke liye video chunein', 'warning');
+    return;
+  }
   const opt = select.options[select.selectedIndex];
   const videoTitle = opt ? opt.getAttribute('data-title') || opt.text : 'Creator Video';
 
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Initializing Razorpay...';
+
   try {
-    const res = await fetch('/api/creator/promote', {
+    const orderRes = await fetch('/api/razorpay/create-order', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        creatorEmail: currentCreatorData.creator.email,
-        creatorName: currentCreatorData.creator.realName,
-        videoId,
-        videoTitle,
-        targetViews: Number(targetViews),
-        amountINR: Number(amountINR),
-        paymentMode: 'instant_demo'
+        itemType: 'boost',
+        itemId: videoId,
+        amount: Number(amountINR),
+        views: Number(targetViews),
+        customerName: currentCreatorData.creator.realName,
+        email: currentCreatorData.creator.email
       })
     });
-    const data = await res.json();
-    btn.disabled = false;
-    btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+    const orderData = await orderRes.json();
 
-    if (data.success) {
-      showToast(`🔥 Boost Activated! ${Number(targetViews).toLocaleString()} views campaign is now running!`);
-      showToast('Video platform feed par top sponsored reel me lag gayi hai!');
-    } else {
-      showToast(data.message || 'Error activating campaign', 'error');
+    if (!orderData.success || !orderData.orderId) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+      showToast(orderData.message || 'Razorpay order failed.', 'error');
+      return;
     }
+
+    if (typeof window.Razorpay === 'undefined') {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+      showToast('Razorpay loading... please wait 2 seconds.', 'warning');
+      return;
+    }
+
+    const options = {
+      key: orderData.keyId,
+      amount: orderData.amount,
+      currency: orderData.currency || 'INR',
+      name: orderData.businessName || 'Speed Accounting',
+      description: `Video Traffic Campaign (${Number(targetViews).toLocaleString()} Views)`,
+      order_id: orderData.orderId,
+      prefill: {
+        name: currentCreatorData.creator.realName,
+        email: currentCreatorData.creator.email
+      },
+      notes: {
+        approved_website: orderData.approvedWebsite || 'https://speedaccountingdevraj.pythonanywhere.com/',
+        videoId: videoId
+      },
+      theme: { color: '#ff416c' },
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+          showToast('Payment window closed.', 'warning');
+        }
+      },
+      handler: async function (response) {
+        btn.innerHTML = '<span>🔓</span> Activating Promotion...';
+        try {
+          const verifyRes = await fetch('/api/razorpay/verify-boost', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              videoId,
+              views: Number(targetViews),
+              amount: Number(amountINR),
+              creatorHandle: currentCreatorData.creator.handle,
+              creatorEmail: currentCreatorData.creator.email
+            })
+          });
+          const verifyData = await verifyRes.json();
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+
+          if (verifyData.success) {
+            showToast(`🔥 Boost Activated! ${Number(targetViews).toLocaleString()} views promotion live!`, 'success');
+            showToast('Video platform feed par top sponsored reel me lag gayi hai!');
+          } else {
+            showToast(verifyData.message || 'Boost activation failed.', 'error');
+          }
+        } catch(vErr) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
+          showToast('Boost verification network error.', 'error');
+        }
+      }
+    };
+
+    const rzpInst = new window.Razorpay(options);
+    rzpInst.open();
+
   } catch(err) {
     btn.disabled = false;
     btn.innerHTML = '<span>🚀</span> Activate Traffic Boost Campaign';
-    showToast('Failed to start campaign', 'error');
+    showToast('Failed to start campaign via Razorpay', 'error');
   }
 }
 

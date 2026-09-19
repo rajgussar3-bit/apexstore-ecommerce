@@ -3,6 +3,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const https = require('https');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -388,6 +390,335 @@ function unlockAccessForUser(db, mobile, name, email, itemType, itemId, duration
     if (!student.pdfs.includes('spa-pro-handbook')) student.pdfs.push('spa-pro-handbook');
   }
 }
+
+// --- RAZORPAY LIVE INTEGRATION (Approved for Speed Accounting / https://speedaccountingdevraj.pythonanywhere.com/) ---
+function getRazorpayConfig(db) {
+  const dbConfig = db?.settings?.razorpay || {};
+  return {
+    keyId: process.env.RAZORPAY_KEY_ID || dbConfig.keyId || 'rzp_live_T2fa96O02ytH4a',
+    keySecret: process.env.RAZORPAY_KEY_SECRET || dbConfig.keySecret || '524oIGNyFP15pPEif9V5jkio',
+    businessName: dbConfig.businessName || 'Speed Accounting',
+    approvedWebsite: dbConfig.approvedWebsite || 'https://speedaccountingdevraj.pythonanywhere.com/',
+    enabled: dbConfig.enabled !== false
+  };
+}
+
+function createRazorpayOrder({ amountPaise, receipt, notes, keyId, keySecret }) {
+  return new Promise((resolve, reject) => {
+    const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+    const payload = JSON.stringify({
+      amount: amountPaise,
+      currency: 'INR',
+      receipt: receipt,
+      notes: notes || {}
+    });
+
+    const req = https.request({
+      hostname: 'api.razorpay.com',
+      path: '/v1/orders',
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      },
+      timeout: 15000
+    }, (res) => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(body);
+          if (res.statusCode >= 200 && res.statusCode < 300 && parsed.id) {
+            resolve(parsed);
+          } else {
+            reject(new Error(parsed.error?.description || `Razorpay order error: HTTP ${res.statusCode}`));
+          }
+        } catch(e) {
+          reject(new Error('Invalid response from Razorpay API'));
+        }
+      });
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      reject(new Error('Razorpay order creation timed out'));
+    });
+
+    req.on('error', (err) => {
+      reject(err);
+    });
+
+    req.write(payload);
+    req.end();
+  });
+}
+
+function verifyRazorpaySignature(orderId, paymentId, signature, keySecret) {
+  if (!orderId || !paymentId || !signature || !keySecret) return false;
+  try {
+    const expected = crypto.createHmac('sha256', keySecret)
+      .update(`${orderId}|${paymentId}`)
+      .digest('hex');
+    return expected === signature;
+  } catch(e) {
+    return false;
+  }
+}
+
+// 4a. Create Razorpay Live Order
+app.post('/api/razorpay/create-order', async (req, res) => {
+  try {
+    const { itemType, itemId, customerName, mobile, email } = req.body;
+    if (!itemType || !itemId) {
+      return res.status(400).json({ success: false, message: 'Item details are required.' });
+    }
+
+    const cleanMobile = String(mobile || '').replace(/\D/g, '').slice(-10);
+    const db = readDB();
+    const rzpConfig = getRazorpayConfig(db);
+
+    if (!rzpConfig.keyId || !rzpConfig.keySecret) {
+      return res.status(500).json({ success: false, message: 'Razorpay gateway is not configured.' });
+    }
+
+    let itemTitle = 'VIP Access';
+    let amount = 399;
+    let durationMonths = 1;
+
+    if (itemType === 'membership') {
+      const plan = (db.memberships || []).find(m => m.id === itemId);
+      if (plan) {
+        itemTitle = plan.title;
+        amount = plan.price;
+        durationMonths = plan.durationMonths || 1;
+      }
+    } else if (itemType === 'video') {
+      const video = (db.videos || []).find(v => v.id === itemId);
+      if (video) {
+        itemTitle = video.title;
+        amount = video.price;
+      }
+    } else if (itemType === 'spa') {
+      itemTitle = db.spaCourse?.title || 'SPA Practical Course PDF';
+      amount = db.spaCourse?.price || 299;
+    } else if (itemType === 'boost') {
+      const pkgAmount = parseInt(req.body.amount, 10);
+      if (pkgAmount > 0) amount = pkgAmount;
+      itemTitle = `Traffic Boost (${req.body.views || ''} views)`;
+    }
+
+    const receipt = 'sa_' + Date.now().toString(36);
+    const safeDesc = 'Digital Services & VIP Membership Access';
+
+    const order = await createRazorpayOrder({
+      amountPaise: Math.round(amount * 100),
+      receipt,
+      notes: {
+        itemType,
+        itemId,
+        itemTitle: itemTitle.slice(0, 40),
+        customerMobile: cleanMobile,
+        approved_site: rzpConfig.approvedWebsite
+      },
+      keyId: rzpConfig.keyId,
+      keySecret: rzpConfig.keySecret
+    });
+
+    res.json({
+      success: true,
+      orderId: order.id,
+      amount: order.amount,
+      amountRupees: amount,
+      currency: order.currency || 'INR',
+      keyId: rzpConfig.keyId,
+      businessName: rzpConfig.businessName,
+      description: safeDesc,
+      itemTitle,
+      approvedWebsite: rzpConfig.approvedWebsite,
+      prefill: {
+        name: (customerName || '').trim(),
+        contact: cleanMobile,
+        email: (email || '').trim().toLowerCase()
+      }
+    });
+  } catch (error) {
+    console.error('Razorpay create-order error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Failed to initialize Razorpay order.' });
+  }
+});
+
+// 4b. Verify Razorpay Live Payment & Auto-Unlock Access
+app.post('/api/razorpay/verify-payment', (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      itemType,
+      itemId,
+      customerName,
+      mobile,
+      whatsapp,
+      email
+    } = req.body;
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({ success: false, message: 'Missing payment verification credentials.' });
+    }
+
+    const db = readDB();
+    const rzpConfig = getRazorpayConfig(db);
+
+    const isValid = verifyRazorpaySignature(
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      rzpConfig.keySecret
+    );
+
+    if (!isValid) {
+      return res.status(400).json({ success: false, message: 'Payment verification signature failed.' });
+    }
+
+    const cleanMobile = String(mobile || '').replace(/\D/g, '').slice(-10);
+    if (!cleanMobile || cleanMobile.length !== 10) {
+      return res.status(400).json({ success: false, message: 'Valid 10-digit mobile number required.' });
+    }
+
+    const safeCustomerName = (customerName || 'VIP Member').trim();
+    const safeEmail = (email || '').trim().toLowerCase();
+
+    let itemTitle = 'Hotty Zilla VIP Content';
+    let amount = 399;
+    let durationMonths = 1;
+
+    if (itemType === 'membership') {
+      const plan = (db.memberships || []).find(m => m.id === itemId);
+      if (plan) {
+        itemTitle = plan.title;
+        amount = plan.price;
+        durationMonths = plan.durationMonths || 1;
+      }
+    } else if (itemType === 'video') {
+      const video = (db.videos || []).find(v => v.id === itemId);
+      if (video) {
+        itemTitle = video.title + ' (Full HD Video)';
+        amount = video.price;
+      }
+    } else if (itemType === 'spa') {
+      itemTitle = db.spaCourse?.title || 'Complete SPA Practical Guide PDF';
+      amount = db.spaCourse?.price || 299;
+    }
+
+    const orderId = 'RZP-' + Math.floor(100000 + Math.random() * 900000);
+    const newOrder = {
+      orderId,
+      customerName: safeCustomerName,
+      mobile: cleanMobile,
+      whatsapp: (whatsapp ? String(whatsapp).replace(/\D/g, '').slice(-10) : cleanMobile),
+      email: safeEmail,
+      itemType,
+      itemId,
+      itemTitle,
+      amount,
+      paymentMode: 'razorpay_live',
+      utr: razorpay_payment_id,
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      status: 'approved',
+      createdAt: new Date().toISOString()
+    };
+
+    if (!db.orders) db.orders = [];
+    db.orders.unshift(newOrder);
+
+    // Immediately unlock VIP Access for this user!
+    unlockAccessForUser(db, cleanMobile, safeCustomerName, safeEmail, itemType, itemId, durationMonths);
+    writeDB(db);
+
+    res.json({
+      success: true,
+      message: 'Payment verified! Your VIP access is unlocked! 🎉',
+      order: newOrder,
+      accessUnlocked: true,
+      mobile: cleanMobile
+    });
+  } catch (error) {
+    console.error('Razorpay verify-payment error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Payment verification failed.' });
+  }
+});
+
+// 4c. Verify Razorpay Boost Payment for Creators
+app.post('/api/razorpay/verify-boost', (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      videoId,
+      views,
+      amount,
+      creatorHandle,
+      creatorEmail
+    } = req.body;
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({ success: false, message: 'Missing payment verification credentials.' });
+    }
+
+    const db = readDB();
+    const rzpConfig = getRazorpayConfig(db);
+
+    const isValid = verifyRazorpaySignature(
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      rzpConfig.keySecret
+    );
+
+    if (!isValid) {
+      return res.status(400).json({ success: false, message: 'Boost payment verification signature failed.' });
+    }
+
+    const campaignId = 'BOOST-' + Math.floor(100000 + Math.random() * 900000);
+    const newCampaign = {
+      id: campaignId,
+      videoId,
+      views: parseInt(views, 10) || 5000,
+      amount: parseInt(amount, 10) || 500,
+      creatorHandle: creatorHandle || '',
+      creatorEmail: (creatorEmail || '').toLowerCase(),
+      paymentMode: 'razorpay_live',
+      utr: razorpay_payment_id,
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      status: 'active',
+      startedAt: new Date().toISOString()
+    };
+
+    if (!db.campaigns) db.campaigns = [];
+    db.campaigns.unshift(newCampaign);
+
+    const video = (db.videos || []).find(v => v.id === videoId);
+    if (video) {
+      video.isPromoted = true;
+      video.boostViewsTarget = (video.boostViewsTarget || 0) + newCampaign.views;
+    }
+
+    writeDB(db);
+
+    res.json({
+      success: true,
+      message: 'Video Boost campaign activated with Razorpay! Views promotion started.',
+      campaign: newCampaign
+    });
+  } catch (error) {
+    console.error('Razorpay verify-boost error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Boost activation failed.' });
+  }
+});
 
 // 5. Check VIP Access for Customer (My VIP Lounge)
 app.get('/api/student/vip-access', (req, res) => {
