@@ -413,68 +413,18 @@
             <input type="tel" id="buyerWhatsapp" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}" maxlength="10" required>
           </div>
 
-          <!-- Payment Mode Selection -->
-          <div style="margin: 20px 0 14px;">
-            <label class="form-label">Payment Mode Chunein:</label>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <!-- Razorpay Gateway Option (Recommended, Instant Unlock) -->
-              <button type="button" class="btn btn-gold btn-block" id="modeRazorpayBtn" onclick="selectPayMode('razorpay')" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; text-decoration: none;">
-                <div style="display: flex; align-items: center; gap: 10px; text-align: left;">
-                  <span style="font-size: 1.3rem;">⚡</span>
-                  <div>
-                    <div style="font-weight: 800; font-size: 0.95rem; color: #0b0d14;">Pay Online with Razorpay</div>
-                    <div style="font-size: 0.76rem; color: #334155; font-weight: 600;">UPI, Google Pay, PhonePe, Paytm, Cards</div>
-                  </div>
-                </div>
-                <span style="background: #0b0d14; color: var(--gold); font-size: 0.68rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; white-space: nowrap;">AUTO UNLOCK 🚀</span>
-              </button>
-
-              <div class="modal-form-grid-2" style="gap: 8px;">
-                <button type="button" class="btn btn-outline" id="modeUpiBtn" style="min-height: 38px; font-size: 0.82rem;" onclick="selectPayMode('upi_qr')">
-                  📱 Manual UPI QR
-                </button>
-                <button type="button" class="btn btn-outline" id="modeDemoBtn" style="min-height: 38px; font-size: 0.82rem;" onclick="selectPayMode('instant_demo')">
-                  🧪 Test Demo Pay
-                </button>
+          <!-- Razorpay Official Gateway Box -->
+          <div id="razorpayPayBox" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 16px; margin: 18px 0 10px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+              <span style="font-size: 1.3rem;">🔒</span>
+              <div>
+                <div style="font-size: 0.92rem; font-weight: 800; color: #fff;">100% Secure Razorpay Payment Gateway</div>
+                <div style="font-size: 0.76rem; color: var(--emerald); font-weight: 700;">✓ UPI (Google Pay, PhonePe, Paytm), QR Code, Cards &amp; NetBanking</div>
               </div>
             </div>
-          </div>
-
-          <!-- Razorpay Official Gateway Box -->
-          <div id="razorpayPayBox" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 14px 16px; margin: 14px 0;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <span style="font-size: 1.2rem;">🔒</span>
-              <div style="font-size: 0.88rem; font-weight: 800; color: #fff;">100% Secure Razorpay Payment Gateway</div>
+            <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.45;">
+              Neeche button par click karein. Razorpay ka official checkout open hoga. Payment confirm hote hi aapka VIP Access turant automatically unlock ho jayega!
             </div>
-            <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.45;">
-              Neeche button par click karein. Razorpay ka official checkout open hoga jisme aap apne UPI app (GPay, PhonePe, Paytm), QR Code ya Card se pay kar sakte hain. Payment confirm hote hi aapka VIP Access turant automatically unlock ho jayega!
-            </div>
-          </div>
-
-          <!-- UPI QR Box -->
-          <div id="upiPayBox" style="display: none; background: rgba(10, 12, 18, 0.85); border: 1px dashed rgba(255, 183, 3, 0.4); border-radius: var(--radius-md); padding: 20px; text-align: center; margin: 18px 0;">
-            <div style="font-weight: 700; color: #fff; margin-bottom: 6px;">Scan &amp; Pay with Any UPI App</div>
-            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">GPay, PhonePe, Paytm, BHIM or Cred</div>
-
-            <div style="background: #fff; padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 12px;">
-              <img id="dynamicQrImage" src="" alt="UPI QR Code" style="width: 170px; height: 170px; display: block;">
-            </div>
-
-            <div style="margin-bottom: 14px;">
-              <span style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.08); padding: 6px 14px; border-radius: 20px; font-family: monospace; color: var(--gold); cursor: pointer;" onclick="copyUpiId()">
-                <span id="displayUpiId">hottyzilla@upi</span> 📋 Copy
-              </span>
-            </div>
-
-            <div class="form-group" style="text-align: left;">
-              <label class="form-label">Payment ke baad 12-digit UTR / Ref No. daalein *</label>
-              <input type="text" id="buyerUtr" class="form-input" placeholder="e.g. 428901849201" minlength="6">
-            </div>
-          </div>
-
-          <!-- Instant Demo Box -->
-          <div id="demoPayBox" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; font-size: 0.88rem; color: #a7f3d0;">
-            <strong>⚡ Instant Test Activation:</strong> Bina real transaction ke turant test karne aur VIP lounge me access unlock karne ke liye ye option use karein.
           </div>
 
           <div style="display: flex; gap: 12px; margin-top: 20px;">
@@ -810,50 +760,17 @@
               </div>
             </div>
 
-            <!-- Payment Mode Selection for Boost -->
-            <div style="margin: 16px 0 12px;">
-              <label class="form-label">Payment Mode Chunein:</label>
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button type="button" class="btn btn-gold btn-block" id="boostModeRazorpayBtn" onclick="selectBoostPayMode('razorpay')" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; text-decoration: none;">
-                  <div style="display: flex; align-items: center; gap: 8px; text-align: left;">
-                    <span style="font-size: 1.2rem;">⚡</span>
-                    <div>
-                      <div style="font-weight: 800; font-size: 0.9rem; color: #0b0d14;">Pay via Razorpay (Instant Activation)</div>
-                      <div style="font-size: 0.72rem; color: #334155; font-weight: 600;">UPI, GPay, PhonePe, Cards</div>
-                    </div>
-                  </div>
-                  <span style="background: #0b0d14; color: var(--gold); font-size: 0.65rem; font-weight: 800; padding: 3px 6px; border-radius: 4px;">INSTANT 🚀</span>
-                </button>
-
-                <div class="modal-form-grid-2" style="gap: 8px;">
-                  <button type="button" class="btn btn-outline" id="boostModeUpiBtn" onclick="selectBoostPayMode('upi_qr')" style="font-size: 0.8rem; min-height: 36px;">
-                    📱 Manual UPI QR
-                  </button>
-                  <button type="button" class="btn btn-outline" id="boostModeDemoBtn" onclick="selectBoostPayMode('instant_demo')" style="font-size: 0.8rem; min-height: 36px;">
-                    🧪 Test Demo
-                  </button>
-                </div>
-              </div>
-            </div>
-
             <!-- Boost Razorpay Info Box -->
-            <div id="boostRazorpayBox" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; font-size: 0.82rem; color: #cbd5e1;">
-              🔒 <strong>Instant Razorpay Activation:</strong> Razorpay se pay karein. Payment hote hi video promotion campaign turant active ho jayega aur platform feed me boost shuru ho jayega!
+            <div id="boostRazorpayBox" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 14px 16px; margin: 16px 0; font-size: 0.84rem; color: #cbd5e1; line-height: 1.45;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <span style="font-size: 1.2rem;">🔒</span>
+                <span style="color: #fff; font-weight: 800; font-size: 0.92rem;">Direct Razorpay Payment &amp; Instant Promotion</span>
+              </div>
+              Razorpay se direct UPI (GPay, PhonePe, Paytm), QR Code ya Cards se pay karein. Payment hote hi aapki video platform feed par top sponsored reel me boost ho jayegi!
             </div>
 
-            <div id="boostUpiBox" style="display: none; background: rgba(0,0,0,0.5); border: 1px dashed var(--gold); border-radius: var(--radius-md); padding: 16px; text-align: center; margin-bottom: 14px;">
-              <div style="font-size: 0.85rem; color: #fff; font-weight: 700;">Scan with UPI App to Pay for Boost Campaign</div>
-              <div style="margin: 10px 0;">
-                <img id="boostQrImage" src="" alt="QR" style="width: 140px; height: 140px; background: #fff; padding: 6px; border-radius: 8px;">
-              </div>
-              <div class="form-group" style="text-align: left;">
-                <label class="form-label">12-Digit UTR / Transaction Ref No. *</label>
-                <input type="text" id="boostUtrInput" class="form-input" placeholder="e.g. 984029482910">
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="boostSubmitBtn">
-              <span>🚀</span> Activate Video Boost Campaign
+            <button type="submit" class="btn btn-gold btn-lg btn-block" id="boostSubmitBtn">
+              <span>⚡</span> Pay via Razorpay &amp; Activate Boost
             </button>
           </form>
         </div>
@@ -890,6 +807,6 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Application Engine -->
-  <script src="/js/app.js?v=2.6"></script>
+  <script src="/js/app.js?v=2.7"></script>
 </body>
 </html>
