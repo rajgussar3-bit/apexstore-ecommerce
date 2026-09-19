@@ -91,23 +91,46 @@ function readDB() {
         });
       }
       if (!parsed.videos) parsed.videos = [];
-      if (!parsed.videos.some(v => v.id === 'vid-ellie-jmac-1')) {
-        parsed.videos.unshift({
-          id: "vid-ellie-jmac-1",
-          title: "Ellie Bellas & J Mac - Exclusive Romance Episode",
-          modelName: "Ellie Bellas & J Mac",
-          category: "Private Hangout",
-          shortDuration: "0:30s Teaser",
-          fullDuration: "21 Mins Full HD",
-          price: 99,
-          originalPrice: 297,
-          badge: "🔥 Trending Master Release",
-          views: "24.5K",
-          shortClipUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+      const v1Idx = parsed.videos.findIndex(v => v.id === 'vid-ellie-jmac-1');
+      const v1Data = {
+        id: "vid-ellie-jmac-1",
+        title: "Ellie Bellas & J Mac - Exclusive Romance Episode",
+        modelName: "Ellie Bellas & J Mac",
+        category: "Private Hangout",
+        shortDuration: "0:45s Teaser",
+        fullDuration: "21 Mins Full HD",
+        price: 99,
+        originalPrice: 297,
+        badge: "🔥 Trending Master Release",
+        views: "24.5K",
+        shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
+        fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
+        poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
+        description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
+        createdAt: "2026-09-19T04:50:00.000Z"
+      };
+      if (v1Idx >= 0) {
+        parsed.videos[v1Idx] = v1Data;
+      } else {
+        parsed.videos.unshift(v1Data);
+      }
+      if (!parsed.videos.some(v => v.id === 'vid-short-project-7')) {
+        parsed.videos.splice(1, 0, {
+          id: "vid-short-project-7",
+          title: "Video Project 7 - Sexy Dance & Romance Short Reel",
+          modelName: "Ellie Bellas",
+          category: "Exclusive Teasers",
+          shortDuration: "0:45s Clip",
+          fullDuration: "Full HD Episode",
+          price: 49,
+          originalPrice: 149,
+          badge: "⭐ New Short Preview",
+          views: "18.2K",
+          shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
           fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
           poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
-          description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
-          createdAt: "2026-09-19T04:50:00.000Z"
+          description: "Video Project 7 exclusive short clip preview. Bufferless 100% ad-free playback.",
+          createdAt: "2026-09-19T06:25:00.000Z"
         });
       }
       memoryDBCache = parsed;
