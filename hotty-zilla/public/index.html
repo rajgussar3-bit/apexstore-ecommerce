@@ -523,42 +523,42 @@
       </div>
       <div class="modal-body">
         <!-- User Identifier Badge -->
-        <div style="background: rgba(255, 65, 108, 0.08); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
-          <div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Logged In Account</div>
-            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="profEmailDisplay">user@example.com</div>
+        <div class="prof-account-box">
+          <div class="prof-account-info">
+            <div class="prof-account-lbl">LOGGED IN ACCOUNT</div>
+            <div class="prof-account-email" id="profEmailDisplay">user@example.com</div>
           </div>
-          <button class="btn btn-outline btn-sm" style="border-color: var(--rose); color: var(--rose);" onclick="customerLogout()">
+          <button class="btn btn-outline btn-sm prof-logout-btn" onclick="customerLogout()">
             🚪 Logout
           </button>
         </div>
 
         <!-- Membership Status Box -->
-        <div id="profMembershipCard" style="background: rgba(255, 183, 3, 0.08); border: 1px solid rgba(255, 183, 3, 0.3); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="font-weight: 700; color: var(--gold); font-size: 0.92rem;">👑 VIP Membership Status</div>
+        <div id="profMembershipCard" class="prof-card prof-card-vip">
+          <div class="prof-card-head">
+            <div class="prof-card-title text-gold">👑 VIP Membership Status</div>
             <span id="profVipBadge" class="badge-pill badge-gold">Checking...</span>
           </div>
-          <p id="profVipMessage" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
+          <p id="profVipMessage" class="prof-card-desc">
             Membership lekar sabhi video shorts, full HD videos aur SPA guide ka direct access paayein!
           </p>
-          <a href="#memberships-section" class="btn btn-gold btn-sm" onclick="closeModal('customerProfileModal')">
+          <a href="#memberships-section" class="btn btn-gold btn-block" onclick="closeModal('customerProfileModal')">
             <span>👑</span> Buy / Upgrade Membership
           </a>
         </div>
 
         <!-- Creator Program Section -->
-        <div id="profCreatorCard" style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="font-weight: 700; color: var(--cyan); font-size: 0.95rem;">🌟 Creator Program &amp; Dollar Monetization</div>
+        <div id="profCreatorCard" class="prof-card prof-card-creator">
+          <div class="prof-card-head">
+            <div class="prof-card-title text-cyan">🌟 Creator Program &amp; Dollar Monetization</div>
             <span id="profCreatorBadge" class="badge-pill" style="background: rgba(56, 189, 248, 0.2); color: var(--cyan);">Not Applied</span>
           </div>
-          <p id="profCreatorMsg" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
+          <p id="profCreatorMsg" class="prof-card-desc">
             Videos upload karein aur har 1,000 views par Dollars ($USD) me paise kamayein! Form submit karne ke 10-15 minute me verify karke approve kiya jayega.
           </p>
-          <div id="profCreatorActionArea">
-            <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
-              <span>🌟</span> Join Creator Program &amp; Earn Dollars ($USD)
+          <div id="profCreatorActionArea" style="width: 100%;">
+            <button type="button" class="btn btn-primary btn-block prof-creator-btn" onclick="openCreatorApplyModal()">
+              <span>🌟</span> Join Creator Program ($USD)
             </button>
           </div>
         </div>
@@ -570,7 +570,7 @@
             <input type="text" id="profNameInput" class="form-input" placeholder="Enter your name" required minlength="2">
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Aapki Age (Years) *</label>
               <input type="number" id="profAgeInput" class="form-input" placeholder="21" min="18" max="99" required>
@@ -581,7 +581,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;" id="saveProfileBtn">
+          <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 10px;" id="saveProfileBtn">
             <span>💾</span> Save Profile Changes
           </button>
         </form>
@@ -605,7 +605,7 @@
         </div>
 
         <form id="creatorApplyForm" onsubmit="handleCreatorApplySubmit(event)">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Real Legal Name (Govt ID Name) *</label>
               <input type="text" id="crLegalName" class="form-input" placeholder="e.g. Priya Sharma" required minlength="3">
@@ -616,7 +616,7 @@
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Age (Strictly 18+ Only) *</label>
               <input type="number" id="crAge" class="form-input" placeholder="18+" min="18" max="99" required>

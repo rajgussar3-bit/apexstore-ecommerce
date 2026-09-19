@@ -1292,11 +1292,11 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <a href="/creator-studio.html" class="btn btn-gold btn-sm" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800;">
-                <span>🌟</span> Open Full Creator Studio ($USD)
+            <div style="display: flex; gap: 8px; flex-direction: column; width: 100%;">
+              <a href="/creator-studio.html" class="btn btn-gold btn-block" style="font-weight: 800; min-height: 42px; text-decoration: none;">
+                <span>🌟</span> Open Creator Studio ($USD)
               </a>
-              <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('customerProfileModal'); openCreatorStudioModal();">
+              <button type="button" class="btn btn-outline btn-block" onclick="closeModal('customerProfileModal'); openCreatorStudioModal();" style="min-height: 38px;">
                 ⚡ Quick Stats
               </button>
             </div>
@@ -1312,11 +1312,11 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-              <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.8; border-color: var(--gold); color: var(--gold);">
+            <div style="display: flex; gap: 8px; flex-direction: column; width: 100%;">
+              <button type="button" class="btn btn-outline btn-block" disabled style="opacity: 0.85; border-color: var(--gold); color: var(--gold); min-height: 40px;">
                 ⏳ Review in Progress (10-15 Min)
               </button>
-              <a href="/creator-studio.html" class="btn btn-outline btn-sm" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan);">
+              <a href="/creator-studio.html" class="btn btn-outline btn-block" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan); min-height: 38px;">
                 Check Studio Status
               </a>
             </div>
@@ -1332,7 +1332,7 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
+            <button type="button" class="btn btn-primary btn-block prof-creator-btn" onclick="openCreatorApplyModal()">
               <span>🔄</span> Re-apply as Creator
             </button>
           `;
@@ -1354,9 +1354,9 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <a href="/creator-studio.html" class="btn btn-gold btn-sm" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 800;">
-                <span>🌟</span> Open Full Creator Studio ($USD)
+            <div style="display: flex; gap: 8px; flex-direction: column; width: 100%;">
+              <a href="/creator-studio.html" class="btn btn-gold btn-block" style="font-weight: 800; min-height: 42px; text-decoration: none;">
+                <span>🌟</span> Open Creator Studio ($USD)
               </a>
             </div>
           `;
@@ -1371,11 +1371,11 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-              <button type="button" class="btn btn-outline btn-sm" disabled style="opacity: 0.8; border-color: var(--gold); color: var(--gold);">
+            <div style="display: flex; gap: 8px; flex-direction: column; width: 100%;">
+              <button type="button" class="btn btn-outline btn-block" disabled style="opacity: 0.85; border-color: var(--gold); color: var(--gold); min-height: 40px;">
                 ⏳ Review in Progress (10-15 Min)
               </button>
-              <a href="/creator-studio.html" class="btn btn-outline btn-sm" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan);">
+              <a href="/creator-studio.html" class="btn btn-outline btn-block" style="text-decoration: none; border-color: var(--cyan); color: var(--cyan); min-height: 38px;">
                 Check Studio Status
               </a>
             </div>
@@ -1391,8 +1391,8 @@ async function openCustomerProfileModal() {
         }
         if (crAction) {
           crAction.innerHTML = `
-            <button type="button" class="btn btn-primary btn-sm" onclick="openCreatorApplyModal()">
-              <span>🌟</span> Join Creator Program &amp; Earn Dollars ($USD)
+            <button type="button" class="btn btn-primary btn-block prof-creator-btn" onclick="openCreatorApplyModal()">
+              <span>🌟</span> Join Creator Program ($USD)
             </button>
           `;
         }
