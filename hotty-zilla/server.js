@@ -114,6 +114,7 @@ function readDB() {
         originalPrice: 297,
         badge: "🔥 Trending Master Release",
         views: "24.5K",
+        likes: "1.8K",
         shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
         fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
         poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
@@ -205,6 +206,30 @@ app.get('/api/catalog', (req, res) => {
 app.get('/api/categories', (req, res) => {
   const db = readDB();
   res.json({ success: true, categories: db.categories || [] });
+});
+
+// 2.2 Track Video Views
+app.post('/api/videos/:id/view', (req, res) => {
+  const db = readDB();
+  const video = (db.videos || []).find(v => v.id === req.params.id);
+  if (video) {
+    const rawViews = parseInt(String(video.views || '0').replace(/[^0-9]/g, '')) || 0;
+    video.views = (rawViews + 1).toLocaleString();
+    writeDB(db);
+  }
+  res.json({ success: true });
+});
+
+// 2.3 Track Video Likes
+app.post('/api/videos/:id/like', (req, res) => {
+  const db = readDB();
+  const video = (db.videos || []).find(v => v.id === req.params.id);
+  if (video) {
+    const rawLikes = parseInt(String(video.likes || '0').replace(/[^0-9]/g, '')) || 1840;
+    video.likes = (rawLikes + 1).toLocaleString();
+    writeDB(db);
+  }
+  res.json({ success: true });
 });
 
 // 3. Fix a Meeting Request

@@ -157,6 +157,7 @@ const CANONICAL_VIDEOS = [
     originalPrice: 297,
     badge: "🔥 Trending Master Release",
     views: "24.5K",
+    likes: "1.8K",
     shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
     fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
     poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
@@ -266,7 +267,107 @@ function selectCategory(catId, catName) {
   }
 }
 
-// 1. Render Video Shorts Grid
+// ==============================================
+// VIDEO FORMATTING, METRICS & LIKES HELPERS
+// ==============================================
+function formatVideoDate(dateStr) {
+  if (!dateStr) return 'Sep 19, 2026';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return 'Sep 19, 2026';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  } catch (e) {
+    return 'Sep 19, 2026';
+  }
+}
+
+function parseLikeCount(val) {
+  if (typeof val === 'number') return val;
+  if (!val) return 1840;
+  const s = val.toString().trim().toUpperCase();
+  if (s.endsWith('K')) {
+    return Math.round(parseFloat(s.replace('K', '')) * 1000);
+  }
+  if (s.endsWith('M')) {
+    return Math.round(parseFloat(s.replace('M', '')) * 1000000);
+  }
+  const n = parseInt(s.replace(/[^0-9]/g, ''), 10);
+  return isNaN(n) ? 1840 : n;
+}
+
+function formatLikeCount(n) {
+  if (n >= 1000000) {
+    return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (n >= 1000) {
+    return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return n.toString();
+}
+
+function getVideoLikes(videoId, initialCount) {
+  try {
+    const stored = localStorage.getItem('hz_v_likes_' + videoId);
+    if (stored !== null) return formatLikeCount(parseInt(stored, 10));
+  } catch(e) {}
+  const base = parseLikeCount(initialCount || '1.8K');
+  return formatLikeCount(base);
+}
+
+function isVideoLiked(videoId) {
+  try {
+    return localStorage.getItem('hz_v_liked_' + videoId) === 'true';
+  } catch(e) {
+    return false;
+  }
+}
+
+function toggleVideoLike(e, videoId) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  try {
+    const isCurrentlyLiked = isVideoLiked(videoId);
+    const storedCount = localStorage.getItem('hz_v_likes_' + videoId);
+    let count = storedCount !== null ? parseInt(storedCount, 10) : parseLikeCount('1.8K');
+
+    if (isCurrentlyLiked) {
+      count = Math.max(0, count - 1);
+      localStorage.setItem('hz_v_liked_' + videoId, 'false');
+    } else {
+      count += 1;
+      localStorage.setItem('hz_v_liked_' + videoId, 'true');
+    }
+    localStorage.setItem('hz_v_likes_' + videoId, count.toString());
+
+    // Update UI elements immediately with smooth feedback
+    const btn = document.getElementById(`like-btn-${videoId}`);
+    const countEl = document.getElementById(`like-count-${videoId}`);
+    const iconEl = btn ? btn.querySelector('.like-heart-icon') : null;
+
+    if (btn) {
+      if (!isCurrentlyLiked) {
+        btn.classList.add('liked');
+        if (iconEl) iconEl.textContent = '❤️';
+      } else {
+        btn.classList.remove('liked');
+        if (iconEl) iconEl.textContent = '🤍';
+      }
+    }
+    if (countEl) {
+      countEl.textContent = formatLikeCount(count);
+    }
+
+    // Background tracking to server (non-blocking)
+    fetch(`/api/videos/${videoId}/like`, { method: 'POST' }).catch(() => {});
+  } catch(err) {
+    console.warn('Toggle like error:', err);
+  }
+}
+
+// 1. Render Video Shorts Grid - Mobile Enhanced 16:9 Cards
 function renderShorts(videos) {
   const container = document.getElementById('shortsContainer');
   if (!container) return;
@@ -299,31 +400,59 @@ function renderShorts(videos) {
         description: `Promoted Reel by ${activeCamp.creatorName} (${activeCamp.creatorEmail}). Exclusive sponsored reach campaign.`
       };
 
+      const spLiked = isVideoLiked(targetVid.id);
+      const spLikes = getVideoLikes(targetVid.id, '2.4K');
+      const spDate = formatVideoDate(targetVid.createdAt);
+      const spDesc = targetVid.description ? (targetVid.description.length > 90 ? targetVid.description.slice(0, 90).trim() + '...' : targetVid.description) : 'Promoted viral reel reach.';
+
       sponsoredHtml = `
         <div class="reel-card sponsored-card">
-          <div class="reel-thumb-box">
+          <div class="reel-thumb-box" onclick="playShortClip('${targetVid.id}')">
             <img class="reel-thumb-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75" alt="${targetVid.title}" loading="lazy" decoding="async">
-            <div class="reel-overlay-play" onclick="playShortClip('${targetVid.id}')">
+            
+            <div class="reel-top-bar">
+              <span class="badge-pill badge-gold">🔥 SPONSORED PROMOTED</span>
+              <span class="badge-quality">4K Ultra HD</span>
+            </div>
+
+            <div class="reel-overlay-play">
               <div class="play-circle-btn">▶</div>
-              <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 8px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Watch Promoted Teaser</div>
+              <div class="play-label">Play 16:9 Preview</div>
             </div>
-            <div class="reel-badge-top">
-              <span class="sponsored-badge-glow">🔥 SPONSORED REEL</span>
+
+            <div class="reel-bottom-bar">
+              <span class="reel-duration-tag">⏱️ ${targetVid.shortDuration || '0:30s Clip'}</span>
+              <span class="reel-audio-tag">🔊 Dolby Stereo</span>
             </div>
-            <div class="reel-duration-tag">⏱️ ${targetVid.shortDuration || '0:30s'}</div>
           </div>
 
           <div class="reel-info-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <div class="reel-model" style="color: var(--gold);">📢 ${activeCamp.creatorName}</div>
-              <span style="font-size: 0.72rem; color: var(--emerald); font-weight: 700;">PROMOTED AD</span>
+            <div class="reel-creator-row">
+              <div class="reel-creator-info">
+                <span class="creator-avatar-badge">📢</span>
+                <span class="reel-model-name" title="${activeCamp.creatorName}">${activeCamp.creatorName}</span>
+              </div>
+              <span class="reel-date-badge">📅 ${spDate}</span>
             </div>
-            <h3 class="reel-title">${targetVid.title}</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; flex-grow: 1;">${targetVid.description || 'Promoted viral reel reach.'}</p>
+
+            <h3 class="reel-title" title="${targetVid.title}">${targetVid.title}</h3>
+            <p class="reel-short-desc">${spDesc}</p>
             
-            <div class="reel-meta-row">
-              <span>🚀 ${Number(activeCamp.targetViews).toLocaleString()} Target Views</span>
-              <span style="color: var(--gold); font-weight: 700;">Full: ${targetVid.fullDuration || '20 Mins'}</span>
+            <div class="reel-metrics-bar">
+              <div class="metric-item">
+                <span class="metric-icon">👁️</span>
+                <span class="metric-val">🚀 ${Number(activeCamp.targetViews).toLocaleString()} views</span>
+              </div>
+
+              <button class="reel-like-btn ${spLiked ? 'liked' : ''}" id="like-btn-${targetVid.id}" onclick="toggleVideoLike(event, '${targetVid.id}')" title="Like video">
+                <span class="like-heart-icon">${spLiked ? '❤️' : '🤍'}</span>
+                <span class="like-count-text" id="like-count-${targetVid.id}">${spLikes}</span>
+              </button>
+
+              <div class="metric-item">
+                <span class="metric-icon">⏳</span>
+                <span class="metric-val" style="color: var(--gold); font-weight: 700;">Full: ${targetVid.fullDuration || '20 Mins'}</span>
+              </div>
             </div>
 
             <button class="btn-unlock-full" onclick="triggerFullVideo('${targetVid.id}')" style="background: var(--gradient-fire); color: #fff;">
@@ -355,30 +484,70 @@ function renderShorts(videos) {
                 : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=720&q=75'
     );
 
+    const creatorName = v.modelName || v.creatorName || 'Hotty VIP Creator';
+    const uploadDate = formatVideoDate(v.createdAt || v.date || v.uploadDate);
+    const viewCount = v.views || '24.5K';
+    const isLiked = isVideoLiked(v.id);
+    const likeCount = getVideoLikes(v.id, v.likes);
+    const rawDesc = v.description || 'Exclusive HD romantic episode teaser.';
+    const shortDesc = rawDesc.length > 90 ? rawDesc.slice(0, 90).trim() + '...' : rawDesc;
+
     return `
       <div class="reel-card">
-        <div class="reel-thumb-box">
+        <div class="reel-thumb-box" onclick="playShortClip('${v.id}')">
           <img class="reel-thumb-img" src="${posterImg}" alt="${v.title}" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=720&q=75'">
-          <div class="reel-overlay-play" onclick="playShortClip('${v.id}')">
+          
+          <div class="reel-top-bar">
+            <span class="badge-pill badge-fire">${v.badge || '🔥 Trending'}</span>
+            <span class="badge-quality">4K Ultra HD</span>
+          </div>
+
+          <div class="reel-overlay-play">
             <div class="play-circle-btn">▶</div>
-            <div style="font-size: 0.82rem; font-weight: 700; color: #fff; margin-top: 8px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Watch Teaser Free</div>
+            <div class="play-label">Play 16:9 Preview</div>
           </div>
-          <div class="reel-badge-top">
-            <span class="badge-pill badge-fire">${v.badge || '🔥 Viral Reel'}</span>
+
+          <div class="reel-bottom-bar">
+            <span class="reel-duration-tag">⏱️ ${v.shortDuration || '0:45s Clip'}</span>
+            <span class="reel-audio-tag">🔊 Stereo HD</span>
           </div>
-          <div class="reel-duration-tag">⏱️ ${v.shortDuration || '0:30s'}</div>
         </div>
 
         <div class="reel-info-box">
-          <div class="reel-model">${v.modelName} • ${v.category}</div>
-          <h3 class="reel-title">${v.title}</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; flex-grow: 1;">${v.description || ''}</p>
-          
-          <div class="reel-meta-row">
-            <span>👁️ ${v.views || '50K'} views</span>
-            <span style="color: var(--gold); font-weight: 700;">Full: ${v.fullDuration || '20 Mins'}</span>
+          <!-- Creator Name & Upload Date Row -->
+          <div class="reel-creator-row">
+            <div class="reel-creator-info">
+              <span class="creator-avatar-badge">👑</span>
+              <span class="reel-model-name" title="${creatorName}">${creatorName}</span>
+            </div>
+            <span class="reel-date-badge">📅 ${uploadDate}</span>
           </div>
 
+          <!-- Video Title -->
+          <h3 class="reel-title" title="${v.title}">${v.title}</h3>
+
+          <!-- Chota Short Description (Clamped to 2 lines) -->
+          <p class="reel-short-desc">${shortDesc}</p>
+
+          <!-- Views, Likes & Full Duration Metrics Bar -->
+          <div class="reel-metrics-bar">
+            <div class="metric-item">
+              <span class="metric-icon">👁️</span>
+              <span class="metric-val">${viewCount} views</span>
+            </div>
+
+            <button class="reel-like-btn ${isLiked ? 'liked' : ''}" id="like-btn-${v.id}" onclick="toggleVideoLike(event, '${v.id}')" title="Like this video">
+              <span class="like-heart-icon">${isLiked ? '❤️' : '🤍'}</span>
+              <span class="like-count-text" id="like-count-${v.id}">${likeCount}</span>
+            </button>
+
+            <div class="metric-item">
+              <span class="metric-icon">⏳</span>
+              <span class="metric-val" style="color: var(--gold); font-weight: 700;">Full: ${v.fullDuration || '21 Mins'}</span>
+            </div>
+          </div>
+
+          <!-- Watch Full Video Button -->
           <button class="btn-unlock-full" onclick="triggerFullVideo('${v.id}')">
             <span>👑</span> Watch Full Uncut Video (HD)
           </button>
@@ -388,7 +557,7 @@ function renderShorts(videos) {
   }).join('');
 }
 
-// Play Short Teaser Clip Modal
+// Play Short Teaser Clip Modal - 60 FPS Mobile Non-blocking
 function playShortClip(videoId) {
   const video = (catalogData.videos || []).find(v => v.id === videoId);
   if (!video) return;
@@ -401,17 +570,27 @@ function playShortClip(videoId) {
   const title = document.getElementById('shortModalTitle');
   const fullBtn = document.getElementById('shortModalFullBtn');
 
-  title.textContent = `🎥 Teaser: ${video.title}`;
-  player.src = video.shortClipUrl;
-  player.load();
-  player.play().catch(() => {});
+  if (title) title.textContent = `🎥 Preview: ${video.title}`;
+  if (fullBtn) {
+    fullBtn.onclick = () => {
+      closeShortPlayer();
+      triggerFullVideo(video.id);
+    };
+  }
 
-  fullBtn.onclick = () => {
-    closeShortPlayer();
-    triggerFullVideo(video.id);
-  };
-
+  // Open modal FIRST so UI responds immediately with 0ms delay
   openModal('shortPlayerModal');
+
+  // Defer media loading to next frame to prevent mobile main thread stutter
+  requestAnimationFrame(() => {
+    if (player) {
+      if (player.src !== video.shortClipUrl) {
+        player.src = video.shortClipUrl;
+        player.load();
+      }
+      player.play().catch(() => {});
+    }
+  });
 }
 
 function closeShortPlayer() {
