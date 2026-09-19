@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=2.5">
   <style>
     .studio-header {
       background: rgba(8, 10, 15, 0.96);
@@ -225,7 +225,7 @@
       </div>
 
       <form onsubmit="handleDirectStudioApply(event)">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="modal-form-grid-2">
           <div class="form-group">
             <label class="form-label">Real Name (Govt ID) *</label>
             <input type="text" id="gCrRealName" class="form-input" placeholder="e.g. Priya Sharma" required minlength="2">
@@ -236,7 +236,7 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="modal-form-grid-2">
           <div class="form-group">
             <label class="form-label">Email Address *</label>
             <input type="email" id="gCrEmail" class="form-input" placeholder="priya@gmail.com" required>
@@ -247,7 +247,7 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="modal-form-grid-2">
           <div class="form-group">
             <label class="form-label">City / State *</label>
             <input type="text" id="gCrCity" class="form-input" placeholder="e.g. Mumbai, MH" required>
@@ -377,7 +377,7 @@
             <input type="text" id="cuTitle" class="form-input" placeholder="e.g. Late Night Candid Masti Episode 1" required minlength="4">
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Category *</label>
               <select id="cuCategory" class="form-select" required>
@@ -409,7 +409,7 @@
             <div style="font-size: 0.76rem; color: var(--text-dim); margin-top: 4px;">* Pura 10m/20m/30m+ HD video jo customer paise dekar unlock karega.</div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Teaser Duration</label>
               <input type="text" id="cuShortDuration" class="form-input" placeholder="0:30s Teaser" value="0:30s Teaser">
@@ -472,7 +472,7 @@
         </p>
 
         <form id="payoutSubmitForm" onsubmit="handlePayoutSubmit(event)">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="modal-form-grid-2">
             <div class="form-group">
               <label class="form-label">Withdrawal Amount ($USD) *</label>
               <input type="number" id="poAmount" class="form-input" placeholder="Min 50" min="50" step="1" required>
@@ -588,6 +588,6 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <script src="/js/creator-studio.js"></script>
+  <script src="/js/creator-studio.js?v=2.5"></script>
 </body>
 </html>
