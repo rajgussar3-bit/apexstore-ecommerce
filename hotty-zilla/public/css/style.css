@@ -1309,34 +1309,37 @@ body {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transform: translateZ(0);
+    will-change: transform;
   }
   .nav-container {
-    padding: 6px 14px !important;
+    padding: 6px 12px !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     box-sizing: border-box;
+    overflow: hidden;
   }
   .brand-logo {
-    font-size: 1.15rem;
-    gap: 6px;
+    font-size: 1.1rem;
+    gap: 5px;
     flex-shrink: 0;
   }
   .brand-icon {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
   }
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-left: auto;
     flex-shrink: 0;
   }
   .header-auth-group {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
   .vip-text-full {
     display: none !important;
@@ -1348,22 +1351,34 @@ body {
   /* Cohesive, sleek mobile header buttons: matching 34px height, rounded luxury pills */
   .site-header .btn,
   .btn-header-auth,
-  .btn-header-vip {
+  .btn-header-vip,
+  .btn-header-creator {
     min-height: 34px !important;
     height: 34px !important;
     max-height: 34px !important;
-    padding: 0 12px !important;
-    font-size: 0.78rem !important;
+    padding: 0 10px !important;
+    font-size: 0.76rem !important;
     font-weight: 700 !important;
     border-radius: var(--radius-full) !important;
-    display: inline-flex !important;
+    display: inline-flex;
     align-items: center !important;
     justify-content: center !important;
-    gap: 5px !important;
+    gap: 4px !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
     touch-action: manipulation;
   }
+
+  /* CRITICAL: Hidden buttons must strictly stay hidden with highest priority */
+  .site-header .hidden,
+  .site-header [style*="display: none"],
+  .site-header [style*="display:none"],
+  #headerLoginBtn.hidden,
+  #headerProfileBtn.hidden,
+  #headerCreatorStudioBtn.hidden {
+    display: none !important;
+  }
+
   .btn-header-auth {
     background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.18) !important;
@@ -1376,19 +1391,26 @@ body {
   .btn-header-profile {
     border-color: rgba(56, 189, 248, 0.45) !important;
     color: #38bdf8 !important;
+    max-width: 95px;
   }
   .btn-header-profile #headerUserName {
-    max-width: 60px;
+    max-width: 55px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
+  }
+  .btn-header-creator {
+    border-color: #ff416c !important;
+    color: #ff6b8b !important;
+    padding: 0 8px !important;
   }
   .btn-header-vip {
     background: var(--gradient-gold) !important;
     color: #0b0d14 !important;
     border: none !important;
     box-shadow: 0 2px 10px rgba(251, 133, 0, 0.35) !important;
+    padding: 0 10px !important;
   }
   .btn-header-vip:active {
     transform: scale(0.96);
@@ -1620,20 +1642,28 @@ body {
 
 @media (max-width: 380px) {
   .nav-container {
-    padding: 6px 10px !important;
+    padding: 6px 8px !important;
   }
   .brand-logo {
-    font-size: 1.05rem;
+    font-size: 1rem;
+    gap: 4px;
   }
   .brand-icon {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   .site-header .btn,
   .btn-header-auth,
-  .btn-header-vip {
-    padding: 0 9px !important;
-    font-size: 0.74rem !important;
-    gap: 4px !important;
+  .btn-header-vip,
+  .btn-header-creator {
+    padding: 0 7px !important;
+    font-size: 0.72rem !important;
+    gap: 3px !important;
+  }
+  .btn-header-profile {
+    max-width: 80px !important;
+  }
+  .btn-header-profile #headerUserName {
+    max-width: 42px !important;
   }
   .metric-item {
     font-size: 0.72rem;

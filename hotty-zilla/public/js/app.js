@@ -64,14 +64,33 @@ function updateAuthHeaderUI() {
   const csBtn = document.getElementById('headerCreatorStudioBtn');
 
   if (currentCustomer && currentCustomer.email) {
-    if (loginBtn) loginBtn.style.display = 'none';
-    if (profBtn) profBtn.style.display = 'inline-flex';
-    if (nameSpan) nameSpan.textContent = currentCustomer.name || currentCustomer.email.split('@')[0];
+    if (loginBtn) {
+      loginBtn.style.setProperty('display', 'none', 'important');
+      loginBtn.classList.add('hidden');
+    }
+    if (profBtn) {
+      profBtn.style.setProperty('display', 'inline-flex', 'important');
+      profBtn.classList.remove('hidden');
+    }
+    if (nameSpan) {
+      const rawName = currentCustomer.name || currentCustomer.email.split('@')[0];
+      nameSpan.textContent = rawName.length > 7 ? rawName.slice(0, 7) + '…' : rawName;
+      nameSpan.title = rawName;
+    }
     checkCreatorHeaderStatus();
   } else {
-    if (loginBtn) loginBtn.style.display = 'inline-flex';
-    if (profBtn) profBtn.style.display = 'none';
-    if (csBtn) csBtn.style.display = 'none';
+    if (loginBtn) {
+      loginBtn.style.setProperty('display', 'inline-flex', 'important');
+      loginBtn.classList.remove('hidden');
+    }
+    if (profBtn) {
+      profBtn.style.setProperty('display', 'none', 'important');
+      profBtn.classList.add('hidden');
+    }
+    if (csBtn) {
+      csBtn.style.setProperty('display', 'none', 'important');
+      csBtn.classList.add('hidden');
+    }
   }
 }
 
@@ -84,11 +103,13 @@ async function checkCreatorHeaderStatus() {
                      (currentCustomer && currentCustomer.isCreator);
 
   if (isApproved) {
-    csBtn.style.display = 'inline-flex';
+    csBtn.style.setProperty('display', 'inline-flex', 'important');
+    csBtn.classList.remove('hidden');
     return;
   }
   if (!email) {
-    csBtn.style.display = 'none';
+    csBtn.style.setProperty('display', 'none', 'important');
+    csBtn.classList.add('hidden');
     return;
   }
 
@@ -99,7 +120,8 @@ async function checkCreatorHeaderStatus() {
     });
     const data = await res.json();
     if (data.success && data.applied && data.creator && data.creator.status === 'approved') {
-      csBtn.style.display = 'inline-flex';
+      csBtn.style.setProperty('display', 'inline-flex', 'important');
+      csBtn.classList.remove('hidden');
       localStorage.setItem('hz_is_creator', 'true');
       localStorage.setItem('hz_creator_approved_' + email, 'true');
       if (currentCustomer) {
@@ -107,10 +129,17 @@ async function checkCreatorHeaderStatus() {
         localStorage.setItem('hz_customer_user', JSON.stringify(currentCustomer));
       }
     } else {
-      csBtn.style.display = 'none';
+      csBtn.style.setProperty('display', 'none', 'important');
+      csBtn.classList.add('hidden');
     }
   } catch(e) {
-    csBtn.style.display = isApproved ? 'inline-flex' : 'none';
+    if (isApproved) {
+      csBtn.style.setProperty('display', 'inline-flex', 'important');
+      csBtn.classList.remove('hidden');
+    } else {
+      csBtn.style.setProperty('display', 'none', 'important');
+      csBtn.classList.add('hidden');
+    }
   }
 }
 
