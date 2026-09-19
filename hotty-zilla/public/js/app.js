@@ -161,7 +161,7 @@ const CANONICAL_VIDEOS = [
     shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
     fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
     poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
-    description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
+    description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
     createdAt: "2026-09-19T04:50:00.000Z"
   }
 ];
@@ -367,6 +367,19 @@ function toggleVideoLike(e, videoId) {
   }
 }
 
+function formatCleanDuration(dur) {
+  if (!dur) return '21 Mins';
+  let str = String(dur)
+    .replace(/Full\s*HD/gi, '')
+    .replace(/\bFull\b/gi, '')
+    .replace(/\bHD\b/gi, '')
+    .replace(/Episode/gi, '')
+    .trim();
+  if (!str) return '20 Mins';
+  if (/^\d+$/.test(str)) return `${str} Mins`;
+  return str;
+}
+
 // 1. Render Video Shorts Grid - Mobile Enhanced 16:9 Cards
 function renderShorts(videos) {
   const container = document.getElementById('shortsContainer');
@@ -470,9 +483,9 @@ function renderShorts(videos) {
                 <span class="like-count-text" id="like-count-${targetVid.id}">${spLikes}</span>
               </button>
 
-              <div class="metric-item">
+              <div class="metric-item metric-duration">
                 <span class="metric-icon">⏳</span>
-                <span class="metric-val" style="color: var(--gold); font-weight: 700;">Full: ${targetVid.fullDuration || '20 Mins'}</span>
+                <span class="metric-val">${formatCleanDuration(targetVid.fullDuration || '20 Mins')}</span>
               </div>
             </div>
 
@@ -576,7 +589,7 @@ function renderShorts(videos) {
           <div class="reel-metrics-bar">
             <div class="metric-item">
               <span class="metric-icon">👁️</span>
-              <span class="metric-val">${viewCount} views</span>
+              <span class="metric-val">${(v.views || '24.5K').toString().replace(/views/i, '').trim()} views</span>
             </div>
 
             <button class="reel-like-btn ${isLiked ? 'liked' : ''}" id="like-btn-${v.id}" onclick="toggleVideoLike(event, '${v.id}')" title="Like this video">
@@ -584,15 +597,15 @@ function renderShorts(videos) {
               <span class="like-count-text" id="like-count-${v.id}">${likeCount}</span>
             </button>
 
-            <div class="metric-item">
+            <div class="metric-item metric-duration">
               <span class="metric-icon">⏳</span>
-              <span class="metric-val" style="color: var(--gold); font-weight: 700;">Full: ${v.fullDuration || '21 Mins'}</span>
+              <span class="metric-val">${formatCleanDuration(v.fullDuration || '21 Mins')}</span>
             </div>
           </div>
 
           <!-- Watch Full Video Button -->
           <button class="btn-unlock-full" onclick="triggerFullVideo('${v.id}')">
-            <span>👑</span> Watch Full Uncut Video (HD)
+            <span>👑</span> Watch Full Video (HD)
           </button>
         </div>
       </div>
@@ -1221,7 +1234,7 @@ async function openCustomerProfileModal() {
     } else {
       vipBadge.textContent = '❌ No Active Membership';
       vipBadge.className = 'badge-pill badge-gold';
-      vipMsg.textContent = 'Membership lekar sabhi video shorts, full uncut HD videos aur SPA guide ka direct access paayein!';
+      vipMsg.textContent = 'Membership lekar sabhi video shorts, full HD videos aur SPA guide ka direct access paayein!';
     }
   } catch(e) {
     vipBadge.textContent = 'Inactive';

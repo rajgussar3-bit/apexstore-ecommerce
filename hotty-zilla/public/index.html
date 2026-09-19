@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>HOTTY ZILLA - VIP Friendship, Video Shorts &amp; SPA Course Club</title>
-  <meta name="description" content="Hotty Zilla - Watch exclusive video shorts, unlock full uncut HD videos with VIP memberships, download the professional SPA course PDF, and fix meetings with friends.">
+  <meta name="description" content="Hotty Zilla - Watch exclusive video shorts, unlock full HD videos with VIP memberships, download the professional SPA course PDF, and fix meetings with friends.">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,19 +39,19 @@
       </ul>
 
       <div class="nav-actions">
-        <div id="userHeaderAuth" style="display: flex; align-items: center; gap: 8px;">
-          <a href="/creator-studio.html" class="btn btn-outline btn-sm" id="headerCreatorStudioBtn" style="display: none; border-color: #ff416c; color: #ff6b8b; font-weight: 700; text-decoration: none;">
-            🌟 Creator Studio ($USD)
+        <div id="userHeaderAuth" class="header-auth-group">
+          <a href="/creator-studio.html" class="btn btn-outline btn-sm btn-header-creator" id="headerCreatorStudioBtn" style="display: none; border-color: #ff416c; color: #ff6b8b; font-weight: 700; text-decoration: none;">
+            🌟 Studio
           </a>
-          <button class="btn btn-outline btn-sm" id="headerLoginBtn" onclick="openCustomerLoginModal()">
-            👤 Log In
+          <button class="btn btn-header-auth" id="headerLoginBtn" onclick="openCustomerLoginModal()">
+            <span>👤</span> <span class="auth-text">Log In</span>
           </button>
-          <button class="btn btn-outline btn-sm" id="headerProfileBtn" style="display: none; border-color: var(--cyan); color: #fff;" onclick="openCustomerProfileModal()">
-            👤 <span id="headerUserName">My Profile</span>
+          <button class="btn btn-header-auth btn-header-profile" id="headerProfileBtn" style="display: none;" onclick="openCustomerProfileModal()">
+            <span>👤</span> <span id="headerUserName" class="auth-text">My Profile</span>
           </button>
         </div>
-        <a href="/my-library.html" class="btn btn-gold btn-sm">
-          <span>👑</span> My VIP Lounge
+        <a href="/my-library.html" class="btn btn-gold btn-header-vip">
+          <span>👑</span> <span class="vip-text-full">My VIP Lounge</span><span class="vip-text-short">VIP Lounge</span>
         </a>
       </div>
     </div>
@@ -68,7 +68,7 @@
         VIP Video Shorts — <span class="glow-fire">Hotty Zilla</span>
       </h1>
       <p class="hero-subtitle">
-        Short video teaser clips free me dekhein. Pura uncut HD video dekhne ke liye single video unlock karein ya VIP Membership lein, professional SPA course PDF paayein aur naye doston se meeting fix karein!
+        Short video teaser clips free me dekhein. Pura Full HD video dekhne ke liye single video unlock karein ya VIP Membership lein, professional SPA course PDF paayein aur naye doston se meeting fix karein!
       </p>
 
       <div class="hero-cta-group">
@@ -116,7 +116,7 @@
         <div class="badge-tag">🎥 VIDEO SHORTS &amp; REELS</div>
         <h2 class="section-title">Exclusive Video Shorts (Free Teasers)</h2>
         <p class="section-subtitle">
-          Choti clip (short teaser) sabhi ke liye free hai! Pura uncut HD video dekhne ke liye single video unlock karein ya VIP Membership lein.
+          Choti clip (short teaser) sabhi ke liye free hai! Pura Full HD video dekhne ke liye single video unlock karein ya VIP Membership lein.
         </p>
       </div>
 
@@ -213,7 +213,7 @@
             <span class="brand-text">HOTTY <span>ZILLA</span></span>
           </div>
           <p style="color: var(--text-dim); max-width: 380px; margin-bottom: 16px;">
-            Premium VIP friendship lounge, exclusive video shorts, full uncut episodes, professional SPA wellness guide and meeting coordination.
+            Premium VIP friendship lounge, exclusive video shorts, full HD episodes, professional SPA wellness guide and meeting coordination.
           </p>
           <a href="/my-library.html" class="btn btn-gold btn-sm">👑 VIP Member Lounge</a>
         </div>
@@ -273,7 +273,7 @@
         <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
             <div style="font-size: 0.8rem; color: var(--text-muted);">Short clip khatam hone ke baad:</div>
-            <div style="font-weight: 700; color: #fff;">Pura Uncut Full HD Video Dekhein</div>
+            <div style="font-weight: 700; color: #fff;">Pura Full HD Video Dekhein</div>
           </div>
           <button class="btn btn-gold" id="shortModalFullBtn">
             🔓 Unlock Full HD Video
@@ -287,7 +287,7 @@
   <div class="modal-overlay" id="paywallModal">
     <div class="modal-dialog" style="max-width: 580px;">
       <div class="modal-header">
-        <div class="modal-title" style="color: var(--gold);">🔒 Unlock Full Uncut HD Video</div>
+        <div class="modal-title" style="color: var(--gold);">🔒 Unlock Full Video (HD)</div>
         <button class="modal-close" onclick="closeModal('paywallModal')">✕</button>
       </div>
       <div class="modal-body">
@@ -295,7 +295,7 @@
           <div style="font-size: 3rem; margin-bottom: 6px;">👑</div>
           <h3 id="paywallVideoTitle" style="font-size: 1.3rem; margin-bottom: 6px;">Video Title</h3>
           <p style="color: var(--text-muted); font-size: 0.9rem;">
-            Is video ka pura uncut version dekhne ke liye niche diye gaye options me se chunein:
+            Is video ka pura Full HD version dekhne ke liye niche diye gaye options me se chunein:
           </p>
         </div>
 
@@ -540,7 +540,7 @@
             <span id="profVipBadge" class="badge-pill badge-gold">Checking...</span>
           </div>
           <p id="profVipMessage" style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
-            Membership lekar sabhi video shorts, full uncut HD videos aur SPA guide ka direct access paayein!
+            Membership lekar sabhi video shorts, full HD videos aur SPA guide ka direct access paayein!
           </p>
           <a href="#memberships-section" class="btn btn-gold btn-sm" onclick="closeModal('customerProfileModal')">
             <span>👑</span> Buy / Upgrade Membership
