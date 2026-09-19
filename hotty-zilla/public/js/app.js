@@ -162,23 +162,6 @@ const CANONICAL_VIDEOS = [
     poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
     description: "Ellie Bellas aur J Mac ka exclusive romantic episode. Pura 21 minutes uncut Full HD video dekhein VIP pass ke sath ya direct unlock karein. 100% Bufferless & Ad-free streaming.",
     createdAt: "2026-09-19T04:50:00.000Z"
-  },
-  {
-    id: "vid-short-project-7",
-    title: "Video Project 7 - Sexy Dance & Romance Short Reel",
-    modelName: "Ellie Bellas",
-    category: "Exclusive Teasers",
-    shortDuration: "0:45s Clip",
-    fullDuration: "Full HD Episode",
-    price: 49,
-    originalPrice: 149,
-    badge: "⭐ New Short Preview",
-    views: "18.2K",
-    shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
-    fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
-    poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
-    description: "Video Project 7 exclusive short clip preview. Bufferless 100% ad-free playback.",
-    createdAt: "2026-09-19T06:25:00.000Z"
   }
 ];
 
@@ -191,17 +174,24 @@ async function fetchCatalog() {
     if (data.success) {
       if (!data.videos) data.videos = [];
 
-      // Merge locally published videos if any to guarantee immediate visibility
+      // Clean up any stale duplicate preview in local storage
       try {
         const localVideos = JSON.parse(localStorage.getItem('hz_admin_videos') || '[]');
-        if (localVideos.length > 0) {
+        const cleaned = localVideos.filter(v => v.id !== 'vid-short-project-7');
+        if (cleaned.length !== localVideos.length) {
+          localStorage.setItem('hz_admin_videos', JSON.stringify(cleaned));
+        }
+        if (cleaned.length > 0) {
           const existingIds = new Set(data.videos.map(v => v.id));
-          const newVideos = localVideos.filter(v => !existingIds.has(v.id));
+          const newVideos = cleaned.filter(v => !existingIds.has(v.id));
           if (newVideos.length > 0) {
             data.videos = [...newVideos, ...data.videos];
           }
         }
       } catch(e) {}
+
+      // Always filter out any duplicate vid-short-project-7 so only one master card appears
+      data.videos = data.videos.filter(v => v.id !== 'vid-short-project-7');
 
       // Always guarantee Canonical Releases (like Ellie Bellas) are front and center on mobile & desktop
       try {

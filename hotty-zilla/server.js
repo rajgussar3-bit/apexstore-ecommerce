@@ -114,25 +114,8 @@ function readDB() {
       } else {
         parsed.videos.unshift(v1Data);
       }
-      if (!parsed.videos.some(v => v.id === 'vid-short-project-7')) {
-        parsed.videos.splice(1, 0, {
-          id: "vid-short-project-7",
-          title: "Video Project 7 - Sexy Dance & Romance Short Reel",
-          modelName: "Ellie Bellas",
-          category: "Exclusive Teasers",
-          shortDuration: "0:45s Clip",
-          fullDuration: "Full HD Episode",
-          price: 49,
-          originalPrice: 149,
-          badge: "⭐ New Short Preview",
-          views: "18.2K",
-          shortClipUrl: "https://archive.org/download/video-project-7_202609/Video%20Project%207.mp4",
-          fullVideoUrl: "https://archive.org/download/video-project-4-elly/Video%20Project%204%20elly.mp4",
-          poster: "https://archive.org/download/video-project-4-elly/video-project-4-elly.thumbs/Video%20Project%204%20elly_000180.jpg",
-          description: "Video Project 7 exclusive short clip preview. Bufferless 100% ad-free playback.",
-          createdAt: "2026-09-19T06:25:00.000Z"
-        });
-      }
+      // Guarantee duplicate preview is removed so only single master preview remains
+      parsed.videos = parsed.videos.filter(v => v.id !== 'vid-short-project-7');
       memoryDBCache = parsed;
       return parsed;
     }
