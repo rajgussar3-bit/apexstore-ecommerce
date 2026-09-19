@@ -63,6 +63,17 @@ if (fs.existsSync(path.join(__dirname, 'uploads'))) {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 }
 
+// Clean Friendly Mobile & Desktop Routes (without .html)
+app.get(['/control', '/admin', '/hz-secret-control-desk'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'hz-secret-control-desk.html'));
+});
+app.get(['/creator-studio', '/creator'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'creator-studio.html'));
+});
+app.get(['/my-library', '/library', '/vip'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'my-library.html'));
+});
+
 // In-memory DB cache fallback
 let memoryDBCache = null;
 

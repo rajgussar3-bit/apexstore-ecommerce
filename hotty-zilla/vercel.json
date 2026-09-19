@@ -1,9 +1,43 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/control",
+      "destination": "/hz-secret-control-desk.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/hz-secret-control-desk.html"
+    },
+    {
+      "source": "/hz-secret-control-desk",
+      "destination": "/hz-secret-control-desk.html"
+    },
+    {
+      "source": "/creator-studio",
+      "destination": "/creator-studio.html"
+    },
+    {
+      "source": "/creator",
+      "destination": "/creator-studio.html"
+    },
+    {
+      "source": "/my-library",
+      "destination": "/my-library.html"
+    },
+    {
+      "source": "/library",
+      "destination": "/my-library.html"
+    },
+    {
+      "source": "/vip",
+      "destination": "/my-library.html"
     }
   ]
 }
